@@ -59,15 +59,6 @@ A Taxonomy will not appear in the filter until at least one post has been connec
 Just start tagging up your posts and you’ll see it shows up!
 
 
-<h2> Screenshots </h2>
-
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
-
-
 <h2> Changelog </h2>
 
 <h3> 1.0 </h3>
