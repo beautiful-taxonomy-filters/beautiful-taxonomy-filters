@@ -1,4 +1,4 @@
-=== Beautiful taxonomy filters ===
+<h1> Beautiful taxonomy filters </h1>
 Contributors: jonathandejong, tigerton
 Donate link: http://example.com/
 Tags: Taxonomy, filter, permalinks, terms
@@ -10,7 +10,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Supercharge your custom post type archives by letting visitors filter the posts by their terms/categories. This plugin handles the whole thing for you.
 
-== Description ==
+<h2> Description </h2>
 
 The Beautiful Taxonomy Filters plugin is a easy and good-looking way to provide your visitors with filtering for your post types. With this you get a complete solution for adding filtering based on taxonomy terms/categories/tags. It will also automatically add rewrite rules for pretty looking filter URLs. It’s completely automatic, works without javascript and is based on the [WordPress Plugin boilerplate](https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate) for a *standardized, organized and object-oriented* codebase. It uses [select2](http://ivaynberg.github.io/select2/) for pretty looking and user-friendly dropdowns but will fall back to ordinary ones if javascript is not supported.
 **No more horrible looking URLs or hacky Javascript solutions**
@@ -36,14 +36,14 @@ Do you want to translate this plugin to another language? I recommend using POEd
 * Uses [Select2](http://ivaynberg.github.io/select2/) to enhance dropdowns 
 
 
-== Installation ==
+<h2> Installation </h2>
 
 1. Upload `beautiful-taxonomy-filters` folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Follow the instructions found in Settings > Taxonomy filters to get you started!
 
 
-== Frequently Asked Questions ==
+<h2> Frequently Asked Questions </h2>
 
 = Is there a way to change the order of the taxonomies? =
 
@@ -59,7 +59,7 @@ A Taxonomy will not appear in the filter until at least one post has been connec
 Just start tagging up your posts and you’ll see it shows up!
 
 
-== Screenshots ==
+<h2> Screenshots </h2>
 
 1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
 the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
@@ -68,13 +68,13 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 2. This is the second screen shot
 
 
-== Changelog ==
+<h2> Changelog </h2>
 
 = 1.0 =
 * Initial public version
 
 
-== API ==
+<h2> API </h2>
 
 = **Filters** =
 
