@@ -15,7 +15,7 @@ Supercharge your custom post type archives by letting visitors filter the posts 
 The Beautiful Taxonomy Filters plugin is a easy and good-looking way to provide your visitors with filtering for your post types. With this you get a complete solution for adding filtering based on taxonomy terms/categories/tags. It will also automatically add rewrite rules for pretty looking filter URLs. It’s completely automatic, works without javascript and is based on the [WordPress Plugin boilerplate](https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate) for a *standardized, organized and object-oriented* codebase. It uses [select2](http://ivaynberg.github.io/select2/) for pretty looking and user-friendly dropdowns but will fall back to ordinary ones if javascript is not supported.
 **No more horrible looking URLs or hacky Javascript solutions**
 
-= Features = 
+<h3> Features </h3> 
 * Activate filtering on any registered public post type
 * Exclude taxonomies you just don’t want the visitors to filter on
 * Beautifies the resulting URLs. You won’t see any /posttype/?taxonomy1=term. Instead you’ll see /posttype/taxonomy/term
@@ -25,13 +25,13 @@ The Beautiful Taxonomy Filters plugin is a easy and good-looking way to provide 
 * Multiple filters for modifying the plugins behavior. For those controlfreaks out there
 
 
-= Languages =
+<h3> Languages </h3>
 * English
 * Swedish
 ____
 Do you want to translate this plugin to another language? I recommend using POEdit (http://poedit.net/) or if you prefer to do it straight from the WordPress admin interface (https://wordpress.org/plugins/loco-translate/). When you’re done, send us the file(s) to jonathan@tigerton.se and we’ll add it to the official plugin!
 
-= Other =
+<h3> Other </h3>
 * Based on [WordPress Plugin Boilerplate](https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate)
 * Uses [Select2](http://ivaynberg.github.io/select2/) to enhance dropdowns 
 
@@ -45,15 +45,15 @@ Do you want to translate this plugin to another language? I recommend using POEd
 
 <h2> Frequently Asked Questions </h2>
 
-= Is there a way to change the order of the taxonomies? =
+<h3> Is there a way to change the order of the taxonomies? </h3>
 
 Using this plugin, no. But the order is the same as the order in which you created the taxonomies. So if you’re for instance using the Custom Post Type UI plugin you can change the order by clicking edit on the taxonomy you want last and saving it without doing any changes. If you’ve created your taxonomies by hand you can just change the order of the register_taxonomy functions.
 
-= Does this support multiple selecting multiple terms from the same taxonomy? =
+<h3> Does this support multiple selecting multiple terms from the same taxonomy? </h3>
 
-No. In a future release we will look into if it’s possible to support this AND having beautiful permalinks. If that doesn’t work we will likely add an option where you can opt out of beautiful permalinks and enjoy the power of multiple terms filtering instead. 
+No. In a future release we will look into if it’s possible to support this and having beautiful permalinks. If that doesn’t work we will likely add an option where you can opt out of beautiful permalinks and enjoy the power of multiple terms filtering instead. 
 
-= My taxonomy isn’t showing in the filter / the filters are too small =
+<h3> My taxonomy isn’t showing in the filter / the filters are too small </h3>
 
 A Taxonomy will not appear in the filter until at least one post has been connected to one of the terms.
 Just start tagging up your posts and you’ll see it shows up!
@@ -70,18 +70,18 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 
 <h2> Changelog </h2>
 
-= 1.0 =
+<h3> 1.0 </h3>
 * Initial public version
 
 
 <h2> API </h2>
 
-= **Filters** =
+<h3> Filters </h3>
 
 These are the filters available to modify the behavior of the plugin. These all take at least 1 parameter which you must return
 ____
 
-= beautiful_filters_dropdown_categories =
+<h4> beautiful_filters_dropdown_categories </h4>
 
 $args is an array of the arguments put into the wp_dropdown_categories function.
 
@@ -93,7 +93,7 @@ function modify_categories_dropdown( $args ) {
 add_filter( 'beautiful_filters_dropdown_categories', 'modify_categories_dropdown’, 10, 1 );
 ```
 
-= beautiful_filters_post_types =
+<h4> beautiful_filters_post_types </h4>
 
 $post_types is an array. Modifies the selected post types before being used.
 
@@ -105,7 +105,7 @@ function modify_post_types( $post_types ) {
 add_filter( 'beautiful_filters_post_types', 'modify_post_types', 10, 1 );
 ```
 
-= beautiful_filters_taxonomies =
+<h4> beautiful_filters_taxonomies </h4>
 
 $taxonomies is an array. Modifies the excluded taxonomies before being used.
 
@@ -117,7 +117,7 @@ function modify_categories_dropdown( $taxonomies ) {
 add_filter( 'beautiful_filters_taxonomies', 'modify_categories_dropdown', 10, 1 );
 ```
 
-= beautiful_filters_clear_all =
+<h4> beautiful_filters_clear_all </h4>
 
 $bool is a boolean which decides if the ”Clear all” link should be used or not. 
 
@@ -129,7 +129,7 @@ function modify_clear_all( $bool ) {
 add_filter( 'beautiful_filters_clear_all', 'modify_clear_all', 10, 1 );
 ```
 
-= beautiful_filters_taxonomy_label =
+<h4> beautiful_filters_taxonomy_label </h4>
 
 $label is the name of the taxonomy used as label to the dropdown.
 
@@ -142,10 +142,10 @@ function modify_labels($label){
 add_filter('beautiful_filters_taxonomy_label', 'modify_labels', 10, 1);
 ```
 
-= **Actions** =
+<h3> Actions </h3>
 These are the actions you may use to extend the filter component.
 
-= beautiful_actions_before_form =
+<h4> beautiful_actions_before_form </h4>
 
 $current_post_type is the post type which the filter component are currently using. Use this variable as a conditional if needed.
 
@@ -158,7 +158,7 @@ function add_markup_before_form($current_post_type){
 add_action('beautiful_actions_before_form', 'add_markup_before_form' );
 ```
 
-= beautiful_actions_after_form =
+<h4> beautiful_actions_after_form </h4>
 
 $current_post_type is the post type which the filter component are currently using. Use this variable as a conditional if needed.
 
@@ -171,7 +171,7 @@ function add_markup_after_form($current_post_type){
 add_action('beautiful_actions_after_form', 'add_markup_after_form' );
 ```
 
-= beautiful_actions_beginning_form =
+<h4> beautiful_actions_beginning_form </h4>
 
 $current_post_type is the post type which the filter component are currently using. Use this variable as a conditional if needed.
 This action is very usable if you for some reason need to add inputs to be send with the form
@@ -185,7 +185,7 @@ function add_markup_beginning_form($current_post_type){
 add_action('beautiful_actions_beginning_form', 'add_markup_beginning_form' );
 ```
 
-= beautiful_actions_ending_form =
+<h4> beautiful_actions_ending_form </h4>
 
 $current_post_type is the post type which the filter component are currently using. Use this variable as a conditional if needed.
 This action is very usable if you for some reason need to add inputs to be send with the form.
