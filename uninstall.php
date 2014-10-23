@@ -1,6 +1,9 @@
 <?php
 
 /**
+ * NOTICE: This file is kept as a safety-measure on my part (the developer of this plugin). 
+ * I may need to use it in a later update and reading the link below makes me think I might as well leave it here for now!
+ * 
  * Fired when the plugin is uninstalled.
  *
  * When populating this file, consider the following flow

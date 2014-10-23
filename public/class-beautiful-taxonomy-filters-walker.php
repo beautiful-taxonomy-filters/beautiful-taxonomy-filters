@@ -33,7 +33,6 @@ class Walker_Slug_Value_Category_Dropdown extends Walker_CategoryDropdown {
 		        	$get_array[] = $get_variable;
 	        	}
 	        	foreach($get_array as $get_single){
-	        		print_r($get_array);
 		        	if ( $category->term_id == $args['selected'] || $get_single == $category->slug ){
 						$output .= ' selected="selected"';
 					}

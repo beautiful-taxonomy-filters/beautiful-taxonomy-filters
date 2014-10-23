@@ -3,23 +3,14 @@
 /**
  * The public-facing functionality of the plugin.
  *
- * @link       http://example.com
+ * @link       http://tigerton.se
  * @since      1.0.0
  *
  * @package    Beautiful_Taxonomy_Filters
  * @subpackage Beautiful_Taxonomy_Filters/includes
- */
-
-/**
- * The public-facing functionality of the plugin.
- *
- * Defines the plugin name, version, and two examples hooks for how to
- * enqueue the dashboard-specific stylesheet and JavaScript.
- *
- * @package    Beautiful_Taxonomy_Filters
- * @subpackage Beautiful_Taxonomy_Filters/admin
  * @author     Jonathan de Jong <jonathan@tigerton.se>
  */
+
 class Beautiful_Taxonomy_Filters_Public {
 
 	/**
@@ -107,11 +98,28 @@ class Beautiful_Taxonomy_Filters_Public {
 
 	}
 	
+	/**
+	* Appends the already existing GET parameters to the url. 
+	* This allows for custom parameters to carry on to the filtered page
+	* @since 1.0.0
+	*/
+	private function append_get_parameters($new_url){
+		if(!empty($_GET)){
+			$previous_parameters = $_GET;
+			$i = 0;
+			foreach($previous_parameters as $key => $value){
+				$new_url .= ($i == 0 ? '?' : '&');
+				$new_url .= $key . '=' . $value;
+				$i++;
+			}
+		}
+		return $new_url;
+	}
 	
 	
 	/**
 	* Runs on template_include filter. Check for $POST values coming from the filter and add them to the url
-	*
+	* Also check for custom GET parameters and reattach them to the url to support combination with other functionalities
 	* @since 1.0.0
 	*/
 	public function catch_filter_values(){
@@ -121,7 +129,28 @@ class Beautiful_Taxonomy_Filters_Public {
 			return;
 		
 		//get current post type archive
-		$current_post_type = get_post_type();
+		if(isset($_POST['post_type']) && $_POST['post_type'] != ''){
+			$current_post_type = $_POST['post_type'];
+		}else{ //If there was no post type from the form (for some reason), try to get it anyway!
+			$current_post_type = get_post_type();
+			//If there is no post type found OR post type found is a page, try to find the post type from the current template instead!
+			if(!$current_post_type || $current_post_type == 'page'){
+				global $template;
+				$template_name = explode('-', basename( $template, '.php' ));
+				if (in_array('archive', $template_name) && count($template_name) > 1) {
+					//We found the post type in the template!
+					$current_post_type = $template_name[1];
+				}else{
+					//didnt find the post type in the template, fall back to the wp_query!
+					global $wp_query;
+					if($wp_query->query['post_type'] != ''){
+						$current_post_type = $wp_query->query['post_type'];	
+					}
+				}
+			}
+		}
+		
+		
 		//base url
 		$new_url = $referer . '/' . $current_post_type . '/';
 		
@@ -139,8 +168,11 @@ class Beautiful_Taxonomy_Filters_Public {
 				
 			}
 		}
-		//perform a safe redirect
-		wp_safe_redirect($new_url);
+		
+		$new_url = $this->append_get_parameters($new_url);
+		
+		//perform a redirect to the new filtered url
+		wp_redirect($new_url);
 		exit;
 	}
 	
@@ -150,9 +182,66 @@ class Beautiful_Taxonomy_Filters_Public {
 	*
 	* @since 1.0.0
 	*/
-	public static function get_beautiful_filters(){
+	public static function beautiful_filters(){
+		//Fetch the plugins options
+		//Apply filters on them to let users modify the options before they're being used!
+		$post_types = apply_filters( 'beautiful_filters_post_types', get_option('beautiful_taxonomy_filters_post_types') ); 
+		$excluded_taxonomies = apply_filters( 'beautiful_filters_taxonomies', get_option('beautiful_taxonomy_filters_taxonomies') ); 
+
+		//If there's no post types, bail early!
+		if(!$post_types) 
+			return;
+
+		//get current post type archive
+		if(isset($_POST['post_type']) && $_POST['post_type'] != ''){
+			$current_post_type = $_POST['post_type'];
+		}else{ //If there was no post type from the form (for some reason), try to get it anyway!
+			$current_post_type = get_post_type();
+			//If there is no post type found OR post type found is a page, try to find the post type from the current template instead!
+			if(!$current_post_type || $current_post_type == 'page'){
+				global $template;
+				$template_name = explode('-', basename( $template, '.php' ));
+				if (in_array('archive', $template_name) && count($template_name) > 1) {
+					$current_post_type = $template_name[1];
+				}else{
+					global $wp_query;
+					if($wp_query->query['post_type'] != ''){
+						$current_post_type = $wp_query->query['post_type'];	
+					}
+				}
+			}
+		}
+
+		//Get the taxonomies of the current post type
+		$current_taxonomies = get_object_taxonomies($current_post_type, 'objects');
+		//If we both have taxonomies on the post type AND we've set som excluded taxonomies in the plugins settings. Loop through them and unset those we don't want!
+		if($current_taxonomies && $excluded_taxonomies){
+			foreach($current_taxonomies as $key => $value){
+				if(in_array($key, $excluded_taxonomies)){
+					unset($current_taxonomies[$key]);
+				}
+			}
+		}
+		//On a post type that we want the filter on, and we have atleast one valid taxonomy
+		if(in_array($current_post_type, $post_types) && !empty($current_taxonomies)){
+
+			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/beautiful-taxonomy-filters-public-display.php';
+		}
+		
+	}
 	
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/beautiful-taxonomy-filters-public-display.php';
+	/**
+	* Public function to return information about the currently active filters
+	*
+	* @since 1.0.0
+	*/
+	public static function beautiful_filters_info(){
+		global $wp_query;
+		$taxonomies = $wp_query->tax_query->queries;
+		//as long as we have some taxonomies, lets show the info!
+		if(!empty($taxonomies)){
+			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/beautiful-taxonomy-filters-public-info-display.php';	
+		}
 		
 	}
 

@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Provide a dashboard view for the plugin
+ * The setting for which post types the filter should be applicable to
  *
- * This file is used to markup the public-facing aspects of the plugin.
+ * This file is used to setup a settings field
  *
- * @link       http://example.com
+ * @link       http://tigerton.se
  * @since      1.0.0
  *
- * @package    Plugin_Name
- * @subpackage Plugin_Name/admin/partials
+ * @package    Beautiful_Taxonomy_Filters
+ * @subpackage Beautiful_Taxonomy_Filters/admin/partials
  */
 ?>
 

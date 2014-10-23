@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * The setting to disable the heading for the active filters
+ *
+ * This file is used to setup a settings field
+ *
+ * @link       http://tigerton.se
+ * @since      1.0.0
+ *
+ * @package    Beautiful_Taxonomy_Filters
+ * @subpackage Beautiful_Taxonomy_Filters/admin/partials
+ */
+
+
+$clear_all = (get_option('beautiful_taxonomy_filters_disable_heading') ? get_option('beautiful_taxonomy_filters_disable_heading') : false); 
+?>
+<input type="checkbox" name="beautiful_taxonomy_filters_disable_heading" value="1" <?php if($clear_all){ echo 'checked="checked"'; } ?> />
+

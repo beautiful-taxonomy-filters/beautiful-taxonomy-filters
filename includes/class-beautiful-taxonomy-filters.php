@@ -162,8 +162,6 @@ class Beautiful_Taxonomy_Filters {
 
 		$plugin_admin = new Beautiful_Taxonomy_Filters_Admin( $this->get_Beautiful_Taxonomy_Filters(), $this->get_version() );
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'generate_rewrite_rules', $plugin_admin, 'add_rewrite_rules' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_admin_menu' );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'settings_api_init' );		

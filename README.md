@@ -1,12 +1,4 @@
 <h1> Beautiful taxonomy filters </h1>
-Contributors: jonathandejong, tigerton
-Donate link: http://example.com/
-Tags: Taxonomy, filter, permalinks, terms
-Requires at least: 3.0.1
-Tested up to: 4.0
-Stable tag: 1.0.0
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Supercharge your custom post type archives by letting visitors filter the posts by their terms/categories. This plugin handles the whole thing for you.
 
@@ -15,7 +7,7 @@ Supercharge your custom post type archives by letting visitors filter the posts 
 The Beautiful Taxonomy Filters plugin is a easy and good-looking way to provide your visitors with filtering for your post types. With this you get a complete solution for adding filtering based on taxonomy terms/categories/tags. It will also automatically add rewrite rules for pretty looking filter URLs. It’s completely automatic, works without javascript and is based on the [WordPress Plugin boilerplate](https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate) for a *standardized, organized and object-oriented* codebase. It uses [select2](http://ivaynberg.github.io/select2/) for pretty looking and user-friendly dropdowns but will fall back to ordinary ones if javascript is not supported.
 **No more horrible looking URLs or hacky Javascript solutions**
 
-<h3> Features </h3> 
+<h3> Features </h3>
 * Activate filtering on any registered public post type
 * Exclude taxonomies you just don’t want the visitors to filter on
 * Beautifies the resulting URLs. You won’t see any /posttype/?taxonomy1=term. Instead you’ll see /posttype/taxonomy/term
@@ -35,12 +27,16 @@ Do you want to translate this plugin to another language? I recommend using POEd
 * Based on [WordPress Plugin Boilerplate](https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate)
 * Uses [Select2](http://ivaynberg.github.io/select2/) to enhance dropdowns 
 
+<h3>TODOS</h3>
+* Add the ability to disable using select2
+* A Pro version with more cool features! 
+* Look into compatibility with other plugins (feel free to suggest)
 
 <h2> Installation </h2>
 
 1. Upload `beautiful-taxonomy-filters` folder to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Follow the instructions found in Settings > Taxonomy filters to get you started!
+2. Activate the plugin through the 'Plugins' menu in WordPress
+3. Follow the instructions found in Settings > Taxonomy filters to get you started!
 
 
 <h2> Frequently Asked Questions </h2>
@@ -51,12 +47,21 @@ Using this plugin, no. But the order is the same as the order in which you creat
 
 <h3> Does this support multiple selecting multiple terms from the same taxonomy? </h3>
 
-No. In a future release we will look into if it’s possible to support this and having beautiful permalinks. If that doesn’t work we will likely add an option where you can opt out of beautiful permalinks and enjoy the power of multiple terms filtering instead. 
+No. In a future release we will look into if it’s possible to support this AND having beautiful permalinks. If that doesn’t work we will likely add an option where you can opt out of beautiful permalinks and enjoy the power of multiple terms filtering instead. 
 
 <h3> My taxonomy isn’t showing in the filter / the filters are too small </h3>
 
 A Taxonomy will not appear in the filter until at least one post has been connected to one of the terms.
-Just start tagging up your posts and you’ll see it shows up!
+Just start tagging up your posts and you’ll see it shows up! Also, make sure that your custom post type has an archive (in the arguments for the custom post type) since this plugin uses the builtin WordPress functionality for archives.
+
+
+<h2> Screenshots </h2>
+
+1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
+the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
+directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
+(or jpg, jpeg, gif).
+2. This is the second screen shot
 
 
 <h2> Changelog </h2>
@@ -67,7 +72,7 @@ Just start tagging up your posts and you’ll see it shows up!
 
 <h2> API </h2>
 
-<h3> Filters </h3>
+<h3> **Filters** </h3>
 
 These are the filters available to modify the behavior of the plugin. These all take at least 1 parameter which you must return
 ____
@@ -75,13 +80,14 @@ ____
 <h4> beautiful_filters_dropdown_categories </h4>
 
 $args is an array of the arguments put into the wp_dropdown_categories function.
+$taxonomy is the current taxonomy. 
 
 ```
-function modify_categories_dropdown( $args ) {
+function modify_categories_dropdown( $args, $taxonomy ) {
 
     return $args;
 }
-add_filter( 'beautiful_filters_dropdown_categories', 'modify_categories_dropdown’, 10, 1 );
+add_filter( 'beautiful_filters_dropdown_categories', 'modify_categories_dropdown’, 10, 2 );
 ```
 
 <h4> beautiful_filters_post_types </h4>
@@ -133,7 +139,35 @@ function modify_labels($label){
 add_filter('beautiful_filters_taxonomy_label', 'modify_labels', 10, 1);
 ```
 
-<h3> Actions </h3>
+<h4> beautiful_filters_active_taxonomy </h4>
+
+$label is the taxonomy string for the active filter info
+$taxonomy is the current taxonomy name
+
+```
+function modify_active_taxonomy($label, $taxonomy){
+	
+	return $label;
+}
+
+add_filter('beautiful_filters_taxonomy_label', 'modify_active_taxonomy', 10, 2);
+```
+
+<h4> beautiful_filters_active_terms </h4>
+
+$terms is the terms string for the active filter info
+$taxonomy is the current taxonomy name
+
+```
+function modify_active_taxonomy($terms, $taxonomy){
+	
+	return $terms;
+}
+
+add_filter('beautiful_filters_active_terms', 'modify_active_terms', 10, 2);
+```
+
+<h3> **Actions** </h3>
 These are the actions you may use to extend the filter component.
 
 <h4> beautiful_actions_before_form </h4>

@@ -219,6 +219,20 @@
 
 
 
+/*
+* Active filters
+*/
+.beautiful-taxonomy-filters-active-filter{
+	margin:.5em 2em;
+}
+.beautiful-taxonomy-filters-info-heading{
+	margin-top:0px;
+	margin-bottom:.5em;
+}
+.beautiful-taxonomy-filters-single-tax .single-tax-key{
+	font-weight: bold;
+}
+
 
 
 

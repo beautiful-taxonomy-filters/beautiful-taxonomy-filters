@@ -8,18 +8,9 @@
  *
  * @package    Beautiful_Taxonomy_Filters
  * @subpackage Beautiful_Taxonomy_Filters/includes
- */
-
-/**
- * The dashboard-specific functionality of the plugin.
- *
- * Defines the plugin name, version, and two examples hooks for how to
- * enqueue the dashboard-specific stylesheet and JavaScript.
- *
- * @package    Beautiful_Taxonomy_Filters
- * @subpackage Beautiful_Taxonomy_Filters/admin
  * @author     Jonathan de Jong <jonathan@tigerton.se>
  */
+
 class Beautiful_Taxonomy_Filters_Admin {
 
 	/**
@@ -51,51 +42,6 @@ class Beautiful_Taxonomy_Filters_Admin {
 
 		$this->name = $name;
 		$this->version = $version;
-
-	}
-
-	/**
-	 * Register the stylesheets for the Dashboard.
-	 *
-	 * @since    1.0.0
-	 */
-	public function enqueue_styles() {
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Beautiful_Taxonomy_Filters_Admin_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Beautiful_Taxonomy_Filters_Admin_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-		wp_enqueue_style( $this->name, plugin_dir_url( __FILE__ ) . 'css/beautiful-taxonomy-filters-admin.css', array(), $this->version, 'all' );
-
-	}
-
-	/**
-	 * Register the JavaScript for the dashboard.
-	 *
-	 * @since    1.0.0
-	 */
-	public function enqueue_scripts() {
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Beautiful_Taxonomy_Filters_Admin_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Beautiful_Taxonomy_Filters_Admin_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
-		wp_enqueue_script( $this->name, plugin_dir_url( __FILE__ ) . 'js/beautiful-taxonomy-filters-admin.js', array( 'jquery' ), $this->version, false );
 
 	}
 	
@@ -194,6 +140,15 @@ class Beautiful_Taxonomy_Filters_Admin {
 			'taxonomy_filters_styling_settings_section'
 		);
 		
+		// Add checkbox to let users choose to disable the "active filters" heading
+	 	add_settings_field(
+			'beautiful_taxonomy_filters_disable_heading',
+			__('Disable the active filters heading:', 'beautiful-taxonomy-filters'),
+			array($this, 'disable_heading_setting_callback_function'),
+			'taxonomy-filters',
+			'taxonomy_filters_styling_settings_section'
+		);
+		
 		// Add the field with the selectable styles
 	 	add_settings_field(
 			'beautiful_taxonomy_filters_styles',
@@ -218,6 +173,7 @@ class Beautiful_Taxonomy_Filters_Admin {
 		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_styles' );
 		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_custom_css' );
 		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_clear_all' );
+		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_disable_heading' );
 		
 	}
 	
@@ -239,6 +195,10 @@ class Beautiful_Taxonomy_Filters_Admin {
  	
  	function clear_all_setting_callback_function() {
  		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/beautiful-taxonomy-filters-clear-all-settings-display.php';
+ 	}
+ 	
+ 	function disable_heading_setting_callback_function() {
+ 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/beautiful-taxonomy-filters-disable-heading-settings-display.php';
  	}
  	
  	function styles_setting_callback_function() {

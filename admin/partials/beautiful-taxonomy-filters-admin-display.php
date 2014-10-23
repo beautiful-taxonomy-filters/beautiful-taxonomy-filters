@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Provide a dashboard view for the plugin
+ * The main settings content for our beautiful plugin.. 
  *
- * This file is used to markup the public-facing aspects of the plugin.
+ * This file is used to setup the main settings area
  *
- * @link       http://example.com
+ * @link       http://tigerton.se
  * @since      1.0.0
  *
- * @package    Plugin_Name
- * @subpackage Plugin_Name/admin/partials
+ * @package    Beautiful_Taxonomy_Filters
+ * @subpackage Beautiful_Taxonomy_Filters/admin/partials
  */
 ?>
 <?php
@@ -37,9 +37,12 @@ flush_rewrite_rules();
 			<p><?php _e('<i>success! Your previously ugly taxonomy filtering is now oh so beautiful!</i>', 'beautiful-taxonomy-filters'); ?></p>
 		</li>
 		<li>
-			<p><?php _e('To use the provided select dropdown filters. Copy:', 'beautiful-taxonomy-filters'); ?> <pre><code>&lt;?php Beautiful_Taxonomy_Filters_Public::get_beautiful_filters(); ?&gt;</code></pre> <?php _e('and paste it in your', 'beautiful-taxonomy-filters'); ?> <a href="<?php echo get_admin_url() . 'theme-editor.php?file=archive.php'; ?>" target="_blank">archive.php</a> <?php _e('file in your template. It should be placed somewhere above', 'beautiful-taxonomy-filters'); ?> <pre><code>&lt;?php if( have_posts() ) : ?&gt;</code></pre></p>
+			<p><?php _e('To use the provided select dropdown filters. Copy:', 'beautiful-taxonomy-filters'); ?> <pre><code>&lt;?php show_beautiful_filters(); ?&gt;</code></pre> <?php _e('and paste it in your', 'beautiful-taxonomy-filters'); ?> <a href="<?php echo get_admin_url() . 'theme-editor.php?file=archive.php'; ?>" target="_blank">archive.php</a> <?php _e('file in your template. It should be placed somewhere above', 'beautiful-taxonomy-filters'); ?> <pre><code>&lt;?php if( have_posts() ) : ?&gt;</code></pre></p>
 			<p><?php _e('<b>Note:</b> The layout of archive.php may differ drastically between different themes. We can\'t help you with the positioning of the function in your theme so please either just try some locations (you can just remove the function again if something breaks) or ask in your themes support forum (if available). Best of luck!', 'beautiful-taxonomy-filters'); ?></p>
 			<p><?php _e('<b>Note 2:</b> The function will only show a filter if the post type archive is for a post type you\'ve selected in the settings above. So don\'t worry about filters in the wrong place.', 'beautiful-taxonomy-filters'); ?></p>
+		</li>
+		<li>
+			<p><?php _e('To show the active filter info. Copy:', 'beautiful-taxonomy-filters'); ?> <pre><code>&lt;?php show_beautiful_filters_info(); ?&gt;</code></pre> <?php _e('to wherever you want the filter info to appear.', 'beautiful-taxonomy-filters'); ?></p>
 		</li>
 	</ol>
 </div>

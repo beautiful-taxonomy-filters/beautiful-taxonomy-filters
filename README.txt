@@ -22,7 +22,9 @@ The Beautiful Taxonomy Filters plugin is a easy and good-looking way to provide 
 * Comes with a complete functional filter component for you to put in your theme. 
 * Choose from different styles for the component, or disable styling and do it yourself in style.css! Just want to tweak a style? Add your custom CSS directly on the settings page
 * Want a ”Clear all” link for the filter component? Just tick a box in the settings page!
-* Multiple filters for modifying the plugins behavior. For those controlfreaks out there
+* Ability to show your visitors information about their current active filtering
+* Allows for custom GET parameters to be included. Extend the filter your way with maybe a custom search-parameter or whatever you like. 
+* Many filters and actions for modifying the plugins behavior. For those controlfreaks out there
 
 
 = Languages =
@@ -39,8 +41,8 @@ Do you want to translate this plugin to another language? I recommend using POEd
 == Installation ==
 
 1. Upload `beautiful-taxonomy-filters` folder to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Follow the instructions found in Settings > Taxonomy filters to get you started!
+2. Activate the plugin through the 'Plugins' menu in WordPress
+3. Follow the instructions found in Settings > Taxonomy filters to get you started!
 
 
 == Frequently Asked Questions ==
@@ -56,7 +58,7 @@ No. In a future release we will look into if it’s possible to support this AND
 = My taxonomy isn’t showing in the filter / the filters are too small =
 
 A Taxonomy will not appear in the filter until at least one post has been connected to one of the terms.
-Just start tagging up your posts and you’ll see it shows up!
+Just start tagging up your posts and you’ll see it shows up! Also, make sure that your custom post type has an archive (in the arguments for the custom post type) since this plugin uses the builtin WordPress functionality for archives.
 
 
 == Screenshots ==
@@ -84,13 +86,14 @@ ____
 = beautiful_filters_dropdown_categories =
 
 $args is an array of the arguments put into the wp_dropdown_categories function.
+$taxonomy is the current taxonomy. 
 
 ```
-function modify_categories_dropdown( $args ) {
+function modify_categories_dropdown( $args, $taxonomy ) {
 
     return $args;
 }
-add_filter( 'beautiful_filters_dropdown_categories', 'modify_categories_dropdown’, 10, 1 );
+add_filter( 'beautiful_filters_dropdown_categories', 'modify_categories_dropdown’, 10, 2 );
 ```
 
 = beautiful_filters_post_types =
@@ -140,6 +143,34 @@ function modify_labels($label){
 }
 
 add_filter('beautiful_filters_taxonomy_label', 'modify_labels', 10, 1);
+```
+
+= beautiful_filters_active_taxonomy =
+
+$label is the taxonomy string for the active filter info
+$taxonomy is the current taxonomy name
+
+```
+function modify_active_taxonomy($label, $taxonomy){
+	
+	return $label;
+}
+
+add_filter('beautiful_filters_taxonomy_label', 'modify_active_taxonomy', 10, 2);
+```
+
+= beautiful_filters_active_terms =
+
+$terms is the terms string for the active filter info
+$taxonomy is the current taxonomy name
+
+```
+function modify_active_taxonomy($terms, $taxonomy){
+	
+	return $terms;
+}
+
+add_filter('beautiful_filters_active_terms', 'modify_active_terms', 10, 2);
 ```
 
 = **Actions** =

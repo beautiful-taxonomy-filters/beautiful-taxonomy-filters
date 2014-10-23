@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       Beautiful taxonomy filter
  * Plugin URI:        http://tigerton.se
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress dashboard.
+ * Description:       Supercharges your custom post type archives by letting visitors filter the posts by their terms/categories.
  * Version:           1.0.0
  * Author:            Jonathan de Jong
  * Author URI:        http://jonathandejong.se/
@@ -46,11 +46,15 @@ register_activation_hook( __FILE__, array( 'Beautiful_Taxonomy_Filters_Activator
 /** This action is documented in includes/class-beautiful-taxonomy-filters-deactivator.php */
 register_deactivation_hook( __FILE__, array( 'Beautiful_Taxonomy_Filters_Deactivator', 'deactivate' ) );
 
+/** The template tags accessible for public use */
+require_once plugin_dir_path( __FILE__ ) . 'public/beautiful-taxonomy-filters-functions.php';
+
 /**
  * The core plugin class that is used to define internationalization,
  * dashboard-specific hooks, and public-facing site hooks.
  */
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-beautiful-taxonomy-filters.php';
+
 
 /**
  * Begins execution of the plugin.
