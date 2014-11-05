@@ -1,5 +1,5 @@
 === Beautiful taxonomy filters ===
-Contributors: jonathandejong, tigerton
+Contributors: Jonathandejong, tigerton
 Donate link: http://example.com/
 Tags: Taxonomy, filter, permalinks, terms
 Requires at least: 3.0.1
@@ -63,11 +63,11 @@ Just start tagging up your posts and you’ll see it shows up! Also, make sure t
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. Basic setup settings for the plugin.
+2. Styling settings for both the included filter module and info module.
+3. Example of a beautified permalink structure.
+4. The filter module with the "light material" style.
+5. The filter module in work with select2 for user friendly dropdowns.
 
 
 == Changelog ==
