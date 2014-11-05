@@ -4,15 +4,15 @@ Donate link: http://example.com/
 Tags: Taxonomy, filter, permalinks, terms
 Requires at least: 3.0.1
 Tested up to: 4.0
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Supercharge your custom post type archives by letting visitors filter the posts by their terms/categories. This plugin handles the whole thing for you.
+Supercharge your custom post type archives by letting visitors filter posts by their terms/categories. This plugin handles the whole thing for you!
 
 == Description ==
 
-The Beautiful Taxonomy Filters plugin is a easy and good-looking way to provide your visitors with filtering for your post types. With this you get a complete solution for adding filtering based on taxonomy terms/categories/tags. It will also automatically add rewrite rules for pretty looking filter URLs. It’s completely automatic, works without javascript and is based on the [WordPress Plugin boilerplate](https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate) for a *standardized, organized and object-oriented* codebase. It uses [select2](http://ivaynberg.github.io/select2/) for pretty looking and user-friendly dropdowns but will fall back to ordinary ones if javascript is not supported.
+The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide your visitors with filtering for your post types. With this you get a complete solution for adding filtering based on taxonomy terms/categories/tags. It will also automatically add rewrite rules for pretty looking filter URLs. It’s completely automatic, works without javascript and is based on the [WordPress Plugin boilerplate](https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate) for a *standardized, organized and object-oriented* codebase. It uses [select2](http://ivaynberg.github.io/select2/) for pretty looking and user-friendly dropdowns but will fall back to ordinary ones if javascript is not supported.
 **No more horrible looking URLs or hacky Javascript solutions**
 
 = Features = 
@@ -24,12 +24,13 @@ The Beautiful Taxonomy Filters plugin is a easy and good-looking way to provide 
 * Want a ”Clear all” link for the filter component? Just tick a box in the settings page!
 * Ability to show your visitors information about their current active filtering
 * Allows for custom GET parameters to be included. Extend the filter your way with maybe a custom search-parameter or whatever you like. 
-* Many filters and actions for modifying the plugins behavior. For those controlfreaks out there
+* Many filters and actions for modifying the plugins behavior. For those controlfreaks out there…
 
 
 = Languages =
 * English
 * Swedish
+* Spanish (Thanks to Juan Javier Moreno Restituto)
 ____
 Do you want to translate this plugin to another language? I recommend using POEdit (http://poedit.net/) or if you prefer to do it straight from the WordPress admin interface (https://wordpress.org/plugins/loco-translate/). When you’re done, send us the file(s) to jonathan@tigerton.se and we’ll add it to the official plugin!
 
@@ -72,6 +73,10 @@ Just start tagging up your posts and you’ll see it shows up! Also, make sure t
 
 == Changelog ==
 
+= 1.0.1 =
+* FIX: PHP Notice on some occasions using the filter info function
+* FEATURE: Spanish translation. Thanks to Juan Javier Moreno Restituto
+
 = 1.0 =
 * Initial public version
 
@@ -88,90 +93,90 @@ ____
 $args is an array of the arguments put into the wp_dropdown_categories function.
 $taxonomy is the current taxonomy. 
 
-```
+`
 function modify_categories_dropdown( $args, $taxonomy ) {
 
     return $args;
 }
 add_filter( 'beautiful_filters_dropdown_categories', 'modify_categories_dropdown’, 10, 2 );
-```
+`
 
 = beautiful_filters_post_types =
 
 $post_types is an array. Modifies the selected post types before being used.
 
-```
+`
 function modify_post_types( $post_types ) {
 
     return $post_types;
 }
 add_filter( 'beautiful_filters_post_types', 'modify_post_types', 10, 1 );
-```
+`
 
 = beautiful_filters_taxonomies =
 
 $taxonomies is an array. Modifies the excluded taxonomies before being used.
 
-```
+`
 function modify_categories_dropdown( $taxonomies ) {
 
     return $taxonomies;
 }
 add_filter( 'beautiful_filters_taxonomies', 'modify_categories_dropdown', 10, 1 );
-```
+`
 
 = beautiful_filters_clear_all =
 
 $bool is a boolean which decides if the ”Clear all” link should be used or not. 
 
-```
+`
 function modify_clear_all( $bool ) {
 
     return $bool;
 }
 add_filter( 'beautiful_filters_clear_all', 'modify_clear_all', 10, 1 );
-```
+`
 
 = beautiful_filters_taxonomy_label =
 
 $label is the name of the taxonomy used as label to the dropdown.
 
-```
+`
 function modify_labels($label){
 	
 	return $label;
 }
 
 add_filter('beautiful_filters_taxonomy_label', 'modify_labels', 10, 1);
-```
+`
 
 = beautiful_filters_active_taxonomy =
 
 $label is the taxonomy string for the active filter info
 $taxonomy is the current taxonomy name
 
-```
+`
 function modify_active_taxonomy($label, $taxonomy){
 	
 	return $label;
 }
 
 add_filter('beautiful_filters_taxonomy_label', 'modify_active_taxonomy', 10, 2);
-```
+`
 
 = beautiful_filters_active_terms =
 
 $terms is the terms string for the active filter info
 $taxonomy is the current taxonomy name
 
-```
+`
 function modify_active_taxonomy($terms, $taxonomy){
 	
 	return $terms;
 }
 
 add_filter('beautiful_filters_active_terms', 'modify_active_terms', 10, 2);
-```
+`
 
 = **Actions** =
 These are the actions you may use to extend the filter component.
@@ -180,52 +185,52 @@ These are the actions you may use to extend the filter component.
 
 $current_post_type is the post type which the filter component are currently using. Use this variable as a conditional if needed.
 
-```
+`
 function add_markup_before_form($current_post_type){
 		
 	echo 'Hej världen';
 }
 
 add_action('beautiful_actions_before_form', 'add_markup_before_form' );
-```
+`
 
 = beautiful_actions_after_form =
 
 $current_post_type is the post type which the filter component are currently using. Use this variable as a conditional if needed.
 
-```
+`
 function add_markup_after_form($current_post_type){
 	
 	echo 'Hej världen';
 }
 
 add_action('beautiful_actions_after_form', 'add_markup_after_form' );
-```
+`
 
 = beautiful_actions_beginning_form =
 
 $current_post_type is the post type which the filter component are currently using. Use this variable as a conditional if needed.
 This action is very usable if you for some reason need to add inputs to be send with the form
 
-```
+`
 function add_markup_beginning_form($current_post_type){
 	
 	echo 'Hej världen';
 }
 
 add_action('beautiful_actions_beginning_form', 'add_markup_beginning_form' );
-```
+`
 
 = beautiful_actions_ending_form =
 
 $current_post_type is the post type which the filter component are currently using. Use this variable as a conditional if needed.
 This action is very usable if you for some reason need to add inputs to be send with the form.
 
-```
+`
 function add_markup_ending_form($current_post_type){
 	
 	echo 'Hej världen';
 }
 
 add_action('beautiful_actions_ending_form', 'add_markup_ending_form' );
-```
+`

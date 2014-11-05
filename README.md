@@ -4,7 +4,7 @@ Donate link: http://example.com/
 Tags: Taxonomy, filter, permalinks, terms
 Requires at least: 3.0.1
 Tested up to: 4.0
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,6 +28,7 @@ The Beautiful Taxonomy Filters plugin is a easy and good-looking way to provide 
 = Languages =
 * English
 * Swedish
+* Spanish (Thanks to Juan Javier Moreno Restituto)
 ____
 Do you want to translate this plugin to another language? I recommend using POEdit (http://poedit.net/) or if you prefer to do it straight from the WordPress admin interface (https://wordpress.org/plugins/loco-translate/). When you’re done, send us the file(s) to jonathan@tigerton.se and we’ll add it to the official plugin!
 

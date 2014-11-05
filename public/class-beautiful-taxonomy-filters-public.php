@@ -236,10 +236,10 @@ class Beautiful_Taxonomy_Filters_Public {
 	* @since 1.0.0
 	*/
 	public static function beautiful_filters_info(){
+		
 		global $wp_query;
-		$taxonomies = $wp_query->tax_query->queries;
 		//as long as we have some taxonomies, lets show the info!
-		if(!empty($taxonomies)){
+		if(!empty($wp_query->tax_query->queries)){
 			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/beautiful-taxonomy-filters-public-info-display.php';	
 		}
 		
