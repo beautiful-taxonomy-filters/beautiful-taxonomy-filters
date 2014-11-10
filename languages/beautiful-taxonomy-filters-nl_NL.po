@@ -1,0 +1,163 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Beautiful taxonomy filter\n"
+"POT-Creation-Date: 2014-11-10 10:47+0800\n"
+"PO-Revision-Date: 2014-11-10 10:49+0800\n"
+"Last-Translator: Piet Bos <piet@so-wp.com>\n"
+"Language-Team: Piet Bos <piet@senlinonline.com>\n"
+"Language: nl_NL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.10\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: admin/class-beautiful-taxonomy-filters-admin.php:103
+msgid "Setup settings"
+msgstr "Setup instellingen"
+
+#: admin/class-beautiful-taxonomy-filters-admin.php:111
+msgid "Style settings"
+msgstr "Stijl instellingen"
+
+#: admin/class-beautiful-taxonomy-filters-admin.php:119
+msgid "Activate for these post types:"
+msgstr "Activeer voor deze post types:"
+
+#: admin/class-beautiful-taxonomy-filters-admin.php:128
+msgid "Exclude these taxonomies:"
+msgstr "Exclusief deze taxonomieën"
+
+#: admin/class-beautiful-taxonomy-filters-admin.php:137
+msgid "Enable a \"Clear all\" link:"
+msgstr "Activeer een \"Wis alles\" link:"
+
+#: admin/class-beautiful-taxonomy-filters-admin.php:146
+msgid "Disable the active filters heading:"
+msgstr "Schakel de actieve filters rubriek uit:"
+
+#: admin/class-beautiful-taxonomy-filters-admin.php:155
+msgid "Styling:"
+msgstr "Stijl:"
+
+#: admin/class-beautiful-taxonomy-filters-admin.php:164
+msgid "Custom CSS Styling:"
+msgstr "Aangepaste CSS Stijl"
+
+#: admin/partials/beautiful-taxonomy-filters-admin-display.php:21
+msgid "Beautiful Taxonomy Filters"
+msgstr "Beautiful Taxonomy Filters"
+
+#: admin/partials/beautiful-taxonomy-filters-admin-display.php:27
+#: admin/partials/beautiful-taxonomy-filters-section-display.php:15
+msgid "How to use Beautiful Taxonomy Filters"
+msgstr "Hoe de Beautiful Taxonomy Filters te gebruiken"
+
+#: admin/partials/beautiful-taxonomy-filters-admin-display.php:30
+msgid ""
+"Select which post types you want to use the filtering on.</br> <b>Note:</b> "
+"if the post type aren't connected to one or more taxonomies you wont see any "
+"results."
+msgstr ""
+"Selecteer welke post typen je de filters op wilt gebruiken.</br><b>Opmerking:"
+"</b> als de post types niet zijn aangesloten op één of meerdere taxonomieën "
+"zal je geen resultaten zien."
+
+#: admin/partials/beautiful-taxonomy-filters-admin-display.php:33
+msgid ""
+"Exclude any taxonomies you don't want the users to be able to filter on.</"
+"br> <b>Note:</b> Only taxonomies that are connected to post types you have "
+"selected above will be affected"
+msgstr ""
+"Sluit de taxonomieën uit waarvan je niet wilt dat de gebruikers de "
+"mogelijkheid ebben op te kunnen filteren.</br> <b>Opmerking:</b> Alleen de "
+"taxonomieën die gekoppeld zijn aan de types die u hierboven hebt "
+"geselecteerd zullen worden beïnvloed"
+
+#: admin/partials/beautiful-taxonomy-filters-admin-display.php:36
+msgid "Save your changes."
+msgstr "Bewaar de veranderingen."
+
+#: admin/partials/beautiful-taxonomy-filters-admin-display.php:37
+msgid ""
+"<i>success! Your previously ugly taxonomy filtering is now oh so beautiful!</"
+"i>"
+msgstr "<i>Gefeliciteerd! Uw voormalige lelijke filter is nu oh zo mooi!</i>"
+
+#: admin/partials/beautiful-taxonomy-filters-admin-display.php:40
+msgid "To use the provided select dropdown filters. Copy:"
+msgstr "Om de opgegeven dropdown filters te gebruiken. Kopieer:"
+
+#: admin/partials/beautiful-taxonomy-filters-admin-display.php:40
+msgid "and paste it in your"
+msgstr "en plak het in je"
+
+#: admin/partials/beautiful-taxonomy-filters-admin-display.php:40
+msgid "file in your template. It should be placed somewhere above"
+msgstr "file in je templet. Het moet ergens geplaatst worden boven"
+
+#: admin/partials/beautiful-taxonomy-filters-admin-display.php:41
+msgid ""
+"<b>Note:</b> The layout of archive.php may differ drastically between "
+"different themes. We can't help you with the positioning of the function in "
+"your theme so please either just try some locations (you can just remove the "
+"function again if something breaks) or ask in your themes support forum (if "
+"available). Best of luck!"
+msgstr ""
+"<b>Opmerking:</b> Het uiterlijk van archive.php kan verschillentussen de "
+"verschillende thema's. We kunnen je niet helpen met het plaatsen van de "
+"functie in je thema, dus probeer het gewoon (je kan de functie altijd weer "
+"verwijderen als er iets breekt) of vraag het in het support forum van je "
+"thema (als dat bestaat). Succes!"
+
+#: admin/partials/beautiful-taxonomy-filters-admin-display.php:42
+msgid ""
+"<b>Note 2:</b> The function will only show a filter if the post type archive "
+"is for a post type you've selected in the settings above. So don't worry "
+"about filters in the wrong place."
+msgstr ""
+"<b>Opmerking 2:</b> De functie zal alleen een filter laten zien als het een "
+"archief is voor een post type dat je in de instellingen hierboven hebt "
+"geselecteerd. Maak je dus geen zorgen om filters op verkeerde plaatsen."
+
+#: admin/partials/beautiful-taxonomy-filters-admin-display.php:45
+msgid "To show the active filter info. Copy:"
+msgstr "Om de actieve filter info te laten zien. Kopieer:"
+
+#: admin/partials/beautiful-taxonomy-filters-admin-display.php:45
+msgid "to wherever you want the filter info to appear."
+msgstr "waar je het filter wilt zien."
+
+#: admin/partials/beautiful-taxonomy-filters-style-section-display.php:15
+msgid ""
+"This section lets you control the layout and design of the filter you can "
+"use in your archive pages."
+msgstr ""
+"Hier kan je het uiterlijk en de inhoud van het filter dat je kan gebruiken "
+"in de archief pagina's aanpassen."
+
+#: public/partials/beautiful-taxonomy-filters-public-display.php:71
+msgid "All "
+msgstr "Alle"
+
+#: public/partials/beautiful-taxonomy-filters-public-display.php:90
+msgid "Apply filter"
+msgstr "Filter"
+
+#: public/partials/beautiful-taxonomy-filters-public-display.php:92
+msgid "Click to clear all active filters"
+msgstr "Klik om alle active filters te wissen"
+
+#: public/partials/beautiful-taxonomy-filters-public-display.php:92
+msgid "Clear all"
+msgstr "Wis allés"
+
+#: public/partials/beautiful-taxonomy-filters-public-info-display.php:24
+msgid "Active filters"
+msgstr "Actieve filters"
