@@ -166,6 +166,37 @@
 .select2-results .select2-highlighted{
 	background:#9e9e9e;	
 }
+.select2-results .level-1{
+	padding-left:10px;
+}
+.select2-results .level-2{
+	padding-left:20px;
+}
+
+.select2-drop.select2-drop-above{
+	border-radius: 0;
+}
+.select2-drop.select2-drop-above.select2-drop-active{
+	border-top:1px solid #e0e0e0;
+	-webkit-border-radius: 0 0 2px 2px;
+	-moz-border-radius: 0 0 2px 2px;
+	border-radius: 0 0 2px 2px;
+	-webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,.15) !important;
+	-moz-box-shadow: 0 2px 2px 0 rgba(0,0,0,.15) !important;
+	box-shadow: 0 2px 2px 0 rgba(0,0,0,.15) !important;
+	-ms-border-radius: 0 0 2px 2px;
+	-o-border-radius: 0 0 2px 2px;
+	-ms-box-shadow: 0 2px 2px 0 rgba(0,0,0,.15) !important;
+	-o-box-shadow: 0 2px 2px 0 rgba(0,0,0,.15) !important;
+}
+.select2-dropdown-open .select2-choice, .select2-dropdown-open .select2-choices{
+	-moz-border-radius:0;
+	-webkit-border-radius:0;
+	-ms-border-radius:0;
+	-o-border-radius:0;
+	border-radius:0;
+	background-image: none;
+}
 
 
 /* Retina-ize icons */
@@ -184,9 +215,10 @@
     }
 }
 
-
-
-
-
-
-
+/*
+* SIDEBAR WIDGET STYLING
+*/
+.beautiful-taxonomy-filters-widget .beautiful-taxonomy-filters-tax{
+	width:100%;
+	margin-bottom:20px;	
+}

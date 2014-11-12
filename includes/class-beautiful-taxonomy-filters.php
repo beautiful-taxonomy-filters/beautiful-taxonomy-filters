@@ -128,6 +128,16 @@ class Beautiful_Taxonomy_Filters {
 		 * The class that contains our custom wp_get_categories walker
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-beautiful-taxonomy-filters-walker.php';
+		
+		/**
+		 * Our widget class
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'widgets/beautiful-taxonomy-filters-widget.php';
+		
+		/**
+		 * Our info widget class
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'widgets/beautiful-taxonomy-filters-info-widget.php';
 
 		$this->loader = new Beautiful_Taxonomy_Filters_Loader();
 
@@ -164,7 +174,8 @@ class Beautiful_Taxonomy_Filters {
 
 		$this->loader->add_action( 'generate_rewrite_rules', $plugin_admin, 'add_rewrite_rules' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_admin_menu' );
-		$this->loader->add_action( 'admin_init', $plugin_admin, 'settings_api_init' );		
+		$this->loader->add_action( 'admin_init', $plugin_admin, 'settings_api_init' );
+		$this->loader->add_action( 'widgets_init', $plugin_admin, 'register_widgets' );
 		
 	}
 

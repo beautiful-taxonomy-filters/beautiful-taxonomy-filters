@@ -45,21 +45,33 @@ class Beautiful_Taxonomy_Filters_Rewrite_Rules {
 	 
 	    $new_rewrite_rules = array();
 	    $taxonomies = get_object_taxonomies( $post_type->name, 'objects' );
+
 	    // Add taxonomy filters to the query vars array
 	    foreach( $taxonomies as $taxonomy ){
 		    if($excluded_taxonomies){
 			    if(!in_array($taxonomy->query_var, $excluded_taxonomies)){
-					$query_vars[] = $taxonomy->query_var;
+				    if($taxonomy->rewrite['slug'] != ''){
+					    $query_vars[] = $taxonomy->rewrite['slug'];
+				    }else{
+						$query_vars[] = $taxonomy->query_var;    
+				    }
+					
 			    }
 		    }else{
-			    $query_vars[] = $taxonomy->query_var;
+			    if($taxonomy->rewrite['slug'] != ''){
+				    $query_vars[] = $taxonomy->rewrite['slug'];
+			    }else{
+					$query_vars[] = $taxonomy->query_var;    
+			    }
 		    }
 	    }
 	    // Loop over all the possible combinations of the query vars
 	    for( $i = 1; $i <= count( $query_vars );  $i++ ) {
-	 
-	        $new_rewrite_rule =  $post_type->rewrite['slug'] . '/';
-	        $new_query_string = 'index.php?post_type=' . $post_type->name;
+			
+			$new_rewrite_rule =  $post_type->rewrite['slug'] . '/';
+			$new_query_string = 'index.php?post_type=' . $post_type->name;
+			
+	        
 	 
 	        // Prepend the rewrites & queries
 	        for( $n = 1; $n <= $i; $n++ ) {
@@ -80,7 +92,9 @@ class Beautiful_Taxonomy_Filters_Rewrite_Rules {
 	                                    $new_rewrite_rule       => $new_query_string )
 	                             + $new_rewrite_rules;
 	    }
+	    
 	    return $new_rewrite_rules;
+	  
 	}	
 
 }

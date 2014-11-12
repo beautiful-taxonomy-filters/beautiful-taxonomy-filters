@@ -118,6 +118,30 @@ class Beautiful_Taxonomy_Filters_Public {
 	
 	
 	/**
+	* Retrieves the current post type 
+	* 
+	* @since 1.1.0
+	*/
+	public static function get_current_posttype(){
+		$current_post_type = get_post_type();
+		if(!$current_post_type || $current_post_type == 'page'){
+			global $template;
+			$template_name = explode('-', basename( $template, '.php' ));
+			if (in_array('archive', $template_name) && count($template_name) > 1) {
+				$current_post_type = $template_name[1];
+			}else{
+				//didnt find the post type in the template, fall back to the wp_query!
+				global $wp_query;
+				if(array_key_exists('post_type', $wp_query->query) && $wp_query->query['post_type'] != ''){
+					$current_post_type = $wp_query->query['post_type'];	
+				}
+			}
+		}
+		return $current_post_type;
+	}
+	
+	
+	/**
 	* Runs on template_include filter. Check for $POST values coming from the filter and add them to the url
 	* Also check for custom GET parameters and reattach them to the url to support combination with other functionalities
 	* @since 1.0.0
@@ -132,27 +156,14 @@ class Beautiful_Taxonomy_Filters_Public {
 		if(isset($_POST['post_type']) && $_POST['post_type'] != ''){
 			$current_post_type = $_POST['post_type'];
 		}else{ //If there was no post type from the form (for some reason), try to get it anyway!
-			$current_post_type = get_post_type();
-			//If there is no post type found OR post type found is a page, try to find the post type from the current template instead!
-			if(!$current_post_type || $current_post_type == 'page'){
-				global $template;
-				$template_name = explode('-', basename( $template, '.php' ));
-				if (in_array('archive', $template_name) && count($template_name) > 1) {
-					//We found the post type in the template!
-					$current_post_type = $template_name[1];
-				}else{
-					//didnt find the post type in the template, fall back to the wp_query!
-					global $wp_query;
-					if($wp_query->query['post_type'] != ''){
-						$current_post_type = $wp_query->query['post_type'];	
-					}
-				}
-			}
+			
+			$current_post_type = self::get_current_posttype();
+			
 		}
 		
 		
 		//base url
-		$new_url = $referer . '/' . $current_post_type . '/';
+		$new_url = $referer . '/' . $current_post_type . '/';	
 		
 		//Get the taxonomies of the current post type
 		$current_taxonomies = get_object_taxonomies($current_post_type, 'objects');
@@ -196,20 +207,9 @@ class Beautiful_Taxonomy_Filters_Public {
 		if(isset($_POST['post_type']) && $_POST['post_type'] != ''){
 			$current_post_type = $_POST['post_type'];
 		}else{ //If there was no post type from the form (for some reason), try to get it anyway!
-			$current_post_type = get_post_type();
-			//If there is no post type found OR post type found is a page, try to find the post type from the current template instead!
-			if(!$current_post_type || $current_post_type == 'page'){
-				global $template;
-				$template_name = explode('-', basename( $template, '.php' ));
-				if (in_array('archive', $template_name) && count($template_name) > 1) {
-					$current_post_type = $template_name[1];
-				}else{
-					global $wp_query;
-					if($wp_query->query['post_type'] != ''){
-						$current_post_type = $wp_query->query['post_type'];	
-					}
-				}
-			}
+			
+			$current_post_type = self::get_current_posttype();
+			
 		}
 
 		//Get the taxonomies of the current post type
@@ -237,11 +237,7 @@ class Beautiful_Taxonomy_Filters_Public {
 	*/
 	public static function beautiful_filters_info(){
 		
-		global $wp_query;
-		//as long as we have some taxonomies, lets show the info!
-		if(!empty($wp_query->tax_query->queries)){
-			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/beautiful-taxonomy-filters-public-info-display.php';	
-		}
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/beautiful-taxonomy-filters-public-info-display.php';	
 		
 	}
 

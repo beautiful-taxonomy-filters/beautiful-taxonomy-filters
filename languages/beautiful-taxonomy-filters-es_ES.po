@@ -1,0 +1,118 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Beautiful taxonomy filter\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: Fri Oct 10 2014 11:26:31 GMT+0200 (CEST)\n"
+"PO-Revision-Date: 2014-11-05 11:24+0100\n"
+"Last-Translator: Juan Javier <destynova2001@hotmail.com>\n"
+"Language-Team: \n"
+"Language: Swedish\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Loco-Target-Locale: sv_SE\n"
+"X-Generator: Loco - https://localise.biz/\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:157
+msgid "Setup settings"
+msgstr "Ajustes de Configuración"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:165
+msgid "Style settings"
+msgstr "Ajustes de estilo"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:173
+msgid "Activate for these post types:"
+msgstr "Activar para estos tipos personalizados:"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:182
+msgid "Exclude these taxonomies:"
+msgstr "Excluir estas taxonomías:"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:191
+msgid "Enable a \"Clear all\" link:"
+msgstr "Activar un enlace \"Borrar todo\":"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:200
+msgid "Styling:"
+msgstr "Estilo:"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:209
+msgid "Custom CSS Styling:"
+msgstr "Estilos CSS personalizados:"
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:21
+msgid "Beautiful Taxonomy Filters"
+msgstr ""
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:27
+#: ..
+#: /admin/partials/beautiful-taxonomy-filters-section-display.php:15
+msgid "How to use Beautiful Taxonomy Filters"
+msgstr "Cómo usar Beautiful Taxonomy Filters"
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:30
+msgid "Select which post types you want to use the filtering on.</br> <b>Note:</b> if the post type aren't connected to one or more taxonomies you wont see any results."
+msgstr "Selecciona los tipos de entradas personalizadas (CPT) que quieres usar en el filtrado.</br><b>Nota:</b> si el tipo de entrada no está conectado a una o más taxonomías no verás ningún resultado."
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:33
+msgid "Exclude any taxonomies you don't want the users to be able to filter on.</br> <b>Note:</b> Only taxonomies that are connected to post types you have selected above will be affected"
+msgstr "Excluir cualquier taxonomía que no quieras que los usuarios sean capaces de filtrar.</br> <b>Nota:</b> Sólo taxonomías que están conectadas a tipos de entradas que has seleccionado previamente se verán afectadas"
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:36
+msgid "Save your changes."
+msgstr "Guarda tus cambios."
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:37
+msgid "<i>success! Your previously ugly taxonomy filtering is now oh so beautiful!</i>"
+msgstr "<i>¡Éxito! Tus anteriores y feos filtros de taxonomías ahora son oh tan hermosas!</i>"
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:40
+msgid "To use the provided select dropdown filters. Copy:"
+msgstr "Para usar los filtros desplegables proporcionados. Copiar:"
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:40
+msgid "and paste it in your"
+msgstr "y pegar en tu"
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:40
+msgid "file in your template. It should be placed somewhere above"
+msgstr "archivo de plantilla. Debería ser colocado en algún lugar por encima"
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:41
+msgid "<b>Note:</b> The layout of archive.php may differ drastically between different themes. We can't help you with the positioning of the function in your theme so please either just try some locations (you can just remove the function again if something breaks) or ask in your themes support forum (if available). Best of luck!"
+msgstr "<b>Nota:</b> La disposición (layout) del archive.php puede variar drásticamente entre diferentes temas. No podemos ayudarte con el posicionamiento de este función en tu tema así que por favor, intenta probar en algunos lugares (puedes quitar la función si algo se rompe) o pregunta en el foro de soporte de tu tema (si hay disponible). ¡Mucha suerte!"
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:42
+msgid "<b>Note 2:</b> The function will only show a filter if the post type archive is for a post type you've selected in the settings above. So don't worry about filters in the wrong place."
+msgstr "<b>Nota 2:</b> La función sólo mostrará un filtro si el archivo es de una entrada personalizada que has seleccionado en los ajustes anteriores. Así que no te preocupes de los filtros en el lugar equivocado."
+
+#: ../admin/partials/beautiful-taxonomy-filters-style-section-display.php:15
+msgid "This section lets you control the layout and design of the filter you can use in your archive pages."
+msgstr "Esta sección te permite controlar la disposición y diseño del filtro que puedes usar en tus páginas de archivo."
+
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:79
+msgid "All "
+msgstr "Todos"
+
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:98
+msgid "Apply filter"
+msgstr "Aplicar filtro"
+
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:100
+msgid "Click to clear all active filters"
+msgstr "Click para borrar todos los filtros activos"
+
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:100
+msgid "Clear all"
+msgstr "Borrar todos"
+
+#: ../public/partials/beautiful-taxonomy-filters-public-info-display.php:39
+msgid "Active filters"
+msgstr "Filtros activos"
+

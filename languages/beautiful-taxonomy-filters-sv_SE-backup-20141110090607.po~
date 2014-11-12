@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Beautiful taxonomy filter\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Fri Oct 10 2014 11:26:31 GMT+0200 (CEST)\n"
-"PO-Revision-Date: Fri Oct 10 2014 11:36:04 GMT+0200 (CEST)\n"
-"Last-Translator: swr-admin <jonathan@tigerton.se>\n"
+"PO-Revision-Date: Wed Nov 05 2014 11:46:47 GMT+0100 (CET)\n"
+"Last-Translator: admin <admin@local.dev>\n"
 "Language-Team: \n"
 "Language: Swedish\n"
 "Plural-Forms: nplurals=2; plural=n != 1\n"
@@ -22,44 +22,60 @@ msgstr ""
 "X-Loco-Target-Locale: sv_SE\n"
 "X-Generator: Loco - https://localise.biz/"
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:157
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:103 ../backend/class-
+#: beautiful-taxonomy-filters-admin.php:103
 msgid "Setup settings"
 msgstr "Grundläggande inställningar"
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:165
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:111 ../backend/class-
+#: beautiful-taxonomy-filters-admin.php:111
 msgid "Style settings"
 msgstr "Utseende inställningar"
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:173
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:119 ../backend/class-
+#: beautiful-taxonomy-filters-admin.php:119
 msgid "Activate for these post types:"
 msgstr "Aktivera på dessa posttyper"
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:182
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:128 ../backend/class-
+#: beautiful-taxonomy-filters-admin.php:128
 msgid "Exclude these taxonomies:"
 msgstr "Exkludera dessa taxonomier:"
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:191
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:137 ../backend/class-
+#: beautiful-taxonomy-filters-admin.php:137
 msgid "Enable a \"Clear all\" link:"
 msgstr "Aktivera en \"rensa alla\" länk:"
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:200
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:146 ../backend/class-
+#: beautiful-taxonomy-filters-admin.php:146
+msgid "Disable the active filters heading:"
+msgstr "Inaktivera rubriken ovanför informationen om aktiva filter:"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:155 ../backend/class-
+#: beautiful-taxonomy-filters-admin.php:155
 msgid "Styling:"
 msgstr "Stil:"
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:209
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:164 ../backend/class-
+#: beautiful-taxonomy-filters-admin.php:164
 msgid "Custom CSS Styling:"
 msgstr "Skräddarsydd CSS"
 
-#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:21
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:21 ..
+#: /backend/partials/beautiful-taxonomy-filters-admin-display.php:21
 msgid "Beautiful Taxonomy Filters"
 msgstr ""
 
 #: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:27 ..
-#: /admin/partials/beautiful-taxonomy-filters-section-display.php:15
+#: /admin/partials/beautiful-taxonomy-filters-section-display.php:15 ..
+#: /backend/partials/beautiful-taxonomy-filters-admin-display.php:27 ..
+#: /backend/partials/beautiful-taxonomy-filters-section-display.php:15
 msgid "How to use Beautiful Taxonomy Filters"
 msgstr "Hur du använder Beautiful Taxonomy Filters"
 
-#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:30
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:30 ..
+#: /backend/partials/beautiful-taxonomy-filters-admin-display.php:30
 msgid ""
 "Select which post types you want to use the filtering on.</br> <b>Note:</b> "
 "if the post type aren't connected to one or more taxonomies you wont see any "
@@ -68,7 +84,8 @@ msgstr ""
 "Välj vilka posttyper du vill använda filtret på.</br><b>Notera:</b> om "
 "posttypen inte har kopplats till en eller flera taxonomier händer inget."
 
-#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:33
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:33 ..
+#: /backend/partials/beautiful-taxonomy-filters-admin-display.php:33
 msgid ""
 "Exclude any taxonomies you don't want the users to be able to filter on."
 "</br> <b>Note:</b> Only taxonomies that are connected to post types you have "
@@ -78,29 +95,35 @@ msgstr ""
 "</br><b>Notera: </b> Bara taxonomier som är kopplade till de posttyper du "
 "valt ovan påverkas."
 
-#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:36
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:36 ..
+#: /backend/partials/beautiful-taxonomy-filters-admin-display.php:36
 msgid "Save your changes."
 msgstr "Spara ändringarna."
 
-#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:37
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:37 ..
+#: /backend/partials/beautiful-taxonomy-filters-admin-display.php:37
 msgid ""
 "<i>success! Your previously ugly taxonomy filtering is now oh so beautiful!"
 "</i>"
 msgstr "<i>Gratulerar! Dina före detta fula filter är nu ack så vackra!</i>"
 
-#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:40
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:40 ..
+#: /backend/partials/beautiful-taxonomy-filters-admin-display.php:40
 msgid "To use the provided select dropdown filters. Copy:"
 msgstr "För att använda den medföljande filtreringskomponenten. Kopiera:"
 
-#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:40
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:40 ..
+#: /backend/partials/beautiful-taxonomy-filters-admin-display.php:40
 msgid "and paste it in your"
 msgstr "och klistra in i din"
 
-#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:40
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:40 ..
+#: /backend/partials/beautiful-taxonomy-filters-admin-display.php:40
 msgid "file in your template. It should be placed somewhere above"
 msgstr "fil i din template. Det bör läggas strax ovanför"
 
-#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:41
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:41 ..
+#: /backend/partials/beautiful-taxonomy-filters-admin-display.php:41
 msgid ""
 "<b>Note:</b> The layout of archive.php may differ drastically between "
 "different themes. We can't help you with the positioning of the function in "
@@ -113,7 +136,8 @@ msgstr ""
 "ditt tema så prova antingen runt lite tills du hittar rätt eller fråga i "
 "ditt temas support forum. Lycka till!"
 
-#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:42
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:42 ..
+#: /backend/partials/beautiful-taxonomy-filters-admin-display.php:42
 msgid ""
 "<b>Note 2:</b> The function will only show a filter if the post type archive "
 "is for a post type you've selected in the settings above. So don't worry "
@@ -123,7 +147,18 @@ msgstr ""
 "har valt i inställningarna. Det innebär att du inte behöver oroa dig för att "
 "filter ska visas på fel ställen."
 
-#: ../admin/partials/beautiful-taxonomy-filters-style-section-display.php:15
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:45 ..
+#: /backend/partials/beautiful-taxonomy-filters-admin-display.php:45
+msgid "To show the active filter info. Copy:"
+msgstr "För att visa information om aktivt filter. Kopiera:"
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:45 ..
+#: /backend/partials/beautiful-taxonomy-filters-admin-display.php:45
+msgid "to wherever you want the filter info to appear."
+msgstr "till var du vill att informationen ska synas."
+
+#: ../admin/partials/beautiful-taxonomy-filters-style-section-display.php:15 ..
+#: /backend/partials/beautiful-taxonomy-filters-style-section-display.php:15
 msgid ""
 "This section lets you control the layout and design of the filter you can "
 "use in your archive pages."
@@ -131,22 +166,22 @@ msgstr ""
 "Här kan du styra utseendet och innehållet i filterkomponenten du använder i "
 "dina posttyp-arkiv."
 
-#: ../public/partials/beautiful-taxonomy-filters-public-display.php:79
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:71
 msgid "All "
 msgstr "Alla "
 
-#: ../public/partials/beautiful-taxonomy-filters-public-display.php:98
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:90
 msgid "Apply filter"
 msgstr "Filtrera"
 
-#: ../public/partials/beautiful-taxonomy-filters-public-display.php:100
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:92
 msgid "Click to clear all active filters"
 msgstr "Klicka för att rensa alla aktiva filter"
 
-#: ../public/partials/beautiful-taxonomy-filters-public-display.php:100
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:92
 msgid "Clear all"
 msgstr "Rensa alla"
 
-#: ../public/partials/beautiful-taxonomy-filters-public-info-display.php:39
+#: ../public/partials/beautiful-taxonomy-filters-public-info-display.php:24
 msgid "Active filters"
 msgstr "Aktiva filter"
