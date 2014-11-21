@@ -87,6 +87,7 @@ class Beautiful_Taxonomy_Filters_Rewrite_Rules {
 	        $new_paged_rewrite_rule = $new_paged_rewrite_rule . '?$';
 	        $new_rewrite_rule = $new_rewrite_rule . '?$';
 	 
+			
 	        // Add the new rewrites
 	        $new_rewrite_rules = array( $new_paged_rewrite_rule => $new_paged_query_string,
 	                                    $new_rewrite_rule       => $new_query_string )

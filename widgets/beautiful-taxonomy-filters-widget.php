@@ -130,7 +130,7 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
     	//Make sure we find the current post type! 
     	if($post_type == 'automatic'){
 	    	
-	    	$current_post_type = Beautiful_Taxonomy_Filters_Public::get_current_posttype();
+	    	$current_post_type = Beautiful_Taxonomy_Filters_Public::get_current_posttype(false);
 	    	
     	}else{
 	    	$current_post_type = $post_type;

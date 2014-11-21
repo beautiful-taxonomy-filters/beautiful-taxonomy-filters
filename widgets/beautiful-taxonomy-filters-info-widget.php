@@ -65,9 +65,14 @@ class Beautiful_Taxonomy_Filters_Info_Widget extends WP_Widget {
     	$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
 
 		global $wp_query;
-		$taxonomies = $wp_query->tax_query->queries;
+		if(!empty($wp_query->tax_query->queries)){
+			$taxonomies = $wp_query->tax_query->queries;	
+		}else{
+			$taxonomies = false;
+		}
+		
 		$activated_post_types = apply_filters( 'beautiful_filters_post_types', get_option('beautiful_taxonomy_filters_post_types') );
-		$current_post_type = Beautiful_Taxonomy_Filters_Public::get_current_posttype();
+		$current_post_type = Beautiful_Taxonomy_Filters_Public::get_current_posttype(false);
 		
 		//If there is no current post type, bail early!
 		if(!$current_post_type || !in_array($current_post_type, $activated_post_types)){

@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Beautiful taxonomy filter\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-11-10 09:35+0800\n"
-"POT-Revision-Date: Mon Nov 10 2014 10:03:47 GMT+0100 (CET)\n"
+"POT-Revision-Date: Fri Nov 21 2014 10:47:36 GMT+0100 (CET)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -24,47 +24,55 @@ msgstr ""
 "esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
 "X-Poedit-SearchPath-0: ."
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:107
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:120
 msgid "Setup settings"
 msgstr ""
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:115
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:128
 msgid "Filter module settings"
 msgstr ""
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:123
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:136
 msgid "Style settings"
 msgstr ""
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:136
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:149
 msgid "Activate for these post types:"
 msgstr ""
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:145
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:158
 msgid "Exclude these taxonomies:"
 msgstr ""
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:154
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:167
 msgid "Enable a \"Clear all\" link:"
 msgstr ""
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:163
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:176
 msgid "Hide empty terms in the dropdowns:"
 msgstr ""
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:172
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:185
 msgid "Show post count next to term name:"
 msgstr ""
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:181
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:194
+msgid "Dropdown deselect/default behaviour:"
+msgstr ""
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:203
+msgid "Automagically insert the modules in the archives:"
+msgstr ""
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:212
 msgid "Disable the active filters heading:"
 msgstr ""
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:190
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:221
 msgid "Styling:"
 msgstr ""
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:199
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:230
 msgid "Custom CSS Styling:"
 msgstr ""
 
@@ -79,20 +87,20 @@ msgstr ""
 
 #: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:30
 msgid ""
-"Select which post types you want to use the filtering on.</br> <b>Note:</b> "
-"if the post type aren't connected to one or more taxonomies you wont see any "
+"Select the post types you want to use the filtering on.</br> <b>Note:</b> if "
+"the post type aren't connected to one or more taxonomies you wont see any "
 "results."
 msgstr ""
 
 #: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:33
 msgid ""
 "Exclude any taxonomies you don't want the users to be able to filter on."
-"</br> <b>Note:</b> Only taxonomies that are connected to post types you have "
-"selected above will be affected"
+"</br> <b>Note:</b> Only affects taxonomies that are connected to post types "
+"you have selected"
 msgstr ""
 
 #: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:36
-msgid "Save your changes."
+msgid "Save Changes."
 msgstr ""
 
 #: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:37
@@ -102,7 +110,9 @@ msgid ""
 msgstr ""
 
 #: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:40
-msgid "To use the provided select dropdown filters. Copy:"
+msgid ""
+"To use the dropdown filter module you can either use the widgets, automagic "
+"feature or copy:"
 msgstr ""
 
 #: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:40
@@ -116,25 +126,56 @@ msgstr ""
 #: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:41
 msgid ""
 "<b>Note:</b> The layout of archive.php may differ drastically between "
-"different themes. We can't help you with the positioning of the function in "
-"your theme so please either just try some locations (you can just remove the "
-"function again if something breaks) or ask in your themes support forum (if "
-"available). Best of luck!"
+"different themes. We can't help you with the placement of the function in "
+"your theme so just try some locations (you can just remove the function "
+"again if something breaks) or ask in your themes support forum. Best of luck!"
 msgstr ""
 
-#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:42
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:44
 msgid ""
-"<b>Note 2:</b> The function will only show a filter if the post type archive "
-"is for a post type you've selected in the settings above. So don't worry "
-"about filters in the wrong place."
+"To show the active filter info either use the widgets, automagic feature or "
+"copy:"
 msgstr ""
 
-#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:45
-msgid "To show the active filter info. Copy:"
-msgstr ""
-
-#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:45
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:44
 msgid "to wherever you want the filter info to appear."
+msgstr ""
+
+#: ../admin/partials/beautiful-taxonomy-filters-automagic-settings-display.php:17
+msgid ""
+"Experimental feature. Attempts to automagically insert the modules in your "
+"archive. If the placement isn't what you want you'll have to use one of the "
+"other methods."
+msgstr ""
+
+#: ../admin/partials/beautiful-taxonomy-filters-automagic-settings-display.php:20
+msgid "Filter module"
+msgstr ""
+
+#: ../admin/partials/beautiful-taxonomy-filters-automagic-settings-display.php:24
+msgid "Filter info module"
+msgstr ""
+
+#: ../admin/partials/beautiful-taxonomy-filters-automagic-settings-display.php:27
+msgid "Location of the filter info module"
+msgstr ""
+
+#: ../admin/partials/beautiful-taxonomy-filters-automagic-settings-display.php:30
+msgid "Above the filter module"
+msgstr ""
+
+#: ../admin/partials/beautiful-taxonomy-filters-automagic-settings-display.php:31
+msgid "Below the filter module"
+msgstr ""
+
+#: ../admin/partials/beautiful-taxonomy-filters-dropdown-behaviour-settings-
+#: display.php:17
+msgid "All option"
+msgstr ""
+
+#: ../admin/partials/beautiful-taxonomy-filters-dropdown-behaviour-settings-
+#: display.php:20
+msgid "Placeholder"
 msgstr ""
 
 #: ../admin/partials/beautiful-taxonomy-filters-module-section-display.php:15
@@ -147,22 +188,92 @@ msgid ""
 "use in your archive pages."
 msgstr ""
 
-#: ../public/partials/beautiful-taxonomy-filters-public-display.php:87
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:77 ..
+#: /public/partials/beautiful-taxonomy-filters-public-display.php:90 ..
+#: /public/partials/beautiful-taxonomy-filters-public-display.php:102 ..
+#: /widgets/beautiful-taxonomy-filters-widget.php:208
 msgid "All "
 msgstr ""
 
-#: ../public/partials/beautiful-taxonomy-filters-public-display.php:107
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:110 ..
+#: /widgets/beautiful-taxonomy-filters-widget.php:228
 msgid "Apply filter"
 msgstr ""
 
-#: ../public/partials/beautiful-taxonomy-filters-public-display.php:109
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:112 ..
+#: /widgets/beautiful-taxonomy-filters-widget.php:230
 msgid "Click to clear all active filters"
 msgstr ""
 
-#: ../public/partials/beautiful-taxonomy-filters-public-display.php:109
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:112 ..
+#: /widgets/beautiful-taxonomy-filters-widget.php:230
 msgid "Clear all"
 msgstr ""
 
-#: ../public/partials/beautiful-taxonomy-filters-public-info-display.php:29
+#: ../public/partials/beautiful-taxonomy-filters-public-info-display.php:35
 msgid "Active filters"
+msgstr ""
+
+#: ../public/partials/beautiful-taxonomy-filters-public-info-display.php:73 ..
+#: /public/partials/beautiful-taxonomy-filters-public-info-display.php:101 ..
+#: /widgets/beautiful-taxonomy-filters-info-widget.php:125 ../widgets/beautiful-
+#: taxonomy-filters-info-widget.php:153
+msgid "All"
+msgstr ""
+
+#: ../widgets/beautiful-taxonomy-filters-info-widget.php:23
+msgid "Add an active filter info module to the sidebar"
+msgstr ""
+
+#: ../widgets/beautiful-taxonomy-filters-info-widget.php:37 ../widgets/beautiful-
+#: taxonomy-filters-widget.php:42
+msgid "Title:"
+msgstr ""
+
+#: ../widgets/beautiful-taxonomy-filters-widget.php:23
+msgid "Add a filter module to the sidebar"
+msgstr ""
+
+#: ../widgets/beautiful-taxonomy-filters-widget.php:46
+msgid "Enable a \"clear all\" link: "
+msgstr ""
+
+#: ../widgets/beautiful-taxonomy-filters-widget.php:48 ../widgets/beautiful-
+#: taxonomy-filters-widget.php:57 ../widgets/beautiful-taxonomy-filters-widget.
+#: php:66
+msgid "Inherit"
+msgstr ""
+
+#: ../widgets/beautiful-taxonomy-filters-widget.php:49 ../widgets/beautiful-
+#: taxonomy-filters-widget.php:58 ../widgets/beautiful-taxonomy-filters-widget.
+#: php:67
+msgid "Enable"
+msgstr ""
+
+#: ../widgets/beautiful-taxonomy-filters-widget.php:50 ../widgets/beautiful-
+#: taxonomy-filters-widget.php:59 ../widgets/beautiful-taxonomy-filters-widget.
+#: php:68
+msgid "Disable"
+msgstr ""
+
+#: ../widgets/beautiful-taxonomy-filters-widget.php:55
+msgid "Hide empty terms: "
+msgstr ""
+
+#: ../widgets/beautiful-taxonomy-filters-widget.php:64
+msgid "Show post count: "
+msgstr ""
+
+#: ../widgets/beautiful-taxonomy-filters-widget.php:73
+msgid "Specific posttype: "
+msgstr ""
+
+#: ../widgets/beautiful-taxonomy-filters-widget.php:75
+msgid "Automatic (default)"
+msgstr ""
+
+#: ../widgets/beautiful-taxonomy-filters-widget.php:92
+msgid ""
+"By Selecting a specific posttype the filter will work from anywhere but only "
+"for that posttype."
 msgstr ""

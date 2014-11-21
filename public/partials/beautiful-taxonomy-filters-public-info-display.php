@@ -23,7 +23,7 @@ $hide_heading = apply_filters( 'beautiful_filters_disable_heading', get_option('
 global $wp_query;
 $taxonomies = $wp_query->tax_query->queries;
 $activated_post_types = apply_filters( 'beautiful_filters_post_types', get_option('beautiful_taxonomy_filters_post_types') );
-$current_post_type = Beautiful_Taxonomy_Filters_Public::get_current_posttype();
+$current_post_type = Beautiful_Taxonomy_Filters_Public::get_current_posttype(false);
 
 //If there is no current post type, bail early!
 if(!$current_post_type || !in_array($current_post_type, $activated_post_types)){

@@ -193,7 +193,9 @@ class Beautiful_Taxonomy_Filters {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 		$this->loader->add_action( 'wp_head', $plugin_public, 'custom_css' );
+		$this->loader->add_action( 'loop_start', $plugin_public, 'automagic_insertion' ); //sounds dirty...
 		$this->loader->add_filter( 'template_redirect', $plugin_public, 'catch_filter_values' );
+		
 		
 
 	}

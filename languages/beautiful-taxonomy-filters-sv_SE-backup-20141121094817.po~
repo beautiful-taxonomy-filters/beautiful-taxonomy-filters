@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Beautiful taxonomy filter\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-11-10 09:35+0800\n"
-"PO-Revision-Date: Fri Nov 21 2014 10:48:16 GMT+0100 (CET)\n"
+"PO-Revision-Date: Fri Nov 21 2014 10:46:09 GMT+0100 (CET)\n"
 "Last-Translator: admin <admin@local.dev>\n"
 "Language-Team: \n"
 "Language: Swedish\n"
@@ -113,12 +113,8 @@ msgid ""
 msgstr "<i>Gratulerar! Dina före detta fula filter är nu ack så vackra!</i>"
 
 #: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:40
-msgid ""
-"To use the dropdown filter module you can either use the widgets, automagic "
-"feature or copy:"
-msgstr ""
-"För att använda filtermodulen kan du antingen använda widgets, automatiska "
-"funktionen eller kopiera:"
+msgid "To use the dropdown filter module you can either use the widgets or copy:"
+msgstr "För att använda filtermodulen kan du antingen använda widgets eller kopiera:"
 
 #: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:40
 msgid "and paste it in your"
@@ -141,12 +137,8 @@ msgstr ""
 "egna supportforum ni kan vända er till. Lycka till!"
 
 #: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:44
-msgid ""
-"To show the active filter info either use the widgets, automagic feature or "
-"copy:"
-msgstr ""
-"För att använda filterinfo-modulen kan du antingen använda widgets, "
-"automatiska funktionen eller kopiera:"
+msgid "To show the active filter info either use the widgets or copy:"
+msgstr "För att visa aktivt filterinfo, använd widgets eller kopiera:"
 
 #: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:44
 msgid "to wherever you want the filter info to appear."

@@ -12,4 +12,4 @@
  * @subpackage Beautiful_Taxonomy_Filters/admin/partials
  */
 ?>
-<p><?php _e('Functionality of the filter module. These are optional settings.'); ?></p>
+<p><?php _e('Functionality of the filter module. These are optional settings.', 'beautiful-taxonomy-filters'); ?></p>

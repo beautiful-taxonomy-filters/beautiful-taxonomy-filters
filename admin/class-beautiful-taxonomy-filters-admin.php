@@ -188,6 +188,24 @@ class Beautiful_Taxonomy_Filters_Admin {
 			'taxonomy_filters_module_settings_section'
 		);
 		
+		// Select either an "All terms" option or a placeholder with a deselect
+	 	add_settings_field(
+			'beautiful_taxonomy_filters_dropdown_behaviour',
+			__('Dropdown deselect/default behaviour:', 'beautiful-taxonomy-filters'),
+			array($this, 'dropdown_behaviour_setting_callback_function'),
+			'taxonomy-filters',
+			'taxonomy_filters_module_settings_section'
+		);
+		
+		// Automagically insert the modules using loop_start hook
+	 	add_settings_field(
+			'beautiful_taxonomy_filters_automagic',
+			__('Automagically insert the modules in the archives:', 'beautiful-taxonomy-filters'),
+			array($this, 'automagic_setting_callback_function'),
+			'taxonomy-filters',
+			'taxonomy_filters_module_settings_section'
+		);
+		
 		// Add checkbox to let users choose to disable the "active filters" heading
 	 	add_settings_field(
 			'beautiful_taxonomy_filters_disable_heading',
@@ -224,6 +242,9 @@ class Beautiful_Taxonomy_Filters_Admin {
 		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_show_count' );
 		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_hide_empty' );
 		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_disable_heading' );
+		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_dropdown_behaviour' );
+		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_automagic' );
+		
 		
 	}
 	
@@ -260,6 +281,14 @@ class Beautiful_Taxonomy_Filters_Admin {
  	
  	function show_count_setting_callback_function() {
  		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/beautiful-taxonomy-filters-show-count-settings-display.php';
+ 	}
+ 	
+ 	function dropdown_behaviour_setting_callback_function() {
+ 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/beautiful-taxonomy-filters-dropdown-behaviour-settings-display.php';
+ 	}
+ 	
+ 	function automagic_setting_callback_function() {
+ 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/beautiful-taxonomy-filters-automagic-settings-display.php';
  	}
  	
  	function disable_heading_setting_callback_function() {

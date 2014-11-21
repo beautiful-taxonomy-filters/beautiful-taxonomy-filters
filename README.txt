@@ -1,10 +1,9 @@
 === Beautiful taxonomy filters ===
 Contributors: Jonathandejong, tigerton
-Donate link: http://example.com/
 Tags: Taxonomy, filter, permalinks, terms
 Requires at least: 3.0.1
-Tested up to: 4.0
-Stable tag: 1.1.0
+Tested up to: 4.0.1
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,12 +20,13 @@ The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide
 * Beautifies the resulting URLs. You won’t see any /posttype/?taxonomy1=term. Instead you’ll see /posttype/taxonomy/term
 * Comes with a complete functional filter module for you to put in your theme. 
 * Use either the widgets or functions to add the filter module and it's friend the filterinfo module to your site.
+* Or use the automagic setting to have the modules appear on your archive from thin air. Wizards at work… 
 * Choose from different styles for the component, or disable styling and do it yourself in style.css! Just want to tweak a style? Add your custom CSS directly on the settings page.
 * Want a ”Clear all” link for the filter component? Just tick a box in the settings page!
-* Settings for fine-tuning the filter modules behaviour.
+* Many settings for fine-tuning the filter modules behaviour.
 * Ability to show your visitors information about their current active filtering.
 * Allows for custom GET parameters to be included. Extend the filter your way with maybe a custom search-parameter or whatever you like. 
-* Many [filters and actions](https://wordpress.org/plugins/beautiful-taxonomy-filters/other_notes/) for modifying the plugins behavior. For those controlfreaks out there…
+* Many [filters and actions](https://wordpress.org/plugins/beautiful-taxonomy-filters/other_notes/) for modifying the plugins behaviour. For you control freaks out there…
 
 
 = Languages =
@@ -84,6 +84,18 @@ Just start tagging up your posts and you’ll see it shows up! Also, make sure t
 
 
 == Changelog ==
+
+= 1.1.1 =
+* FEATURE: You can now automagically insert the two modules into your archive pages! No need for modification of your theme. This feature is sort of experimental and there's a few things to note compared to the manual methods: 
+  * The modules wont appear if your users select a filtering and there's no posts.
+  * You can't control the placement of the filter. You can decide to place the filter info module above or below the filter module but that's it. For more control use one of the manual methods (function calls or widgets).
+  * The modules wont output twice. So that means you'll have to remove the manual functions if you're using them. This also means that you can use the automagic way and still manually place the functions on specific posttype archives if you like. Great stuff I know…
+* FEATURE: You can now choose to display a placeholder text and a "clear" button on the dropdowns instead of the regular "All <taxonomy>" option. Of course this comes with a filter to let you control this feature per posttype archive. Have placeholders on one archive and an empty option on another.. no problem!
+* FIX: The filter module will now work correctly even when you have a different rewrite slug for your CPT.
+* FIX: Minor bug fixes resulting in PHP notice logs.
+* IMPROVEMENT: Minor code performance improvements.
+* IMPROVEMENT: Update to Swedish and French translations. Thanks to [Brice Capobianco](https://profiles.wordpress.org/brikou) for the french translation.
+* IMPROVEMENT: Updated select2 to 3.5.2
 
 = 1.1.0 =
 * FEATURE: Brand new beautiful widget. You can now add the filter module directly to your sidebar areas via a custom widget. 
@@ -223,6 +235,19 @@ function modify_dropdown_orderby( $orderby, $taxonomy) {
     return $orderby;
 }
 add_filter( 'beautiful_filters_dropdown_orderby', 'modify_dropdown_orderby', 10, 2 );
+`
+
+= beautiful_filters_dropdown_behaviour =
+
+$behaviour is a string that should be either show_all_option or show_placeholder_option. $current_post_type is the current posttype name.
+Use this to modify the dropdown behaviour per posttype or just manually from functions.php
+
+`
+function modify_dropdown_behaviour( $behaviour, $current_post_type) {
+
+    return $orderby;
+}
+add_filter( 'beautiful_filters_dropdown_behaviour', 'modify_dropdown_behaviour', 10, 2 );
 `
 
 = beautiful_filters_taxonomy_label =

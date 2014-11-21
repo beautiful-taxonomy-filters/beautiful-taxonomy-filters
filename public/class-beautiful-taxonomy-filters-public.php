@@ -81,7 +81,7 @@ class Beautiful_Taxonomy_Filters_Public {
 		
 		wp_enqueue_script( 'select2', plugin_dir_url( __FILE__ ) . 'js/select2/select2.min.js', array( 'jquery' ), $this->version, false );
 		wp_enqueue_script( $this->name, plugin_dir_url( __FILE__ ) . 'js/beautiful-taxonomy-filters-public.js', array( 'select2' ), $this->version, false );
-
+		
 	}
 	
 	
@@ -122,7 +122,7 @@ class Beautiful_Taxonomy_Filters_Public {
 	* 
 	* @since 1.1.0
 	*/
-	public static function get_current_posttype(){
+	public static function get_current_posttype($rewrite = true){
 		$current_post_type = get_post_type();
 		if(!$current_post_type || $current_post_type == 'page'){
 			global $template;
@@ -137,7 +137,15 @@ class Beautiful_Taxonomy_Filters_Public {
 				}
 			}
 		}
-		return $current_post_type;
+		if($rewrite){
+			//Get the post type object
+			$post_type_object = get_post_type_object($current_post_type);
+			//Return the rewrite slug which is the one we actually want!
+			return $post_type_object->rewrite['slug'];	
+		}else{
+			return $current_post_type;
+		}
+		
 	}
 	
 	
@@ -153,17 +161,26 @@ class Beautiful_Taxonomy_Filters_Public {
 			return;
 		
 		//get current post type archive
+		if(isset($_POST['post_type_rewrite']) && $_POST['post_type_rewrite'] != ''){
+			$current_post_type_rewrite = $_POST['post_type_rewrite'];
+		}else{ //If there was no post type from the form (for some reason), try to get it anyway!
+			
+			$current_post_type_rewrite = self::get_current_posttype();
+			
+		}
+		
+		//get current post type archive
 		if(isset($_POST['post_type']) && $_POST['post_type'] != ''){
 			$current_post_type = $_POST['post_type'];
 		}else{ //If there was no post type from the form (for some reason), try to get it anyway!
 			
-			$current_post_type = self::get_current_posttype();
+			$current_post_type = self::get_current_posttype(false);
 			
 		}
 		
 		
 		//base url
-		$new_url = $referer . '/' . $current_post_type . '/';	
+		$new_url = $referer . '/' . $current_post_type_rewrite . '/';	
 		
 		//Get the taxonomies of the current post type
 		$current_taxonomies = get_object_taxonomies($current_post_type, 'objects');
@@ -189,6 +206,38 @@ class Beautiful_Taxonomy_Filters_Public {
 	
 	
 	/**
+	* Attempts to automagically insert the filter on the correct archives by using the loop_start hook
+	*
+	* @since 1.1.1
+	*/
+	public function automagic_insertion($query){
+		
+		$post_types = get_option('beautiful_taxonomy_filters_post_types');
+		
+		//first make sure we're on a main query and an archive page for one of our selected posttypes
+		if ($query->is_main_query() && is_post_type_archive($post_types)) {
+		
+			$automagic = get_option('beautiful_taxonomy_filters_automagic');
+			
+			if(in_array('filter_info_module', $automagic) && in_array('above', $automagic)){
+				self::beautiful_filters_info();
+			}
+			
+			if(in_array('filter_module', $automagic)){
+				self::beautiful_filters();
+			}
+			
+			if(in_array('filter_info_module', $automagic) && in_array('below', $automagic)){
+				self::beautiful_filters_info();
+			}
+		
+		}
+
+
+	}
+	
+	
+	/**
 	* Public function to return the filters for the current post type archive. 
 	*
 	* @since 1.0.0
@@ -203,14 +252,20 @@ class Beautiful_Taxonomy_Filters_Public {
 		if(!$post_types) 
 			return;
 
+		
 		//get current post type archive
 		if(isset($_POST['post_type']) && $_POST['post_type'] != ''){
 			$current_post_type = $_POST['post_type'];
 		}else{ //If there was no post type from the form (for some reason), try to get it anyway!
 			
-			$current_post_type = self::get_current_posttype();
+			$current_post_type = self::get_current_posttype(false);
 			
 		}
+		
+		//not a post type we have the filter on, bail early!
+		if(!in_array($current_post_type, $post_types))
+			return;
+			
 
 		//Get the taxonomies of the current post type
 		$current_taxonomies = get_object_taxonomies($current_post_type, 'objects');
