@@ -75,7 +75,7 @@ class Beautiful_Taxonomy_Filters_Info_Widget extends WP_Widget {
 		$current_post_type = Beautiful_Taxonomy_Filters_Public::get_current_posttype(false);
 		
 		//If there is no current post type, bail early!
-		if(!$current_post_type || !in_array($current_post_type, $activated_post_types)){
+		if(!is_array($activated_post_types) || !$current_post_type || !in_array($current_post_type, $activated_post_types)){
 			return;
 		}
 		

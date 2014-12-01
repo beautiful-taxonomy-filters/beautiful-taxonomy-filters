@@ -37,6 +37,7 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
     	$hide_empty = strip_tags($instance['hide_empty']);
     	$show_count = strip_tags($instance['show_count']);
     	$post_type = strip_tags($instance['post_type']);
+    	$dropdown_behaviour = strip_tags($instance['dropdown_behaviour']);
     	?>
 		<p>
 			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label>
@@ -66,6 +67,15 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
             	<option value="inherit" <?php if($show_count == 'inherit' || !$show_count){ echo 'selected'; } ?>><?php _e('Inherit', 'beautiful-taxonomy-filters'); ?></option>
             	<option value="enable" <?php if($show_count == 'enable'){ echo 'selected'; } ?>><?php _e('Enable', 'beautiful-taxonomy-filters'); ?></option>
             	<option value="disable" <?php if($show_count == 'disable'){ echo 'selected'; } ?>><?php _e('Disable', 'beautiful-taxonomy-filters'); ?></option>
+            </select>
+            </label>     
+        </p>
+        <p>
+            <label for="<?php echo $this->get_field_id('dropdown_behaviour'); ?>"><?php _e('Dropdown deselect/default behaviour:', 'beautiful-taxonomy-filters'); ?>
+            <select class="widefat" id="<?php echo $this->get_field_id('dropdown_behaviour'); ?>" name="<?php echo $this->get_field_name('dropdown_behaviour'); ?>">
+            	<option value="inherit" <?php if($dropdown_behaviour == 'inherit' || !$dropdown_behaviour){ echo 'selected'; } ?>><?php _e('Inherit', 'beautiful-taxonomy-filters'); ?></option>
+            	<option value="show_all_option" <?php if($dropdown_behaviour == 'show_all_option'){ echo 'selected'; } ?>><?php _e('All option', 'beautiful-taxonomy-filters'); ?></option>
+            	<option value="show_placeholder_option" <?php if($dropdown_behaviour == 'show_placeholder_option'){ echo 'selected'; } ?>><?php _e('Placeholder', 'beautiful-taxonomy-filters'); ?></option>
             </select>
             </label>     
         </p>
@@ -108,6 +118,7 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
     	$instance['hide_empty'] = strip_tags($new_instance['hide_empty']);
     	$instance['show_count'] = strip_tags($new_instance['show_count']);
     	$instance['post_type'] = strip_tags($new_instance['post_type']);
+    	$instance['dropdown_behaviour'] = strip_tags($new_instance['dropdown_behaviour']);
         return $instance;
     }
     
@@ -125,6 +136,7 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
     	$hide_empty = strip_tags($instance['hide_empty']);
     	$show_count = strip_tags($instance['show_count']);
     	$post_type = strip_tags($instance['post_type']);
+    	$dropdown_behaviour = strip_tags($instance['dropdown_behaviour']);
     	$activated_post_types = apply_filters( 'beautiful_filters_post_types', get_option('beautiful_taxonomy_filters_post_types') );
     	
     	//Make sure we find the current post type! 
@@ -137,7 +149,7 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
     	}
    		
    		//If there is no current post type, bail early!
-		if(!$current_post_type || !in_array($current_post_type, $activated_post_types)){
+		if(!is_array($activated_post_types) || !$current_post_type || !in_array($current_post_type, $activated_post_types)){
 			return;
 		}
 		
@@ -173,6 +185,13 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
     	}else{
 	    	$show_count = ($show_count == 'enable' ? 1 : 0);
 	    	$show_count = apply_filters( 'beautiful_filters_show_count', $show_count, $current_post_type );
+    	}
+    	
+    	if($dropdown_behaviour == 'inherit'){
+	    	$dropdown_behaviour = apply_filters( 'beautiful_filters_dropdown_behaviour', get_option('beautiful_taxonomy_filters_dropdown_behaviour'), $current_post_type );	
+    	}else{
+	    	$dropdown_behaviour = ($dropdown_behaviour == 'enable' ? 1 : 0);
+	    	$dropdown_behaviour = apply_filters( 'beautiful_filters_dropdown_behaviour', $dropdown_behaviour, $current_post_type );
     	}
     	
     	
@@ -217,9 +236,21 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
 									'class'			=> 'beautiful-taxonomy-filters-select',
 									'walker'        => new Walker_Slug_Value_Category_Dropdown
 								);
+								if(!$dropdown_behaviour || $dropdown_behaviour == 'show_all_option'){
+									$dropdown_args['show_option_all'] = __('All ', 'beautiful-taxonomy-filters') . $taxonomy->labels->name;
+								}else{
+									$dropdown_args['show_option_all'] = ' ';
+								}
 								//Apply filter on the arguments to let users modify them first!
 								$dropdown_args = apply_filters( 'beautiful_filters_dropdown_categories', $dropdown_args, $taxonomy->name );
-								echo $filterdropdown = wp_dropdown_categories( $dropdown_args );
+								$filterdropdown = wp_dropdown_categories( $dropdown_args );
+								if(!$dropdown_behaviour || $dropdown_behaviour == 'show_all_option'){
+									echo $filterdropdown;
+								}else{
+									
+									$filterdropdown = str_replace("value='0' selected='selected'", "", $filterdropdown);
+									echo str_replace('<select ', '<select data-placeholder="' . __('All ', 'beautiful-taxonomy-filters') . $taxonomy->labels->name . '"', $filterdropdown);
+								}
 								?>
 							</div>
 						<?php endif; ?>

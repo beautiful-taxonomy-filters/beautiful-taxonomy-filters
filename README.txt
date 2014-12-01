@@ -3,7 +3,7 @@ Contributors: Jonathandejong, tigerton
 Tags: Taxonomy, filter, permalinks, terms
 Requires at least: 3.0.1
 Tested up to: 4.0.1
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,10 @@ Just start tagging up your posts and you’ll see it shows up! Also, make sure t
 
 
 == Changelog ==
+
+= 1.1.2 =
+* IMPROVEMENT: The widget now also has the setting for the dropdown behaviour.
+* FIX: Fixed some php warnings.
 
 = 1.1.1 =
 * FEATURE: You can now automagically insert the two modules into your archive pages! No need for modification of your theme. This feature is sort of experimental and there's a few things to note compared to the manual methods: 

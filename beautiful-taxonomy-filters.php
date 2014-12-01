@@ -16,7 +16,7 @@
  * Plugin Name:       Beautiful taxonomy filter
  * Plugin URI:        http://tigerton.se
  * Description:       Supercharges your custom post type archives by letting visitors filter the posts by their terms/categories.
- * Version:           1.1.1
+ * Version:           1.1.2
  * Author:            Jonathan de Jong
  * Author URI:        http://jonathandejong.se/
  * License:           GPL-2.0+
