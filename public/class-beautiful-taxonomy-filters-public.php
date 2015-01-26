@@ -79,8 +79,8 @@ class Beautiful_Taxonomy_Filters_Public {
 	 */
 	public function enqueue_scripts() {
 		
-		wp_enqueue_script( 'select2', plugin_dir_url( __FILE__ ) . 'js/select2/select2.min.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( $this->name, plugin_dir_url( __FILE__ ) . 'js/beautiful-taxonomy-filters-public.js', array( 'select2' ), $this->version, false );
+		wp_enqueue_script( 'select2', plugin_dir_url( __FILE__ ) . 'js/select2/select2.min.js', array( 'jquery' ), $this->version, true );
+		wp_enqueue_script( $this->name, plugin_dir_url( __FILE__ ) . 'js/beautiful-taxonomy-filters-public.js', array( 'jquery', 'select2' ), $this->version, true );
 		
 	}
 	

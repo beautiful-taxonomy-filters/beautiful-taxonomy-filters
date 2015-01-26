@@ -41,6 +41,17 @@ $dropdown_behaviour = apply_filters( 'beautiful_filters_dropdown_behaviour', get
 
 //Get the taxonomies of the current post type and the excluded taxonomies
 $excluded_taxonomies = apply_filters( 'beautiful_filters_taxonomies', get_option('beautiful_taxonomy_filters_taxonomies') ); 
+//Also make sure we don't try to output the builtin taxonomies since they cannot be supported
+if(is_array($excluded_taxonomies)){
+	array_push($excluded_taxonomies, 'category', 'post_tag', 'post_format');
+}else{
+	$excluded_taxonomies = array(
+		'category',
+		'post_tag',
+		'post_format'
+	);
+}
+
 $current_taxonomies = get_object_taxonomies($current_post_type, 'objects');
 //If we both have taxonomies on the post type AND we've set som excluded taxonomies in the plugins settings. Loop through them and unset those we don't want!
 if($current_taxonomies && $excluded_taxonomies){
@@ -50,6 +61,7 @@ if($current_taxonomies && $excluded_taxonomies){
 		}
 	}
 }
+
 ?>
 <div class="beautiful-taxonomy-filters" id="beautiful-taxonomy-filters-<?php echo $current_post_type_rewrite; ?>">
 	<?php do_action( 'beautiful_actions_before_form', $current_post_type); //Allow custom markup before form ?>
@@ -86,20 +98,26 @@ if($current_taxonomies && $excluded_taxonomies){
 							'class'			=> 'beautiful-taxonomy-filters-select',
 							'walker'        => new Walker_Slug_Value_Category_Dropdown
 						);
-						if(!$dropdown_behaviour || $dropdown_behaviour == 'show_all_option'){
-							$dropdown_args['show_option_all'] = __('All ', 'beautiful-taxonomy-filters') . $taxonomy->labels->name;
-						}else{
-							$dropdown_args['show_option_all'] = ' ';
-						}
 						//Apply filter on the arguments to let users modify them first!
 						$dropdown_args = apply_filters( 'beautiful_filters_dropdown_categories', $dropdown_args, $taxonomy->name );
+						
+						//But if they've selected placeholder we cant use the show_option_all
+						if($dropdown_behaviour == 'show_placeholder_option'){
+							$dropdown_args['show_option_all'] = ' ';
+						}
+						
+						//create the dropdown
 						$filterdropdown = wp_dropdown_categories( $dropdown_args );
+						
+						//If they didnt select placeholder just output the dropdown now
 						if(!$dropdown_behaviour || $dropdown_behaviour == 'show_all_option'){
 							echo $filterdropdown;
 						}else{
 							
+							//They selected placeholder so now we need to choose what to display and then alter the dropdown before output.
+							$new_label = apply_filters( 'beautiful_filters_dropdown_placeholder', __('All ', 'beautiful-taxonomy-filters') . $taxonomy->labels->name, $taxonomy->name );
 							$filterdropdown = str_replace("value='0' selected='selected'", "", $filterdropdown);
-							echo str_replace('<select ', '<select data-placeholder="' . __('All ', 'beautiful-taxonomy-filters') . $taxonomy->labels->name . '"', $filterdropdown);
+							echo str_replace('<select ', '<select data-placeholder="' . $new_label . '"', $filterdropdown);
 						}
 						
 						?>
@@ -107,7 +125,7 @@ if($current_taxonomies && $excluded_taxonomies){
 				<?php endif; ?>
 			<?php endforeach; ?>
 		</div>
-		<button type="submit" class="beautiful-taxonomy-filters-button"><?php _e('Apply filter', 'beautiful-taxonomy-filters'); ?></button>
+		<button type="submit" class="beautiful-taxonomy-filters-button"><?php echo apply_filters( 'beautiful_filters_apply_button', __('Apply filter', 'beautiful-taxonomy-filters') ); ?></button>
 		<?php if($show_clear_all): ?>
 			<a href="<?php echo get_site_url() . '/' . $current_post_type_rewrite; ?>" class="beautiful-taxonomy-filters-clear-all" title="<?php _e('Click to clear all active filters', 'beautiful-taxonomy-filters'); ?>"><?php _e('Clear all', 'beautiful-taxonomy-filters'); ?></a>
 		<?php endif; ?>

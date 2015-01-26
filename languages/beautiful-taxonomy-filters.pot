@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Beautiful taxonomy filter\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-11-10 09:35+0800\n"
-"POT-Revision-Date: Fri Nov 21 2014 10:47:36 GMT+0100 (CET)\n"
+"POT-Revision-Date: Thu Jan 08 2015 11:14:50 GMT+0100 (CET)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -56,7 +56,8 @@ msgstr ""
 msgid "Show post count next to term name:"
 msgstr ""
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:194
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:194 ../widgets/beautiful-
+#: taxonomy-filters-widget.php:74
 msgid "Dropdown deselect/default behaviour:"
 msgstr ""
 
@@ -69,10 +70,14 @@ msgid "Disable the active filters heading:"
 msgstr ""
 
 #: ../admin/class-beautiful-taxonomy-filters-admin.php:221
-msgid "Styling:"
+msgid "Disable the filterinfo modules post count:"
 msgstr ""
 
 #: ../admin/class-beautiful-taxonomy-filters-admin.php:230
+msgid "Styling:"
+msgstr ""
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:239
 msgid "Custom CSS Styling:"
 msgstr ""
 
@@ -169,12 +174,12 @@ msgid "Below the filter module"
 msgstr ""
 
 #: ../admin/partials/beautiful-taxonomy-filters-dropdown-behaviour-settings-
-#: display.php:17
+#: display.php:17 ../widgets/beautiful-taxonomy-filters-widget.php:77
 msgid "All option"
 msgstr ""
 
 #: ../admin/partials/beautiful-taxonomy-filters-dropdown-behaviour-settings-
-#: display.php:20
+#: display.php:20 ../widgets/beautiful-taxonomy-filters-widget.php:78
 msgid "Placeholder"
 msgstr ""
 
@@ -189,33 +194,39 @@ msgid ""
 msgstr ""
 
 #: ../public/partials/beautiful-taxonomy-filters-public-display.php:77 ..
-#: /public/partials/beautiful-taxonomy-filters-public-display.php:90 ..
-#: /public/partials/beautiful-taxonomy-filters-public-display.php:102 ..
-#: /widgets/beautiful-taxonomy-filters-widget.php:208
+#: /public/partials/beautiful-taxonomy-filters-public-display.php:106 ..
+#: /widgets/beautiful-taxonomy-filters-widget.php:227 ../widgets/beautiful-
+#: taxonomy-filters-widget.php:240 ../widgets/beautiful-taxonomy-filters-widget.
+#: php:252
 msgid "All "
 msgstr ""
 
-#: ../public/partials/beautiful-taxonomy-filters-public-display.php:110 ..
-#: /widgets/beautiful-taxonomy-filters-widget.php:228
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:116 ..
+#: /widgets/beautiful-taxonomy-filters-widget.php:259
 msgid "Apply filter"
 msgstr ""
 
-#: ../public/partials/beautiful-taxonomy-filters-public-display.php:112 ..
-#: /widgets/beautiful-taxonomy-filters-widget.php:230
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:118 ..
+#: /widgets/beautiful-taxonomy-filters-widget.php:261
 msgid "Click to clear all active filters"
 msgstr ""
 
-#: ../public/partials/beautiful-taxonomy-filters-public-display.php:112 ..
-#: /widgets/beautiful-taxonomy-filters-widget.php:230
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:118 ..
+#: /widgets/beautiful-taxonomy-filters-widget.php:261
 msgid "Clear all"
 msgstr ""
 
-#: ../public/partials/beautiful-taxonomy-filters-public-info-display.php:35
+#: ../public/partials/beautiful-taxonomy-filters-public-info-display.php:37
 msgid "Active filters"
 msgstr ""
 
-#: ../public/partials/beautiful-taxonomy-filters-public-info-display.php:73 ..
-#: /public/partials/beautiful-taxonomy-filters-public-info-display.php:101 ..
+#: ../public/partials/beautiful-taxonomy-filters-public-info-display.php:40
+#, php-format
+msgid "Result of filter: %d"
+msgstr ""
+
+#: ../public/partials/beautiful-taxonomy-filters-public-info-display.php:79 ..
+#: /public/partials/beautiful-taxonomy-filters-public-info-display.php:107 ..
 #: /widgets/beautiful-taxonomy-filters-info-widget.php:125 ../widgets/beautiful-
 #: taxonomy-filters-info-widget.php:153
 msgid "All"
@@ -226,7 +237,7 @@ msgid "Add an active filter info module to the sidebar"
 msgstr ""
 
 #: ../widgets/beautiful-taxonomy-filters-info-widget.php:37 ../widgets/beautiful-
-#: taxonomy-filters-widget.php:42
+#: taxonomy-filters-widget.php:43
 msgid "Title:"
 msgstr ""
 
@@ -234,45 +245,45 @@ msgstr ""
 msgid "Add a filter module to the sidebar"
 msgstr ""
 
-#: ../widgets/beautiful-taxonomy-filters-widget.php:46
+#: ../widgets/beautiful-taxonomy-filters-widget.php:47
 msgid "Enable a \"clear all\" link: "
-msgstr ""
-
-#: ../widgets/beautiful-taxonomy-filters-widget.php:48 ../widgets/beautiful-
-#: taxonomy-filters-widget.php:57 ../widgets/beautiful-taxonomy-filters-widget.
-#: php:66
-msgid "Inherit"
 msgstr ""
 
 #: ../widgets/beautiful-taxonomy-filters-widget.php:49 ../widgets/beautiful-
 #: taxonomy-filters-widget.php:58 ../widgets/beautiful-taxonomy-filters-widget.
-#: php:67
-msgid "Enable"
+#: php:67 ../widgets/beautiful-taxonomy-filters-widget.php:76
+msgid "Inherit"
 msgstr ""
 
 #: ../widgets/beautiful-taxonomy-filters-widget.php:50 ../widgets/beautiful-
 #: taxonomy-filters-widget.php:59 ../widgets/beautiful-taxonomy-filters-widget.
 #: php:68
+msgid "Enable"
+msgstr ""
+
+#: ../widgets/beautiful-taxonomy-filters-widget.php:51 ../widgets/beautiful-
+#: taxonomy-filters-widget.php:60 ../widgets/beautiful-taxonomy-filters-widget.
+#: php:69
 msgid "Disable"
 msgstr ""
 
-#: ../widgets/beautiful-taxonomy-filters-widget.php:55
+#: ../widgets/beautiful-taxonomy-filters-widget.php:56
 msgid "Hide empty terms: "
 msgstr ""
 
-#: ../widgets/beautiful-taxonomy-filters-widget.php:64
+#: ../widgets/beautiful-taxonomy-filters-widget.php:65
 msgid "Show post count: "
 msgstr ""
 
-#: ../widgets/beautiful-taxonomy-filters-widget.php:73
+#: ../widgets/beautiful-taxonomy-filters-widget.php:83
 msgid "Specific posttype: "
 msgstr ""
 
-#: ../widgets/beautiful-taxonomy-filters-widget.php:75
+#: ../widgets/beautiful-taxonomy-filters-widget.php:85
 msgid "Automatic (default)"
 msgstr ""
 
-#: ../widgets/beautiful-taxonomy-filters-widget.php:92
+#: ../widgets/beautiful-taxonomy-filters-widget.php:102
 msgid ""
 "By Selecting a specific posttype the filter will work from anywhere but only "
 "for that posttype."

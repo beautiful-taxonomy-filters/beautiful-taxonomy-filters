@@ -1,9 +1,9 @@
 === Beautiful taxonomy filters ===
 Contributors: Jonathandejong, tigerton
-Tags: Taxonomy, filter, permalinks, terms
+Tags: Taxonomy, taxonomies, filter, filtering, permalinks, terms, term, widget, pretty permalinks, rewrite, custom posttype, cpt, beautiful, select2, dropdowns, material design, GET
 Requires at least: 3.0.1
-Tested up to: 4.0.1
-Stable tag: 1.1.2
+Tested up to: 4.1
+Stable tag: 1.1.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,12 +19,18 @@ The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide
 * Exclude taxonomies you just don’t want the visitors to filter on.
 * Beautifies the resulting URLs. You won’t see any /posttype/?taxonomy1=term. Instead you’ll see /posttype/taxonomy/term
 * Comes with a complete functional filter module for you to put in your theme. 
-* Use either the widgets or functions to add the filter module and it's friend the filterinfo module to your site.
-* Or use the automagic setting to have the modules appear on your archive from thin air. Wizards at work… 
+* Three alternatives for putting the filter modules in your theme:
+  * Widgets (Also lets you "hard set" a post type for use anywhere)
+  * Functions (for granular control)
+  * Automagic setting which will magically place the modules in your archive from thin air. Wizards at work…
 * Choose from different styles for the component, or disable styling and do it yourself in style.css! Just want to tweak a style? Add your custom CSS directly on the settings page.
-* Want a ”Clear all” link for the filter component? Just tick a box in the settings page!
-* Many settings for fine-tuning the filter modules behaviour.
-* Ability to show your visitors information about their current active filtering.
+* Many more settings for fine-tuning the filter modules behaviour:
+  * A ”Clear all” link for the filter component.
+  * Choose between placeholders or "show all" in the dropdowns.
+  * Hide empty terms in the dropdowns.
+  * Show a post count next to the term name
+  * More to come!
+* Ability to show your visitors information about their current active filtering and control the look of this.
 * Allows for custom GET parameters to be included. Extend the filter your way with maybe a custom search-parameter or whatever you like. 
 * Many [filters and actions](https://wordpress.org/plugins/beautiful-taxonomy-filters/other_notes/) for modifying the plugins behaviour. For you control freaks out there…
 
@@ -42,12 +48,18 @@ Do you want to translate this plugin to another language? I recommend using POEd
 * Based on [WordPress Plugin Boilerplate](https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate)
 * Uses [Select2](http://ivaynberg.github.io/select2/) to enhance dropdowns 
 
+= Featured on =
+* [WP Tavern](http://www.wptavern.com/beautiful-taxonomy-filters-for-wordpress-custom-post-types)
+* [RiverTheme](http://www.rivertheme.com/top-22-free-wordpress-plugins-of-december-2014/)
+* [The WhiP (WPMU DEV)](http://premium.wpmudev.org/blog/this-week-in-wordpress-5/)
+
 
 == Installation ==
 
 1. Upload `beautiful-taxonomy-filters` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Follow the instructions found in Settings > Taxonomy filters to get you started!
+4. For more customization have a look at the [filters and actions](https://wordpress.org/plugins/beautiful-taxonomy-filters/other_notes/)
 
 
 == Frequently Asked Questions ==
@@ -68,6 +80,36 @@ Just start tagging up your posts and you’ll see it shows up! Also, make sure t
 = Why aren't the builtin post types supported? =
 **Posts** are not supported because we haven't been able to create proper rewrite rules for the multiple filtering to work. Posts are handled differently by WordPress than other custom post types (you have probably noticed that there's no /posts/ in the permalink for example). Due to this the same rewrite rules that works for custom post types doesn't work for posts. If you're just looking to filter your posts by their categories with a dropdown you can use this function [wp_dropdown_categories](http://codex.wordpress.org/Function_Reference/wp_dropdown_categories). It's good practice to use a custom post type when you're not going to use it as news/blog -posts so perhaps you should create a Custom post type instead and make use of this beautiful plugin!
 
+= Is it compatible with XXXXXX? =
+You will be able to use this plugin with any **public registered custom post type** regardless if it's been created by yourself or a plugin. **However** the displaying of the CPT must be via it's archive template. That means that a plugin that uses shortcodes to display the entire post listing on a static page will not work out of the box. It will also not work out of the box with plugins that in some way alter the permalink to the CPT archive [WPMU Devs Events+ for example](https://premium.wpmudev.org/project/events-plus/).
+
+= But I'm using Events+ and I really want this! =
+You can make Events+ compatible with BTF by adding this snippet to your themes functions.php file. Note that you'll have to change the "events" string if you've set a different one in the Events+ settings.
+
+`
+function curPageURL() {
+ $pageURL = 'http';
+ if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+ $pageURL .= "://";
+ if ($_SERVER["SERVER_PORT"] != "80") {
+  $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+ } else {
+  $pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+ }
+ return $pageURL;
+}
+
+add_action( 'template_redirect', 'template_redirect_cb' );
+function template_redirect_cb() {
+	$url = curPageURL();
+	if ( strpos( $url,'eab_events_category' ) !== false ) {
+		$u = str_replace( "eab_events_category/", "", $url );
+		$u = str_replace( "events/", "blog/events/", $u );
+		wp_redirect( $u );
+	}
+}
+`
+[See here for more info](http://premium.wpmudev.org/forums/topic/i-would-change-the-sidebar-on-the-events-page-i-created)
 
 
 == Screenshots ==
@@ -85,9 +127,22 @@ Just start tagging up your posts and you’ll see it shows up! Also, make sure t
 
 == Changelog ==
 
-= 1.1.2 =
-* IMPROVEMENT: The widget now also has the setting for the dropdown behaviour.
-* FIX: Fixed some php warnings.
+= 1.1.4.2 =
+* FIX: Hotfix #3. Added fix for widgets regarding core taxonomies.
+
+= 1.1.4.1 = 
+* FIX: Hotfix #2.. Some files got lost in version 1.1.4 and we had to help them find their way back. 
+
+= 1.1.4 =
+* FIX: This update is a hotfix for an issue where WordPress builtin categories and tags connected to a CPT appear in the filter module. Since they cannot be supported at this time they should not appear at all. This update fixes that. Thanks to BlantantWeb for the notice. 
+
+= 1.1.3 = 
+* FEATURE: The filterinfo module now has the ability to show how many posts a filter has resulted in. There is also new filters for hooking into this. 
+* FEATURE: New actions have been added to the filterinfo module that allows for custom markup inside the module. 
+* FEATURE: There is now a filter for modifying the placeholder of each dropdown.
+* FEATURE: There is now a filter for modifying the filter buttons text "Apply filter". 
+* IMPROVEMENT: The plugins scripts will now load in footer instead of head. This also fixes some rare bugs where dependencies with jQuery did not work. 
+* IMPROVEMENT: Update to swedish translation.
 
 = 1.1.1 =
 * FEATURE: You can now automagically insert the two modules into your archive pages! No need for modification of your theme. This feature is sort of experimental and there's a few things to note compared to the manual methods: 
@@ -175,6 +230,20 @@ function modify_categories_dropdown( $taxonomies ) {
     return $taxonomies;
 }
 add_filter( 'beautiful_filters_taxonomies', 'modify_categories_dropdown', 10, 1 );
+`
+
+= beautiful_filters_dropdown_placeholder =
+
+$placeholder is the string used for the placeholder. 
+$taxonomy is the current taxonomy.
+In order to change the placeholders you must use this filter rather than the *modify_categories_dropdown* argument "show_option_all". 
+
+`
+function modify_categories_dropdown( $placeholder, $taxonomy ) {
+
+    return 'New placeholder';
+}
+add_filter( 'beautiful_filters_dropdown_placeholder', 'modify_dropdown_placeholder', 10, 2 );
 `
 
 = beautiful_filters_clear_all =
@@ -267,6 +336,19 @@ function modify_labels($label){
 add_filter('beautiful_filters_taxonomy_label', 'modify_labels', 10, 1);
 `
 
+= beautiful_filters_apply_button =
+
+$string is the default string of the apply filters button. 
+
+`
+function modify_filter_button($string){
+	
+	return 'Hej världen';
+}
+
+add_filter('beautiful_filters_apply_button', 'modify_filter_button', 10, 1);
+`
+
 = beautiful_filters_active_taxonomy =
 
 $label is the taxonomy string for the active filter info
@@ -295,6 +377,19 @@ function modify_active_taxonomy($terms, $taxonomy){
 add_filter('beautiful_filters_active_terms', 'modify_active_terms', 10, 2);
 `
 
+= beautiful_filters_disable_heading =
+
+$bool is a boolean of either true (hide filterinfo heading) or false (show filterinfo heading)
+
+`
+function toggle_filterinfo_heading($bool){
+	
+	return true;
+	
+}
+add_filter('beautiful_filters_disable_heading', 'toggle_filterinfo_heading');
+`
+
 = beautiful_filters_info_heading =
 
 $filter_heading is the default heading string
@@ -307,6 +402,33 @@ function modify_filter_heading($filter_heading){
 	
 }
 add_filter('beautiful_filters_info_heading', 'modify_filter_heading');
+`
+
+= beautiful_filters_disable_postcount =
+
+$bool is a boolean of either true (hide filterinfo postcount) or false (show filterinfo postcount)
+
+`
+function toggle_filterinfo_postcount($bool){
+	
+	return true;
+	
+}
+add_filter('beautiful_filters_disable_postcount', 'toggle_filterinfo_postcount');
+`
+
+
+= beautiful_filters_info_postcount =
+
+$postcount_paragraph is the default postcount string. You MUST add %d somewhere in the new string in order for the resulting number to appear.
+
+`
+function modify_filterinfo_postcount($postcount_paragraph){
+	
+	return 'Hej världen ';
+	
+}
+add_filter('beautiful_filters_info_postcount', 'modify_filterinfo_postcount');
 `
 
 
@@ -366,3 +488,32 @@ function add_markup_ending_form($current_post_type){
 
 add_action('beautiful_actions_ending_form', 'add_markup_ending_form' );
 `
+
+= beautiful_actions_beginning_filterinfo =
+
+$current_post_type is the post type which the filterinfo component are currently using. Use this variable as a conditional if needed.
+This action is very usable if you for some reason need to add markup at the beginning of the filterinfo module
+
+`
+function add_markup_beginning_filterinfo($current_post_type){
+	
+	echo 'Hej världen';
+}
+
+add_action('beautiful_actions_beginning_filterinfo', 'add_markup_beginning_filterinfo' );
+`
+
+= beautiful_actions_ending_filterinfo =
+
+$current_post_type is the post type which the filterinfo component are currently using. Use this variable as a conditional if needed.
+This action is very usable if you for some reason need to add markup at the end of the filterinfo module
+
+`
+function add_markup_ending_filterinfo($current_post_type){
+	
+	echo 'Hej världen';
+}
+
+add_action('beautiful_actions_ending_filterinfo', 'add_markup_ending_filterinfo' );
+`
+

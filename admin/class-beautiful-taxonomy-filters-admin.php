@@ -215,6 +215,15 @@ class Beautiful_Taxonomy_Filters_Admin {
 			'taxonomy_filters_styling_settings_section'
 		);
 		
+		// Add checkbox to let users choose to disable the "Result of filter" paragraph
+	 	add_settings_field(
+			'beautiful_taxonomy_filters_disable_postcount',
+			__('Disable the filterinfo modules post count:', 'beautiful-taxonomy-filters'),
+			array($this, 'disable_postcount_setting_callback_function'),
+			'taxonomy-filters',
+			'taxonomy_filters_styling_settings_section'
+		);
+		
 		// Add the field with the selectable styles
 	 	add_settings_field(
 			'beautiful_taxonomy_filters_styles',
@@ -242,6 +251,7 @@ class Beautiful_Taxonomy_Filters_Admin {
 		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_show_count' );
 		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_hide_empty' );
 		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_disable_heading' );
+		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_disable_postcount' );
 		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_dropdown_behaviour' );
 		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_automagic' );
 		
@@ -293,6 +303,10 @@ class Beautiful_Taxonomy_Filters_Admin {
  	
  	function disable_heading_setting_callback_function() {
  		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/beautiful-taxonomy-filters-disable-heading-settings-display.php';
+ 	}
+ 	
+ 	function disable_postcount_setting_callback_function() {
+ 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/beautiful-taxonomy-filters-disable-postcount-settings-display.php';
  	}
  	
  	function styles_setting_callback_function() {
