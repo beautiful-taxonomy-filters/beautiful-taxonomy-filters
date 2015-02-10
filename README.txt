@@ -1,9 +1,9 @@
 === Beautiful taxonomy filters ===
 Contributors: Jonathandejong, tigerton
-Tags: Taxonomy, taxonomies, filter, filtering, permalinks, terms, term, widget, pretty permalinks, rewrite, custom posttype, cpt, beautiful, select2, dropdowns, material design, GET
+Tags: Taxonomy, taxonomies, filter, filtering, pretty permalinks, terms, term, widget, pretty permalinks, rewrite, custom posttype, cpt, beautiful, select2, dropdowns, material design, GET, multisite compatible, polylang compatible, select filter
 Requires at least: 3.0.1
 Tested up to: 4.1
-Stable tag: 1.1.4.2
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,7 +17,9 @@ The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide
 = Features = 
 * Activate filtering on any registered public custom post type.
 * Exclude taxonomies you just don’t want the visitors to filter on.
-* Beautifies the resulting URLs. You won’t see any /posttype/?taxonomy1=term. Instead you’ll see /posttype/taxonomy/term
+* Beautifies the resulting URLs. You won’t see any /posttype/?taxonomy1=term. Instead you’ll see /posttype/taxonomy/term.
+* Polylang compatible (beta).
+* Multisite compatible. No network settings at the moment.
 * Comes with a complete functional filter module for you to put in your theme. 
 * Three alternatives for putting the filter modules in your theme:
   * Widgets (Also lets you "hard set" a post type for use anywhere)
@@ -52,6 +54,7 @@ Do you want to translate this plugin to another language? I recommend using POEd
 * [WP Tavern](http://www.wptavern.com/beautiful-taxonomy-filters-for-wordpress-custom-post-types)
 * [RiverTheme](http://www.rivertheme.com/top-22-free-wordpress-plugins-of-december-2014/)
 * [The WhiP (WPMU DEV)](http://premium.wpmudev.org/blog/this-week-in-wordpress-5/)
+* [TotalPhotoshop](http://www.total-photoshop.com/)
 
 
 == Installation ==
@@ -63,6 +66,13 @@ Do you want to translate this plugin to another language? I recommend using POEd
 
 
 == Frequently Asked Questions ==
+
+= Can I show the filter module on a static page / in my header / in my footer? =
+
+As of version 1.2 the function for showing the filter module `show_beautiful_filters()` takes an optional parameter of a custom post type name. This "hardcodes" the filter module to that post type and lets you use it pretty much anywhere in your theme. Hardcore right.. 
+`
+<?php echo show_beautiful_filters('myposttype'); ?>
+`
 
 = Is there a way to change the order of the taxonomies? =
 
@@ -79,6 +89,9 @@ Just start tagging up your posts and you’ll see it shows up! Also, make sure t
 
 = Why aren't the builtin post types supported? =
 **Posts** are not supported because we haven't been able to create proper rewrite rules for the multiple filtering to work. Posts are handled differently by WordPress than other custom post types (you have probably noticed that there's no /posts/ in the permalink for example). Due to this the same rewrite rules that works for custom post types doesn't work for posts. If you're just looking to filter your posts by their categories with a dropdown you can use this function [wp_dropdown_categories](http://codex.wordpress.org/Function_Reference/wp_dropdown_categories). It's good practice to use a custom post type when you're not going to use it as news/blog -posts so perhaps you should create a Custom post type instead and make use of this beautiful plugin!
+
+= Is it compatible with Polylang/WPML?
+It is currently only compatible with Polylang but support for WPML is coming. We've not been able to test every single setting in polylang so bear with us if there are a few bugs to work out (feedback is much appreciated). In order for this to work properly you should set the post types and all connected taxonomies to be translatable. The filtered urls will still work even if you don't set the posttype to be translatable but when switching language Polylang still think it should add the new language to the URL which means it'll throw a 404 error. This is to be expected and NOT due to this plugin. If you experience 404 errors make sure you flush your rewrite rules by going to settings > permalinks in the admin dashboard. 
 
 = Is it compatible with XXXXXX? =
 You will be able to use this plugin with any **public registered custom post type** regardless if it's been created by yourself or a plugin. **However** the displaying of the CPT must be via it's archive template. That means that a plugin that uses shortcodes to display the entire post listing on a static page will not work out of the box. It will also not work out of the box with plugins that in some way alter the permalink to the CPT archive [WPMU Devs Events+ for example](https://premium.wpmudev.org/project/events-plus/).
@@ -126,6 +139,19 @@ function template_redirect_cb() {
 
 
 == Changelog ==
+
+= 1.2 =
+* FEATURE: the `show_beautiful_filters()` function can now take a parameter of a custom post type name. Doing so enables you to show the filter module anywhere in your theme for a specific post type. Much like the widget except you can place the function pretty much anywhere without having to use a widget. Pretty sweet.
+* FEATURE: You're now able to completely disable the select2 library and use good old regular selects instead. Use your own select improving library or whatever… my feelings aren't hurt. Just remember that the regular selects don't support placeholders so it will fall back to the "all option".
+* FEATURE: Beautiful Taxonomy Filters is now compatible with Polylang. This is still kind of beta so there might be some bugs to work out over time. I have not been able to try every possible setting so feedback on this is appreciated! See FAQ for more info
+* IMPROVEMENT: Updated swedish translations. If you're a well educated multilingual person with a kind heart I'd love translations for other languages as well! Klingon might be a bit excessive tho.
+* IMPROVEMENT: Made the menu item name translatable. 
+* IMPROVEMENT: Minifed JS and CSS for minimal file sizes to load.
+* FIX: php warning for the automagic feature in settings page.
+* FIX: The result of filter count is now correct and applied to the filterinfo widget as well. 
+* FIX: Sometimes when on a different post type the filter widget didn't use the proper posttype.
+* FIX: The "Clear all" link should now always point to the correct URL.
+
 
 = 1.1.4.2 =
 * FIX: Hotfix #3. Added fix for widgets regarding core taxonomies.

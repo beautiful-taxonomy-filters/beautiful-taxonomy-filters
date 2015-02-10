@@ -52,20 +52,24 @@ class Beautiful_Taxonomy_Filters_Public {
 	 */
 	public function enqueue_styles() {
 		
-		//the basic stylesheet that should always be loaded! For select2 to display properly
-		wp_enqueue_style( 'select2', plugin_dir_url( __FILE__ ) . 'css/select2.css', array(), $this->version, 'all' );
+		$disable_select2 = (get_option('beautiful_taxonomy_filters_disable_select2') ? get_option('beautiful_taxonomy_filters_disable_select2') : false); 
+		
+		if(!$disable_select2){
+			//the basic stylesheet that should always be loaded! For select2 to display properly
+			wp_enqueue_style( 'select2', plugin_dir_url( __FILE__ ) . 'css/select2.min.css', array(), $this->version, 'all' );	
+		}
 		
 		//Get user selected style
 		$selected_style = get_option('beautiful_taxonomy_filters_styles');
 		switch ($selected_style){
 			case 'basic':
-				//We wont load anything, let the allmighty user decide!
+				//We wont load anything, let the almighty user decide!
 				break;
 			case 'light-material':
-				wp_enqueue_style( $this->name, plugin_dir_url( __FILE__ ) . 'css/beautiful-taxonomy-filters-light-material.css', array(), $this->version, 'all' );
+				wp_enqueue_style( $this->name, plugin_dir_url( __FILE__ ) . 'css/beautiful-taxonomy-filters-light-material.min.css', array(), $this->version, 'all' );
 				break;
 			case 'dark-material':
-				wp_enqueue_style( $this->name, plugin_dir_url( __FILE__ ) . 'css/beautiful-taxonomy-filters-dark-material.css', array(), $this->version, 'all' );
+				wp_enqueue_style( $this->name, plugin_dir_url( __FILE__ ) . 'css/beautiful-taxonomy-filters-dark-material.min.css', array(), $this->version, 'all' );
 				break;
 			
 		}
@@ -79,8 +83,13 @@ class Beautiful_Taxonomy_Filters_Public {
 	 */
 	public function enqueue_scripts() {
 		
-		wp_enqueue_script( 'select2', plugin_dir_url( __FILE__ ) . 'js/select2/select2.min.js', array( 'jquery' ), $this->version, true );
-		wp_enqueue_script( $this->name, plugin_dir_url( __FILE__ ) . 'js/beautiful-taxonomy-filters-public.js', array( 'jquery', 'select2' ), $this->version, true );
+		$disable_select2 = (get_option('beautiful_taxonomy_filters_disable_select2') ? get_option('beautiful_taxonomy_filters_disable_select2') : false); 
+		
+		//If the almighty user decides there be no select2, then no select2 there be!
+		if(!$disable_select2){
+			wp_enqueue_script( 'select2', plugin_dir_url( __FILE__ ) . 'js/select2/select2.min.js', array( 'jquery' ), $this->version, true );
+			wp_enqueue_script( $this->name, plugin_dir_url( __FILE__ ) . 'js/beautiful-taxonomy-filters-public.js', array( 'jquery', 'select2' ), $this->version, true );	
+		}
 		
 	}
 	
@@ -177,10 +186,54 @@ class Beautiful_Taxonomy_Filters_Public {
 			$current_post_type = self::get_current_posttype(false);
 			
 		}
+
+		//Polylang support
+		if(function_exists('pll_current_language')){
+			
+			$language_slug = pll_current_language('slug');
+			//If the post type is translated…
+			if(pll_is_translated_post_type($current_post_type)){
+				$new_url = pll_home_url($language_slug);
+			}else{
+				//base url
+				$new_url = $referer . '/';
+			}
+			/* Deprecated stuff. Keep it here for a while just in case shit hits the fan
+			//First make sure the post type we're handling is event translatable.. 
+			if(pll_is_translated_post_type($current_post_type)){
+				
+				//If we're on the default language or not
+				if($language_slug == $polylang_settings['default_lang']){
+					//If we want the language slug even on default
+					if(!$polylang_settings['hide_default']){
+						
+						//If we want the /language part
+						if(!$polylang_settings['rewrite']){
+							$new_url .= 'language/';
+						}
+						
+						$new_url .= $language_slug . '/';
+					}
+				}else{
+					
+					//If we want the /language part
+					if(!$polylang_settings['rewrite']){
+						$new_url .= 'language/';
+					}
+					$new_url .= $language_slug . '/';
+				}
+				
+			}
+			*/
+			
+		}else{
+			
+			//base url
+			$new_url = $referer . '/';
+			
+		}
 		
-		
-		//base url
-		$new_url = $referer . '/' . $current_post_type_rewrite . '/';	
+		$new_url .= $current_post_type_rewrite . '/';	
 		
 		//Get the taxonomies of the current post type
 		$current_taxonomies = get_object_taxonomies($current_post_type, 'objects');
@@ -245,7 +298,7 @@ class Beautiful_Taxonomy_Filters_Public {
 	*
 	* @since 1.0.0
 	*/
-	public static function beautiful_filters(){
+	public static function beautiful_filters($post_type){
 		//Fetch the plugins options
 		//Apply filters on them to let users modify the options before they're being used!
 		$post_types = apply_filters( 'beautiful_filters_post_types', get_option('beautiful_taxonomy_filters_post_types') ); 
@@ -257,11 +310,26 @@ class Beautiful_Taxonomy_Filters_Public {
 
 		
 		//get current post type archive
-		if(isset($_POST['post_type']) && $_POST['post_type'] != ''){
+		if($post_type){
+			
+			$current_post_type = $post_type;
+			//Get the post type object
+			$post_type_object = get_post_type_object($current_post_type);
+			//Take the rewrite slug which is the one we actually want!
+			$current_post_type_rewrite = $post_type_object->rewrite['slug'];	
+			
+		}elseif(isset($_POST['post_type']) && $_POST['post_type'] != ''){
+			
 			$current_post_type = $_POST['post_type'];
-		}else{ //If there was no post type from the form (for some reason), try to get it anyway!
+			//Get the post type object
+			$post_type_object = get_post_type_object($current_post_type);
+			//Take the rewrite slug which is the one we actually want!
+			$current_post_type_rewrite = $post_type_object->rewrite['slug'];
+			
+		}else{ //If there was no post type from the form (for some reason) and there is no post type supplied by the public function, try to get it anyway!
 			
 			$current_post_type = self::get_current_posttype(false);
+			$current_post_type_rewrite = self::get_current_posttype();
 			
 		}
 		
@@ -282,8 +350,9 @@ class Beautiful_Taxonomy_Filters_Public {
 		}
 		//On a post type that we want the filter on, and we have atleast one valid taxonomy
 		if(in_array($current_post_type, $post_types) && !empty($current_taxonomies)){
-
+			
 			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/beautiful-taxonomy-filters-public-display.php';
+			
 		}
 		
 	}

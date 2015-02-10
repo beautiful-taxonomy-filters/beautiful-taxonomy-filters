@@ -30,14 +30,15 @@
 ?>
 <?php 
 //Make sure we find the current post type! Put it as a hidden form input. This assures us that we'll know where to redirect inside the plugin at all times
-$current_post_type_rewrite = Beautiful_Taxonomy_Filters_Public::get_current_posttype();
-$current_post_type = Beautiful_Taxonomy_Filters_Public::get_current_posttype(false);
+// $current_post_type is used from the function where this file is included.
+// $current_post_type_rewrite is used from the function where this file is included.
 
 //Fetch the available settings for the filter modules behaviour
 $show_clear_all = apply_filters( 'beautiful_filters_clear_all', get_option('beautiful_taxonomy_filters_clear_all'), $current_post_type );
 $hide_empty = apply_filters( 'beautiful_filters_hide_empty', get_option('beautiful_taxonomy_filters_hide_empty'), $current_post_type );
 $show_count = apply_filters( 'beautiful_filters_show_count', get_option('beautiful_taxonomy_filters_show_count'), $current_post_type );
 $dropdown_behaviour = apply_filters( 'beautiful_filters_dropdown_behaviour', get_option('beautiful_taxonomy_filters_dropdown_behaviour'), $current_post_type );
+$disable_select2 = (get_option('beautiful_taxonomy_filters_disable_select2') ? get_option('beautiful_taxonomy_filters_disable_select2') : false); 
 
 //Get the taxonomies of the current post type and the excluded taxonomies
 $excluded_taxonomies = apply_filters( 'beautiful_filters_taxonomies', get_option('beautiful_taxonomy_filters_taxonomies') ); 
@@ -50,6 +51,11 @@ if(is_array($excluded_taxonomies)){
 		'post_tag',
 		'post_format'
 	);
+}
+
+//Polylang support
+if(function_exists('pll_current_language')){
+	array_push($excluded_taxonomies, 'language', 'post_translations');
 }
 
 $current_taxonomies = get_object_taxonomies($current_post_type, 'objects');
@@ -101,16 +107,16 @@ if($current_taxonomies && $excluded_taxonomies){
 						//Apply filter on the arguments to let users modify them first!
 						$dropdown_args = apply_filters( 'beautiful_filters_dropdown_categories', $dropdown_args, $taxonomy->name );
 						
-						//But if they've selected placeholder we cant use the show_option_all
-						if($dropdown_behaviour == 'show_placeholder_option'){
+						//But if they've selected placeholder we cant use the show_option_all (they still have to use select2 tho)
+						if(!$disable_select2 && $dropdown_behaviour == 'show_placeholder_option'){
 							$dropdown_args['show_option_all'] = ' ';
 						}
 						
 						//create the dropdown
 						$filterdropdown = wp_dropdown_categories( $dropdown_args );
 						
-						//If they didnt select placeholder just output the dropdown now
-						if(!$dropdown_behaviour || $dropdown_behaviour == 'show_all_option'){
+						//If they didnt select placeholder just output the dropdown now (or if they've disabled select2)
+						if($disable_select2 || !$dropdown_behaviour || $dropdown_behaviour == 'show_all_option'){
 							echo $filterdropdown;
 						}else{
 							
@@ -127,7 +133,7 @@ if($current_taxonomies && $excluded_taxonomies){
 		</div>
 		<button type="submit" class="beautiful-taxonomy-filters-button"><?php echo apply_filters( 'beautiful_filters_apply_button', __('Apply filter', 'beautiful-taxonomy-filters') ); ?></button>
 		<?php if($show_clear_all): ?>
-			<a href="<?php echo get_site_url() . '/' . $current_post_type_rewrite; ?>" class="beautiful-taxonomy-filters-clear-all" title="<?php _e('Click to clear all active filters', 'beautiful-taxonomy-filters'); ?>"><?php _e('Clear all', 'beautiful-taxonomy-filters'); ?></a>
+			<a href="<?php echo get_post_type_archive_link($current_post_type); ?>" class="beautiful-taxonomy-filters-clear-all" title="<?php _e('Click to clear all active filters', 'beautiful-taxonomy-filters'); ?>"><?php _e('Clear all', 'beautiful-taxonomy-filters'); ?></a>
 		<?php endif; ?>
 		<?php do_action( 'beautiful_actions_ending_form', $current_post_type); //allow custom markup at beginning of form ?>
 	</form>

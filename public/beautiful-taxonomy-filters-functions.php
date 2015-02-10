@@ -15,9 +15,9 @@
 * Template tag for displaying the filters form
 * @return html object
 */
-function show_beautiful_filters(){
+function show_beautiful_filters($post_type = false){
 
-	return Beautiful_Taxonomy_Filters_Public::beautiful_filters();
+	return Beautiful_Taxonomy_Filters_Public::beautiful_filters($post_type);
 }
 
 /**

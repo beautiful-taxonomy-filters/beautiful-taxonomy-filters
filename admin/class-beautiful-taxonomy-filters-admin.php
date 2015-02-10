@@ -89,7 +89,7 @@ class Beautiful_Taxonomy_Filters_Admin {
 	 * @since    1.0.0
 	 */
 	public function add_admin_menu() {
-	    add_options_page( 'Beautiful Taxonomy Filters', 'Taxonomy Filters', 'manage_options', 'taxonomy-filters', array($this, 'create_admin_interface'));
+	    add_options_page( 'Beautiful Taxonomy Filters', __('Taxonomy Filters', 'beautiful-taxonomy-filters'), 'manage_options', 'taxonomy-filters', array($this, 'create_admin_interface'));
 	}
 	
 	/**
@@ -159,6 +159,15 @@ class Beautiful_Taxonomy_Filters_Admin {
 			array($this, 'taxonomies_setting_callback_function'),
 			'taxonomy-filters',
 			'taxonomy_filters_general_settings_section'
+		);
+		
+		// Add checkbox to let users choose to disable select2 library
+	 	add_settings_field(
+			'beautiful_taxonomy_filters_disable_select2',
+			__('Disable the select2 library:', 'beautiful-taxonomy-filters'),
+			array($this, 'disable_select2_setting_callback_function'),
+			'taxonomy-filters',
+			'taxonomy_filters_module_settings_section'
 		);
 		
 		// Add checkbox to let users choose to display a "clear all" link on filter
@@ -247,6 +256,7 @@ class Beautiful_Taxonomy_Filters_Admin {
 		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_taxonomies' );
 		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_styles' );
 		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_custom_css' );
+		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_disable_select2' );
 		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_clear_all' );
 		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_show_count' );
 		register_setting( 'taxonomy-filters', 'beautiful_taxonomy_filters_hide_empty' );
@@ -279,6 +289,10 @@ class Beautiful_Taxonomy_Filters_Admin {
  	
  	function taxonomies_setting_callback_function() {
  		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/beautiful-taxonomy-filters-taxonomies-settings-display.php';
+ 	}
+ 	
+ 	function disable_select2_setting_callback_function() {
+ 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/beautiful-taxonomy-filters-disable-select2-settings-display.php';
  	}
  	
  	function clear_all_setting_callback_function() {

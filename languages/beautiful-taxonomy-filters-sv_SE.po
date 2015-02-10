@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Beautiful taxonomy filter\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-11-10 09:35+0800\n"
-"PO-Revision-Date: Thu Jan 08 2015 11:15:16 GMT+0100 (CET)\n"
+"PO-Revision-Date: Sun Feb 08 2015 16:57:22 GMT+0100 (CET)\n"
 "Last-Translator: admin <admin@local.dev>\n"
 "Language-Team: \n"
 "Language: Swedish\n"
@@ -21,6 +21,10 @@ msgstr ""
 "esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
 "X-Loco-Target-Locale: sv_SE\n"
 "X-Generator: Loco - https://localise.biz/"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:92
+msgid "Taxonomy Filters"
+msgstr "Taxonomi filter"
 
 #: ../admin/class-beautiful-taxonomy-filters-admin.php:120
 msgid "Setup settings"
@@ -43,45 +47,49 @@ msgid "Exclude these taxonomies:"
 msgstr "Exkludera dessa taxonomier:"
 
 #: ../admin/class-beautiful-taxonomy-filters-admin.php:167
+msgid "Disable the select2 library:"
+msgstr "Inaktivera select2 biblioteket"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:176
 msgid "Enable a \"Clear all\" link:"
 msgstr "Aktivera en \"rensa alla\" länk:"
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:176
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:185
 msgid "Hide empty terms in the dropdowns:"
 msgstr "Göm tomma kategorier i rullgardinslistorna:"
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:185
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:194
 msgid "Show post count next to term name:"
 msgstr "Visa antal inlägg bredvid kategorins namn:"
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:194 ../widgets/beautiful-
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:203 ../widgets/beautiful-
 #: taxonomy-filters-widget.php:74
 msgid "Dropdown deselect/default behaviour:"
 msgstr "Rullgardinernas avmarkering/default beteende:"
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:203
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:212
 msgid "Automagically insert the modules in the archives:"
 msgstr "Lägg in modulerna i arkivsidorna automatiskt:"
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:212
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:221
 msgid "Disable the active filters heading:"
 msgstr "Inaktivera rubriken ovanför informationen om aktiva filter:"
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:221
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:230
 msgid "Disable the filterinfo modules post count:"
 msgstr "Inaktivera visning av antal resultat för en filtrering i filterinfo-modulen"
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:230
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:239
 msgid "Styling:"
 msgstr "Stil:"
 
-#: ../admin/class-beautiful-taxonomy-filters-admin.php:239
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:248
 msgid "Custom CSS Styling:"
 msgstr "Skräddarsydd CSS"
 
 #: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:21
 msgid "Beautiful Taxonomy Filters"
-msgstr ""
+msgstr "Beautiful Taxonomy Filters"
 
 #: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:27 ..
 #: admin/partials/beautiful-taxonomy-filters-section-display.php:15
@@ -209,26 +217,25 @@ msgstr ""
 "Här kan du styra utseendet och innehållet i filterkomponenten du använder i "
 "dina posttyp-arkiv."
 
-#: ../public/partials/beautiful-taxonomy-filters-public-display.php:77 ..
-#: public/partials/beautiful-taxonomy-filters-public-display.php:106 ..
-#: widgets/beautiful-taxonomy-filters-widget.php:227 ../widgets/beautiful-
-#: taxonomy-filters-widget.php:240 ../widgets/beautiful-taxonomy-filters-widget.
-#: php:252
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:90 ..
+#: public/partials/beautiful-taxonomy-filters-public-display.php:119 ..
+#: widgets/beautiful-taxonomy-filters-widget.php:244 ../widgets/beautiful-
+#: taxonomy-filters-widget.php:273
 msgid "All "
 msgstr "Alla "
 
-#: ../public/partials/beautiful-taxonomy-filters-public-display.php:116 ..
-#: widgets/beautiful-taxonomy-filters-widget.php:259
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:129 ..
+#: widgets/beautiful-taxonomy-filters-widget.php:282
 msgid "Apply filter"
 msgstr "Filtrera"
 
-#: ../public/partials/beautiful-taxonomy-filters-public-display.php:118 ..
-#: widgets/beautiful-taxonomy-filters-widget.php:261
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:131 ..
+#: widgets/beautiful-taxonomy-filters-widget.php:284
 msgid "Click to clear all active filters"
 msgstr "Klicka för att rensa alla aktiva filter"
 
-#: ../public/partials/beautiful-taxonomy-filters-public-display.php:118 ..
-#: widgets/beautiful-taxonomy-filters-widget.php:261
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:131 ..
+#: widgets/beautiful-taxonomy-filters-widget.php:284
 msgid "Clear all"
 msgstr "Rensa alla"
 
@@ -236,15 +243,16 @@ msgstr "Rensa alla"
 msgid "Active filters"
 msgstr "Aktiva filter"
 
-#: ../public/partials/beautiful-taxonomy-filters-public-info-display.php:40
+#: ../public/partials/beautiful-taxonomy-filters-public-info-display.php:40 ..
+#: widgets/beautiful-taxonomy-filters-info-widget.php:90
 #, php-format
 msgid "Result of filter: %d"
 msgstr "Resultat av filtrering: %d"
 
 #: ../public/partials/beautiful-taxonomy-filters-public-info-display.php:79 ..
-#: public/partials/beautiful-taxonomy-filters-public-info-display.php:107 ..
-#: widgets/beautiful-taxonomy-filters-info-widget.php:125 ../widgets/beautiful-
-#: taxonomy-filters-info-widget.php:153
+#: public/partials/beautiful-taxonomy-filters-public-info-display.php:116 ..
+#: widgets/beautiful-taxonomy-filters-info-widget.php:129 ../widgets/beautiful-
+#: taxonomy-filters-info-widget.php:167
 msgid "All"
 msgstr "Alla"
 
