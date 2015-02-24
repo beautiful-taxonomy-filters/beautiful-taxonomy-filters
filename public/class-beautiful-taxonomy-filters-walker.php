@@ -24,7 +24,7 @@ class Walker_Slug_Value_Category_Dropdown extends Walker_CategoryDropdown {
     	global $wp_query;
 		$queryvars = $wp_query->query_vars;	
         $cat_name = apply_filters('list_cats', $category->name, $category);
-        $output .= "\t<option class=\"level-$depth\" value=\"".$category->slug."\"";
+        $output .= '\t<option class="level-' . $depth . ' ' . $category->slug . '" value="' . $category->slug . '"';
         if(isset($_GET)){
         	foreach($_GET as $get_variable){
 	        	if(strpos($get_variable,',') !== false){

@@ -57,6 +57,21 @@ class Beautiful_Taxonomy_Filters_Admin {
 	 	//get the saved options
 	 	$post_types = get_option('beautiful_taxonomy_filters_post_types');
 	 	$taxonomies = get_option('beautiful_taxonomy_filters_taxonomies');
+	 	//Also make sure we don't try to output the builtin taxonomies since they cannot be supported
+		if(is_array($taxonomies)){
+			array_push($taxonomies, 'category', 'tag');
+		}else{
+			$taxonomies = array(
+				'category',
+				'tag'
+			);
+		}
+		
+		//Polylang support
+		if(function_exists('pll_current_language')){
+			array_push($taxonomies, 'language');
+		}
+		
 	 	if($post_types){
 	 		//instantiate the rewrite rules class
 		 	$rewrite_rule_class = new Beautiful_Taxonomy_Filters_Rewrite_Rules();

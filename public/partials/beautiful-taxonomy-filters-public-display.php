@@ -81,6 +81,7 @@ if($current_taxonomies && $excluded_taxonomies){
 		$count = count($current_taxonomies);	
 		?>
 		<div class="beautiful-taxonomy-filters-select-wrap clearfix">
+			<?php do_action( 'beautiful_actions_beginning_form_inner', $current_post_type); //allow custom markup at beginning of form ?>
 			<?php foreach($current_taxonomies as $key => $taxonomy): ?>
 				<?php $terms = get_terms($key); ?>
 				<?php if(!empty($terms) && !is_wp_error($terms)): ?>
@@ -92,7 +93,7 @@ if($current_taxonomies && $excluded_taxonomies){
 						* Uses walker found in: public/class-beautiful-taxonomy-filters-walker.php
 						*/
 						$dropdown_args = array(
-							'show_option_all' => __('All ', 'beautiful-taxonomy-filters') . $taxonomy->labels->name,
+							'show_option_all' => $taxonomy->labels->all_items,
 							'taxonomy'      => $key,
 							'name'          => 'select-'.$key, //BUG?? For some reason we can't use the actual taxonomy slugs. If we do wordpress automatically fetches the correct posts without us even changing the URL HOWEVER it all breaks when the term has a non standard latin character in its name (not even in the slug which is what we actually use) such as åäö
 							'show_count'    => $show_count,
@@ -121,7 +122,7 @@ if($current_taxonomies && $excluded_taxonomies){
 						}else{
 							
 							//They selected placeholder so now we need to choose what to display and then alter the dropdown before output.
-							$new_label = apply_filters( 'beautiful_filters_dropdown_placeholder', __('All ', 'beautiful-taxonomy-filters') . $taxonomy->labels->name, $taxonomy->name );
+							$new_label = apply_filters( 'beautiful_filters_dropdown_placeholder', $taxonomy->labels->all_items, $taxonomy->name );
 							$filterdropdown = str_replace("value='0' selected='selected'", "", $filterdropdown);
 							echo str_replace('<select ', '<select data-placeholder="' . $new_label . '"', $filterdropdown);
 						}
@@ -130,7 +131,9 @@ if($current_taxonomies && $excluded_taxonomies){
 					</div>
 				<?php endif; ?>
 			<?php endforeach; ?>
+			<?php do_action( 'beautiful_actions_ending_form_inner', $current_post_type); //allow custom markup at end of inner form ?>
 		</div>
+		<?php do_action( 'beautiful_actions_before_submit_button', $current_post_type); //allow custom markup before submit button ?>
 		<button type="submit" class="beautiful-taxonomy-filters-button"><?php echo apply_filters( 'beautiful_filters_apply_button', __('Apply filter', 'beautiful-taxonomy-filters') ); ?></button>
 		<?php if($show_clear_all): ?>
 			<a href="<?php echo get_post_type_archive_link($current_post_type); ?>" class="beautiful-taxonomy-filters-clear-all" title="<?php _e('Click to clear all active filters', 'beautiful-taxonomy-filters'); ?>"><?php _e('Clear all', 'beautiful-taxonomy-filters'); ?></a>

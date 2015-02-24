@@ -198,34 +198,7 @@ class Beautiful_Taxonomy_Filters_Public {
 				//base url
 				$new_url = $referer . '/';
 			}
-			/* Deprecated stuff. Keep it here for a while just in case shit hits the fan
-			//First make sure the post type we're handling is event translatable.. 
-			if(pll_is_translated_post_type($current_post_type)){
-				
-				//If we're on the default language or not
-				if($language_slug == $polylang_settings['default_lang']){
-					//If we want the language slug even on default
-					if(!$polylang_settings['hide_default']){
-						
-						//If we want the /language part
-						if(!$polylang_settings['rewrite']){
-							$new_url .= 'language/';
-						}
-						
-						$new_url .= $language_slug . '/';
-					}
-				}else{
 					
-					//If we want the /language part
-					if(!$polylang_settings['rewrite']){
-						$new_url .= 'language/';
-					}
-					$new_url .= $language_slug . '/';
-				}
-				
-			}
-			*/
-			
 		}else{
 			
 			//base url
@@ -240,20 +213,30 @@ class Beautiful_Taxonomy_Filters_Public {
 		if($current_taxonomies){
 			foreach($current_taxonomies as $key => $value){
 				
+				
 				//check for each taxonomy as a $_POST variable. 
 				//If it exists we want to append it along with the value (term) it has.
 				$term = (isset($_POST['select-'.$key]) ? $_POST['select-'.$key] : false);
 				if($term){
-					$new_url .= $key . '/' . $term . '/';
+					//If the taxonomy has a rewrite slug we need to use that instead!
+					if(is_array($value->rewrite) && array_key_exists('slug', $value->rewrite)){
+						$new_url .= $value->rewrite['slug'] . '/' . $term . '/';
+					}else{
+						$new_url .= $key . '/' . $term . '/';	
+					}
 				}
 				
 			}
 		}
 		
+		//Perform actions before the redirect to the filtered page
+		do_action( 'beautiful_actions_before_redirection', $current_post_type);
+		
+		//keep GET parameters
 		$new_url = $this->append_get_parameters($new_url);
 		
 		//perform a redirect to the new filtered url
-		wp_redirect($new_url);
+		wp_redirect(apply_filters( 'beautiful_filters_new_url', $new_url, $current_post_type ));
 		exit;
 	}
 	
@@ -280,7 +263,7 @@ class Beautiful_Taxonomy_Filters_Public {
 			}
 			
 			if(in_array('filter_module', $automagic)){
-				self::beautiful_filters();
+				self::beautiful_filters(false);
 			}
 			
 			if(in_array('filter_info_module', $automagic) && in_array('below', $automagic)){

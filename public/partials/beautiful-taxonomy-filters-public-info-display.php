@@ -62,7 +62,7 @@ if(!$current_post_type || !in_array($current_post_type, $activated_post_types)){
 		//If we both have taxonomies on the post type AND we've set som excluded taxonomies in the plugins settings. Loop through them and unset those we don't want!
 		if($current_taxonomies && $excluded_taxonomies){
 			foreach($current_taxonomies as $key => $value){
-				if(in_array($key, $excluded_taxonomies)){
+				if(in_array($value['taxonomy'], $excluded_taxonomies)){
 					unset($current_taxonomies[$key]);
 				}
 			}
@@ -107,7 +107,7 @@ if(!$current_post_type || !in_array($current_post_type, $activated_post_types)){
 			<div class="beautiful-taxonomy-filters-single-tax">
 				<?php
 				$label = $taxonomy->labels->name . ':';
-				$value = __('All', 'beautiful-taxonomy-filters') . ' ' . $taxonomy->label; 
+				$value = $taxonomy->labels->all_items; 
 				?>
 				<span class="single-tax-key"><?php echo apply_filters('beautiful_filters_active_taxonomy', $label, $taxonomy->query_var); ?></span>
 				<span class="single-tax-value"><?php echo apply_filters('beautiful_filters_active_terms', $value, $taxonomy->query_var); ?></span>
@@ -143,11 +143,11 @@ if(!$current_post_type || !in_array($current_post_type, $activated_post_types)){
 		?>
 		<?php if($posttypes_taxonomies): ?>
 	
-			<?php foreach($posttypes_taxonomies as $taxonomy): ?>
+			<?php foreach($posttypes_taxonomies as $taxonomy):?>
 				<div class="beautiful-taxonomy-filters-single-tax">
 					<?php
 					$label = $taxonomy->labels->name . ':';
-					$value = __('All', 'beautiful-taxonomy-filters') . ' ' . $taxonomy->label; 
+					$value = $taxonomy->labels->all_items; 
 					?>
 					<span class="single-tax-key"><?php echo apply_filters('beautiful_filters_active_taxonomy', $label, $taxonomy->query_var); ?></span>
 					<span class="single-tax-value"><?php echo apply_filters('beautiful_filters_active_terms', $value, $taxonomy->query_var); ?></span>
