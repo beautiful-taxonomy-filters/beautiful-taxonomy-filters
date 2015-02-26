@@ -4,7 +4,7 @@ Donate link: http://fancy.to/k9qxt
 Tags: Taxonomy, taxonomies, filter, filtering, pretty permalinks, terms, term, widget, pretty permalinks, rewrite, custom posttype, cpt, beautiful, select2, dropdowns, material design, GET, multisite compatible, polylang compatible, select filter, SEO friendly
 Requires at least: 3.0.1
 Tested up to: 4.1
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,6 +149,11 @@ Why thank you! We don't have proper donate link but if you want to you can send 
 
 
 == Changelog ==
+
+= 1.2.3 = 
+* IMPROVEMENT: Added some basic media query styling to the style themes to avoid extremely small dropdowns on those modern electric things people carry around (smartphones). 
+* FEATURE: German translation added. Thanks to [Matthias Bonnes](http://macbo.de/).
+* FIX: Fixed issue with " and ' difference in wp_dropdown_categories walker. I'll try to do some more testing before pushing out new features in the future… Thanks to [Folbert](https://github.com/folbert) for noticing.
 
 = 1.2.2 = 
 * IMPROVEMENT: Added the terms slug as class to the option element. Allows for custom styling per term option. You can for example use it to colorcode the dropdowns terms.

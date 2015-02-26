@@ -232,6 +232,33 @@
 }
 
 
+@media all and (max-width: 40em){
+	.filter-count-4, .filter-count-3, .filter-count-many{
+		margin-right:5%;
+		width:47.5%;
+		margin-bottom:5%;
+	}
+	.filter-count-4:nth-child(4n), .filter-count-many:nth-child(4n), .filter-count-3:nth-child(3n){
+		margin-right: 5%;
+	}
+	.filter-count-4:nth-child(2n), .filter-count-many:nth-child(2n), .filter-count-3:nth-child(2n){
+		margin-right:0;
+	}
+}
+
+@media all and (max-width: 30em){
+	.filter-count-4, .filter-count-3, .filter-count-many{
+		margin-right:0%;
+		margin-bottom:5%;
+		width:100%;
+	}
+	.filter-count-4:nth-child(4n), .filter-count-many:nth-child(4n), .filter-count-3:nth-child(3n){
+		margin-right: 0;
+	}
+	.filter-count-4:nth-child(2n), .filter-count-many:nth-child(2n), .filter-count-3:nth-child(2n){
+		margin-right:0;
+	}	
+}
 
 /*
 * Active filters
