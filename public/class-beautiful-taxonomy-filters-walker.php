@@ -22,9 +22,9 @@ class Walker_Slug_Value_Category_Dropdown extends Walker_CategoryDropdown {
 
     function start_el(&$output, $category, $depth = 0, $args = array(), $id = 0) {
     	global $wp_query;
-		$queryvars = $wp_query->query_vars;	
+		$queryvars = $wp_query->query_vars;
         $cat_name = apply_filters('list_cats', $category->name, $category);
-        $output .= '\t<option class="level-' . $depth . ' ' . $category->slug . '" value="' . $category->slug . '"';
+        $output .= "\t" . '<option class="level-' . $depth . ' ' . $category->slug . '" value="' . $category->slug . '"';
         if(isset($_GET)){
         	foreach($_GET as $get_variable){
 	        	if(strpos($get_variable,',') !== false){
@@ -39,7 +39,7 @@ class Walker_Slug_Value_Category_Dropdown extends Walker_CategoryDropdown {
 	        	}
         	}
 		}
-		if ( in_array($category->slug, $queryvars, true)  ) { 
+		if ( in_array($category->slug, $queryvars, true)  ) {
 			$output .= 'selected="selected" ';
 		}
         $output .= '>';
