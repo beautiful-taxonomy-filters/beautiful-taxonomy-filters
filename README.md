@@ -417,7 +417,7 @@ function modify_active_taxonomy($label, $taxonomy){
 	return $label;
 }
 
-add_filter('beautiful_filters_taxonomy_label', 'modify_active_taxonomy', 10, 2);
+add_filter('beautiful_filters_active_taxonomy', 'modify_active_taxonomy', 10, 2);
 `
 
 = beautiful_filters_active_terms =
