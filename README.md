@@ -426,7 +426,7 @@ $terms is the terms string for the active filter info
 $taxonomy is the current taxonomy name
 
 `
-function modify_active_taxonomy($terms, $taxonomy){
+function modify_active_terms($terms, $taxonomy){
 	
 	return $terms;
 }
