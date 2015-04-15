@@ -234,10 +234,12 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
 				<?php
 				//Loop through the taxonomies and output their terms in a select dropdown 
 				$count = count($current_taxonomies);	
+				$taxonomy_order = apply_filters('beautiful_filters_taxonomy_order', array_keys($current_taxonomies), $current_post_type);
 				?>
 				<div class="beautiful-taxonomy-filters-select-wrap clearfix">
 					<?php do_action( 'beautiful_actions_beginning_form_inner', $current_post_type); //allow custom markup at beginning of form ?>
-					<?php foreach($current_taxonomies as $key => $taxonomy): ?>
+					<?php foreach($taxonomy_order as $key) : ?>
+						<?php $taxonomy = $current_taxonomies[$key]; ?>
 						<?php $terms = get_terms($key); ?>
 						<?php if(!empty($terms) && !is_wp_error($terms)): ?>
 							<div class="beautiful-taxonomy-filters-tax filter-count-<?php echo $count; if($count > 5){ echo ' filter-count-many'; } ?>" id="beautiful-taxonomy-filters-tax-<?php echo $key; ?>">
