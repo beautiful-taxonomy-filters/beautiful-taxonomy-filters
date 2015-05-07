@@ -87,8 +87,19 @@ class Beautiful_Taxonomy_Filters_Public {
 		
 		//If the almighty user decides there be no select2, then no select2 there be!
 		if(!$disable_select2){
-			wp_enqueue_script( 'select2', plugin_dir_url( __FILE__ ) . 'js/select2/select2.min.js', array( 'jquery' ), $this->version, true );
-			wp_enqueue_script( $this->name, plugin_dir_url( __FILE__ ) . 'js/beautiful-taxonomy-filters-public.js', array( 'jquery', 'select2' ), $this->version, true );	
+			wp_enqueue_script( 'select2', plugin_dir_url( __FILE__ ) . 'js/select2/select2.full.min.js', array( 'jquery' ), $this->version, true );	
+			wp_register_script( $this->name, plugin_dir_url( __FILE__ ) . 'js/beautiful-taxonomy-filters-public.js', array( 'jquery', 'select2' ), $this->version, true );
+			$localized_array = array(
+				'min_search' => apply_filters( 'beautiful_filters_selec2_minsearch', 8),
+				'allow_clear' => apply_filters( 'beautiful_filters_selec2_allowclear', true)
+			);
+			//Lets make sure that if they've not chosen the placeholder option we don't allow clear since it wont do anything.
+			$dropdown_behaviour = get_option('beautiful_taxonomy_filters_dropdown_behaviour');
+			if(!$dropdown_behaviour || $dropdown_behaviour == 'show_all_option'){
+				$localized_array['allow_clear'] = false;
+			}
+			wp_localize_script( $this->name, 'btf_localization', $localized_array );
+			wp_enqueue_script( $this->name );
 		}
 		
 	}
@@ -164,6 +175,12 @@ class Beautiful_Taxonomy_Filters_Public {
 	* @since 1.0.0
 	*/
 	public function catch_filter_values(){
+		
+		//Nope, this pageload was not due to our filter!
+		if ( !isset($_POST['btf_do_filtering_nonce']) || !wp_verify_nonce( $_POST['btf_do_filtering_nonce'], "Beutiful-taxonomy-filters-do-filter")) 
+			return;
+
+		
 		//If we don't have an url, this wont work!
 		$referer = (isset($_POST['site-url']) ? $_POST['site-url'] : false);
 		if(!$referer)

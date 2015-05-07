@@ -43,7 +43,7 @@ class Walker_Slug_Value_Category_Dropdown extends Walker_CategoryDropdown {
 			$output .= 'selected="selected" ';
 		}
         $output .= '>';
-        $output .= $cat_name;
+        $output .= apply_filters( 'beautiful_filters_term_name', $cat_name, $category, $depth );
         if ( $args['show_count'] )
             $output .= '&nbsp;&nbsp;('. $category->count .')';
         if (isset ( $args['show_last_update'] ) ) {

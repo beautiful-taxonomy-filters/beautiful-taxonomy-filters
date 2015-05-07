@@ -3,8 +3,8 @@ Contributors: Jonathandejong, tigerton
 Donate link: http://fancy.to/k9qxt
 Tags: Taxonomy, taxonomies, filter, filtering, pretty permalinks, terms, term, widget, pretty permalinks, rewrite, custom posttype, cpt, beautiful, select2, dropdowns, material design, GET, multisite compatible, polylang compatible, select filter, SEO friendly
 Requires at least: 3.0.1
-Tested up to: 4.1
-Stable tag: 1.2.3
+Tested up to: 4.2
+Stable tag: 1.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,7 @@ The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide
 * Spanish (Thanks to Juan Javier Moreno Restituto)
 * Dutch (Thanks to Piet Bos)
 * French (Thanks to [Brice Capobianco](https://profiles.wordpress.org/brikou))
+* Simplified Chinese (Thanks to [Amos Lee](http://www.wpzhiku.com/))
 ____
 Do you want to translate this plugin to another language? I recommend using POEdit (http://poedit.net/) or if you prefer to do it straight from the WordPress admin interface (https://wordpress.org/plugins/loco-translate/). When you’re done, send us the file(s) to jonathan@tigerton.se and we’ll add it to the official plugin!
 
@@ -149,6 +150,20 @@ Why thank you! We don't have proper donate link but if you want to you can send 
 
 
 == Changelog ==
+
+= 1.2.5 = 
+* IMPROVEMENT: Added filter for the term names in the dropdowns. Add your own indentation indicators or just mess about with the term names. Go bananas!
+* IMPROVEMENT: Since security is fashionable we've added Nonce security to the form. Try to hack us now!
+
+= 1.2.4 =
+* Tested on WordPress 4.2
+* IMPROVEMENT: Added Simplified Chinese translation. Thanks to [Amos Lee](http://www.wpzhiku.com/).
+* IMPROVEMENT: Added the ability to sort the taxonomies by filter. No need to re-register them in the "right" order. Thanks to [mranner](https://wordpress.org/support/profile/mranner).
+* IMPROVEMENT: Updated the Select2 library (RC2). Fixes usability on devices amongst other things.
+* IMPROVEMENT: Added a setting to select2 which only applies the search-field in the dropdown if there's more than 8 results. This can be modified with a new filter which you can read about under [Other notes](https://wordpress.org/plugins/beautiful-taxonomy-filters/other_notes/).
+* IMPROVEMENT: Added localization for all select2 parameters and created new filters for modifying those. 
+
+A new resource for information about how to use BTF and it's filters will soon emerge from the mist…
 
 = 1.2.3 = 
 * IMPROVEMENT: Added some basic media query styling to the style themes to avoid extremely small dropdowns on those modern electric things people carry around (smartphones). 
@@ -289,6 +304,23 @@ function modify_categories_dropdown( $taxonomies ) {
 add_filter( 'beautiful_filters_taxonomies', 'modify_categories_dropdown', 10, 1 );
 `
 
+= beautiful_filters_taxonomy_order =
+
+$taxonomies is an array of the taxonomies slugs. $current_post_type is the post type we're using the filter on. This must return the $taxonomies array.
+
+`
+function moveElement(&$array, $a, $b) {
+    $out = array_splice($array, $a, 1);
+    array_splice($array, $b, 0, $out);
+}
+
+function custom_tax_ordering($taxonomies, $current_post_type){
+	moveElement($taxonomies, 2, 0);
+	return $taxonomies;
+}
+add_filter('beautiful_filters_taxonomy_order', 'custom_tax_ordering');
+`
+
 = beautiful_filters_dropdown_placeholder =
 
 $placeholder is the string used for the placeholder. 
@@ -380,6 +412,30 @@ function modify_dropdown_behaviour( $behaviour, $current_post_type) {
 add_filter( 'beautiful_filters_dropdown_behaviour', 'modify_dropdown_behaviour', 10, 2 );
 `
 
+= beautiful_filters_dropdown_behaviour =
+
+$term_name is a string that have to be returned. $category is the term object. $depth is the level of depth for the current term starting at 0 (no parent).
+Use this to alter the output of the term name inside the dropdowns.
+
+`
+//Add visual information when a terms are children/grandchildren etc.
+add_filter('beautiful_filters_term_name', 'custom_term_name', 10, 3);
+function custom_term_name($term_name, $category, $depth){
+	
+	//We have indentation
+	if($depth !== 0){
+		$indent = '';
+		//Add one – for each step down the hierarchy, like WP does in admin.
+		for($i = 0; $i < $depth; $i++){
+			$indent .= '–'; 
+		}
+		return $indent . ' ' . $term_name;	
+	}
+	return $term_name;
+	
+}
+`
+
 = beautiful_filters_taxonomy_label =
 
 $label is the name of the taxonomy used as label to the dropdown.
@@ -404,20 +460,6 @@ function modify_filter_button($string){
 }
 
 add_filter('beautiful_filters_apply_button', 'modify_filter_button', 10, 1);
-`
-
-= beautiful_filters_active_taxonomy =
-
-$label is the taxonomy string for the active filter info
-$taxonomy is the current taxonomy name
-
-`
-function modify_active_taxonomy($label, $taxonomy){
-	
-	return $label;
-}
-
-add_filter('beautiful_filters_taxonomy_label', 'modify_active_taxonomy', 10, 2);
 `
 
 = beautiful_filters_active_terms =
@@ -490,7 +532,7 @@ add_filter('beautiful_filters_info_postcount', 'modify_filterinfo_postcount');
 
 = beautiful_filters_new_url =
 
-$posttype is the current posttype. Use this filter to manipulate the URL string of the filtered archive page that the visitor will be directed to.
+Use this filter to manipulate the URL string of the filtered archive page that the visitor will be directed to.
 
 `
 function modify_new_url($url){
@@ -499,6 +541,34 @@ function modify_new_url($url){
 	
 }
 add_filter('beautiful_filters_new_url', 'modify_new_url');
+`
+
+= beautiful_filters_selec2_minsearch =
+
+$min_search is an integer.
+
+`
+function change_minsearch_value($min_search){
+	
+	//always show search
+	return 1;
+	
+}
+add_filter('beautiful_filters_selec2_minsearch', 'change_minsearch_value');
+`
+
+= beautiful_filters_selec2_allowclear =
+
+$bool is a boolean value of either true of false. Setting this to false disables the ability to remove the selection with the x-icon.
+
+`
+function change_allowclear_value($bool){
+	
+	//Disables the allow clear.
+	return false;
+	
+}
+add_filter('beautiful_filters_selec2_allowclear', 'change_allowclear_value');
 `
 
 
@@ -629,4 +699,3 @@ function add_markup_ending_filterinfo($current_post_type){
 
 add_action('beautiful_actions_ending_filterinfo', 'add_markup_ending_filterinfo' );
 `
-

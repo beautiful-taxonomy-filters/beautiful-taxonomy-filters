@@ -230,15 +230,20 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
 				<input type="hidden" name="site-url" value="<?php echo get_bloginfo('url'); ?>" />
 				<input type="hidden" name="post_type_rewrite" value="<?php echo $current_post_type_rewrite; ?>" />
 				<input type="hidden" name="post_type" value="<?php echo $current_post_type; ?>" />
+				<?php wp_nonce_field( 'Beutiful-taxonomy-filters-do-filter', 'btf_do_filtering_nonce' ); ?>
 				<?php do_action( 'beautiful_actions_beginning_form', $current_post_type); //allow custom markup at beginning of form ?>
 				<?php
 				//Loop through the taxonomies and output their terms in a select dropdown 
-				$count = count($current_taxonomies);	
+				$count = count($current_taxonomies);
+				$taxonomies_ordered = apply_filters('beautiful_filters_taxonomy_order', array_keys($current_taxonomies), $current_post_type);
 				?>
 				<div class="beautiful-taxonomy-filters-select-wrap clearfix">
 					<?php do_action( 'beautiful_actions_beginning_form_inner', $current_post_type); //allow custom markup at beginning of form ?>
-					<?php foreach($current_taxonomies as $key => $taxonomy): ?>
-						<?php $terms = get_terms($key); ?>
+					<?php foreach($taxonomies_ordered as $key): ?>
+						<?php
+						$taxonomy = $current_taxonomies[$key];
+						$terms = get_terms($key); 
+						?>
 						<?php if(!empty($terms) && !is_wp_error($terms)): ?>
 							<div class="beautiful-taxonomy-filters-tax filter-count-<?php echo $count; if($count > 5){ echo ' filter-count-many'; } ?>" id="beautiful-taxonomy-filters-tax-<?php echo $key; ?>">
 								<label for="select-<?php echo $key; ?>" class="beautiful-taxonomy-filters-label"><?php echo apply_filters( 'beautiful_filters_taxonomy_label', $taxonomy->labels->name, $taxonomy->name); ?></label>
