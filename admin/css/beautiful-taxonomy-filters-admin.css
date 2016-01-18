@@ -1,0 +1,28 @@
+.btf-tooltip{
+	display: inline-block;
+	margin-right: 5px;
+	vertical-align: middle;
+	width:12px;
+	height: 12px;
+	text-align: center;
+	color: #FFF;
+	background: #333;
+	-moz-border-radius: 100%;
+	-webkit-border-radius: 100%;
+	-o-border-radius: 100%;
+	-ms-border-radius: 100%;
+	border-radius: 100%;
+	font-size: 9px;
+	cursor: help;
+}
+.beautiful-taxonomy-filters-tabs{
+	padding: 15px;
+	background: #FFF;
+    border-width: 0px 1px 1px;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-right-color: rgb(204, 204, 204);
+    border-bottom-color: rgb(204, 204, 204);
+    border-left-color: rgb(204, 204, 204);
+}

@@ -27,7 +27,16 @@ $saved_taxonomies = get_option('beautiful_taxonomy_filters_taxonomies');
 ?>
 
 <?php if(!empty($taxonomies)): foreach($taxonomies as $taxonomy): ?>
-	<p><label for="<?php echo $taxonomy->name; ?>-checkbox">
-		<input type="checkbox" value="<?php echo $taxonomy->name; ?>" id="<?php echo $taxonomy->name; ?>-checkbox" name="beautiful_taxonomy_filters_taxonomies[]" <?php if(is_array($saved_taxonomies) && in_array($taxonomy->name, $saved_taxonomies)){ echo 'checked'; } ?> /> <?php echo $taxonomy->labels->name; ?>
-	</label></p>
+	<p>
+		<label for="<?php echo $taxonomy->name; ?>-checkbox">
+			<input type="checkbox" value="<?php echo $taxonomy->name; ?>" id="<?php echo $taxonomy->name; ?>-checkbox" name="beautiful_taxonomy_filters_taxonomies[]" <?php if(is_array($saved_taxonomies) && in_array($taxonomy->name, $saved_taxonomies)){ echo 'checked'; } ?> /> <?php echo $taxonomy->labels->name; ?>
+		</label>
+		<small>
+			<?php
+			if( $taxonomy->object_type && !empty( $taxonomy->object_type ) ){
+				echo implode(', ', $taxonomy->object_type);
+			}
+			?>
+		</small>
+	</p>
 <?php endforeach; endif; ?>

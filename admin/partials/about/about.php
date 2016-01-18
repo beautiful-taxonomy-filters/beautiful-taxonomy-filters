@@ -1,0 +1,2 @@
+<h4>Supercharge your custom post type archives by letting visitors filter posts by their terms/categories.</h4>
+<p>Beautiful Taxonomy Filters is maintained by Jonathan at the agency <a href="https://www.tigerton.se" target="_blank">Tigerton</a>.</p>

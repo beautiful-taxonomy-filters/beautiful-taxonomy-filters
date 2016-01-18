@@ -32,6 +32,8 @@ class Beautiful_Taxonomy_Filters_Deactivator {
 		flush_rewrite_rules();
 		//would want to use flush_rewrite_rules only but that does not work for some reason??
 		delete_option('rewrite_rules');
+		//Delete plugin version
+		//delete_option('beautiful_taxonomy_filters_version');
 	}
 
 }

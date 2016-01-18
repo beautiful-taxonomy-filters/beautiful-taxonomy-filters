@@ -1,6 +1,6 @@
 <?php
 /**
- * The publicly accessible functions of the plugin. These communicate with our objects inside the classes. 
+ * The publicly accessible functions of the plugin. These communicate with our objects inside the classes.
  *
  * @link       http://tigerton.se
  * @since      1.0.0
@@ -8,6 +8,9 @@
  * @package    Beautiful_Taxonomy_Filters
  * @subpackage Beautiful_Taxonomy_Filters/includes
  * @author     Jonathan de Jong <jonathan@tigerton.se>
+
+ * DEPRECATED SINCE 1.2.6
+ * Keeping for backwards compatibility
  */
 
 

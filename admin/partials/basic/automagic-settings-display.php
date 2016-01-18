@@ -14,8 +14,6 @@
 ?>
 <?php $automagic = get_option('beautiful_taxonomy_filters_automagic'); ?>
 
-<p><small><?php _e('Experimental feature. Attempts to automagically insert the modules in your archive. If the placement isn\'t what you want you\'ll have to use one of the other methods.', 'beautiful-taxonomy-filters'); ?></small></p>
-
 <p><label for="filter-module-checkbox">
 	<input type="checkbox" value="filter_module" id="filter-module-checkbox" name="beautiful_taxonomy_filters_automagic[]" <?php if(is_array($automagic) && in_array('filter_module', $automagic)){ echo 'checked'; } ?> /> <?php _e('Filter module', 'beautiful-taxonomy-filter'); ?>
 </label></p>
@@ -27,7 +25,7 @@
 <p><small><?php _e('Location of the filter info module', 'beautiful-taxonomy-filters'); ?></small></p>
 <p><label for="filter-info-module-placement-select">
 	<select name="beautiful_taxonomy_filters_automagic[]" id="filter-info-module-placement-select">
-		<option value="above" <?php if(is_array($automagic) && in_array('above', $automagic) || !in_array('below', $automagic)){ echo 'selected'; } ?>><?php _e('Above the filter module', 'beautiful-taxonomy-filters'); ?></option>
+		<option value="above" <?php if( (is_array($automagic) && in_array('above', $automagic)) || (is_array($automagic) && !in_array('below', $automagic)) ){ echo 'selected'; } ?>><?php _e('Above the filter module', 'beautiful-taxonomy-filters'); ?></option>
 		<option value="below" <?php if(is_array($automagic) && in_array('below', $automagic)){ echo 'selected'; } ?>><?php _e('Below the filter module', 'beautiful-taxonomy-filters'); ?></option>
 	</select>
 </label></p>

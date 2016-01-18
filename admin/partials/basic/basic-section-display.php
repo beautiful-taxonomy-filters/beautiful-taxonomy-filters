@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The setting section for the styles
+ * The setup settings section in the settings page (lol)
  *
  * This file is used to setup a settings section
  *
@@ -12,4 +12,3 @@
  * @subpackage Beautiful_Taxonomy_Filters/admin/partials
  */
 ?>
-<p><?php _e('This section lets you control the layout and design of the filter you can use in your archive pages.', 'beautiful-taxonomy-filters'); ?></p>

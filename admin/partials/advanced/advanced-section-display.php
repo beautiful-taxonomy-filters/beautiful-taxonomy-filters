@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The setup settings section in the settings page (lol)
+ * The setting section for the styles
  *
  * This file is used to setup a settings section
  *
@@ -12,4 +12,4 @@
  * @subpackage Beautiful_Taxonomy_Filters/admin/partials
  */
 ?>
-<a href="#beautiful-taxonomy-filters-howto"><?php _e('How to use Beautiful Taxonomy Filters', 'beautiful-taxonomy-filters'); ?></a>
+<p><?php _e('Settings for fine tuning your filter modules. You may leave these as default.', 'beautiful-taxonomy-filters'); ?></p>

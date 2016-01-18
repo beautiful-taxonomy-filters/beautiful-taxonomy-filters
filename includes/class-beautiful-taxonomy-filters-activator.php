@@ -23,10 +23,7 @@
 class Beautiful_Taxonomy_Filters_Activator {
 
 	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
-	 *
+	 * Flush rewrite rules
 	 * @since    1.0.0
 	 */
 	public static function activate() {
@@ -35,6 +32,19 @@ class Beautiful_Taxonomy_Filters_Activator {
 		//would want to use flush_rewrite_rules only but that does not work for some reason??
 		delete_option('rewrite_rules');
 
+		//Find if there's already some post types enabled
+		$post_types = get_option('beautiful_taxonomy_filters_post_types');
+		//If option does not exist or is empty. Show a message to help them along
+		if( !$post_types || empty( $post_types ) ){
+
+			$btf = new Beautiful_Taxonomy_Filters();
+			$btf_admin = new Beautiful_Taxonomy_Filters_Admin($btf->get_Beautiful_Taxonomy_Filters(), $btf->get_version());
+
+			$message = sprintf( wp_kses( __( 'Beautiful Taxonomy Filters needs some <a href="%s">basic setup</a>.', 'beautiful-taxonomy-filters' ), array(  'a' => array( 'href' => array() ) ) ), esc_url( admin_url() . 'options-general.php?page=taxonomy-filters&tab=basic' ) );
+
+			$btf_admin->add_admin_notice( $message );
+
+		}
 	}
 
 }

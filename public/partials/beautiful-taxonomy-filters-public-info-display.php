@@ -11,14 +11,14 @@
  * @package    Beautiful_Taxonomy_Filters
  * @subpackage Beautiful_Taxonomy_Filters/public/partials
  */
- 
+
  /*
  * Filters in this file
  * @ beautiful_filters_active_taxonomy
  * @ beautiful_filters_active_terms
  */
 ?>
-<?php 
+<?php
 $hide_heading = apply_filters( 'beautiful_filters_disable_heading', get_option('beautiful_taxonomy_filters_disable_heading') );
 $hide_postcount = apply_filters( 'beautiful_filters_disable_postcount', get_option('beautiful_taxonomy_filters_disable_postcount') );
 global $wp_query;
@@ -38,13 +38,13 @@ if(!$current_post_type || !in_array($current_post_type, $activated_post_types)){
 	<?php endif; ?>
 	<?php if(!$hide_postcount): ?>
 		<p class="beautiful-taxonomy-filters-postcount"><?php echo apply_filters( 'beautiful_filters_info_postcount', sprintf( __( 'Result of filter: %d', 'beautiful-taxonomy-filters' ), $wp_query->found_posts ) ); ?></p>
-		
+
 	<?php endif; ?>
 	<?php $posttypes_taxonomies = get_object_taxonomies($current_post_type, 'objects'); ?>
 	<?php if($current_taxonomies): ?>
-		<?php 
+		<?php
 		//Get the taxonomies of the current post type and the excluded taxonomies
-		$excluded_taxonomies = apply_filters( 'beautiful_filters_taxonomies', get_option('beautiful_taxonomy_filters_taxonomies') ); 
+		$excluded_taxonomies = apply_filters( 'beautiful_filters_taxonomies', get_option('beautiful_taxonomy_filters_taxonomies') );
 		//Also make sure we don't try to output the builtin taxonomies since they cannot be supported
 		if(is_array($excluded_taxonomies)){
 			array_push($excluded_taxonomies, 'category', 'post_tag', 'post_format');
@@ -107,15 +107,15 @@ if(!$current_post_type || !in_array($current_post_type, $activated_post_types)){
 			<div class="beautiful-taxonomy-filters-single-tax">
 				<?php
 				$label = $taxonomy->labels->name . ':';
-				$value = $taxonomy->labels->all_items; 
+				$value = $taxonomy->labels->all_items;
 				?>
 				<span class="single-tax-key"><?php echo apply_filters('beautiful_filters_active_taxonomy', $label, $taxonomy->query_var); ?></span>
 				<span class="single-tax-value"><?php echo apply_filters('beautiful_filters_active_terms', $value, $taxonomy->query_var); ?></span>
 			</div>
 		<?php endforeach; endif; ?>
-		
+
 	<?php else: ?>
-		
+
 		<?php
 		//Get the taxonomies of the current post type and the excluded taxonomies
 		$excluded_taxonomies = apply_filters( 'beautiful_filters_taxonomies', get_option('beautiful_taxonomy_filters_taxonomies') );
@@ -142,20 +142,20 @@ if(!$current_post_type || !in_array($current_post_type, $activated_post_types)){
 		}
 		?>
 		<?php if($posttypes_taxonomies): ?>
-	
+
 			<?php foreach($posttypes_taxonomies as $taxonomy):?>
 				<div class="beautiful-taxonomy-filters-single-tax">
 					<?php
 					$label = $taxonomy->labels->name . ':';
-					$value = $taxonomy->labels->all_items; 
+					$value = $taxonomy->labels->all_items;
 					?>
 					<span class="single-tax-key"><?php echo apply_filters('beautiful_filters_active_taxonomy', $label, $taxonomy->query_var); ?></span>
 					<span class="single-tax-value"><?php echo apply_filters('beautiful_filters_active_terms', $value, $taxonomy->query_var); ?></span>
 				</div>
 			<?php endforeach; ?>
-			
+
 		<?php endif; ?>
-	
+
 	<?php endif; ?>
 	<?php do_action( 'beautiful_actions_ending_filterinfo', $current_post_type); //Allow custom markup before filter info ?>
 </div>
