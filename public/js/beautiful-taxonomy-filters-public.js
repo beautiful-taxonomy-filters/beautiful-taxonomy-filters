@@ -46,11 +46,17 @@
 				allowClear: btf_localization.allow_clear,
 				minimumResultsForSearch: parseInt(btf_localization.min_search),
 				templateResult: formatResult,
-				templateSelection: formatSelection
+				templateSelection: formatSelection,
+				dropdownCssClass: ':all:',
+				containerCssClass: ':all:',
+				syncCssClasses: true
 			});
 		}else{
 			$('.beautiful-taxonomy-filters-select').select2({
 				allowClear: btf_localization.allow_clear,
+				dropdownCssClass: ':all:',
+				containerCssClass: ':all:',
+				syncCssClasses: true,
 				minimumResultsForSearch: parseInt(btf_localization.min_search)
 			});
 		}

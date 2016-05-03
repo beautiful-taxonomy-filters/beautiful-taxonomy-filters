@@ -3,8 +3,8 @@ Contributors: Jonathandejong, tigerton
 Donate link: http://fancy.to/k9qxt
 Tags: Taxonomy, taxonomies, filter, filtering, pretty permalinks, terms, term, widget, pretty permalinks, rewrite, custom posttype, cpt, beautiful, select2, dropdowns, material design, GET, multisite compatible, polylang compatible, select filter, SEO friendly
 Requires at least: 3.0.1
-Tested up to: 4.4
-Stable tag: 1.2.8
+Tested up to: 4.5
+Stable tag: 1.2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -150,6 +150,13 @@ Why thank you! We don't have proper donate link but if you want to you can send 
 
 
 == Changelog ==
+
+= 1.2.9 =
+* BUGFIX: Fixed undefined index for widget walker.
+* BUGFIX: Fixed incorrect post count in each term when filter module is not on a CPT archive.
+* IMPROVEMENT: Updated german translations. Thanks to [Nils Schönwald](https://wordpress.org/support/profile/schoenwaldnils).
+* IMPROVEMENT/BUGFIX: Updated select2 library to 4.0.1 (latest stable). This seems to fix issue of `.change` event not happening on original select element.
+* IMPROVEMENT: Fixed some commenting inconsistencies. Nothing to see here folks.
 
 = 1.2.8 =
 IMPORTANT: In this update we've done a big overhaul of the settings page. This was important to be able to keep improving BTF settings and features. Unfortunately this means that any of your advanced settings will have to be reset. After updating please take a look at the "Advanced options" tab to make sure everything is set as you want.

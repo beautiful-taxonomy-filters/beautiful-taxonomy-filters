@@ -122,7 +122,8 @@ class Beautiful_Taxonomy_Filters_Public {
 	/**
 	* Appends the already existing GET parameters to the url.
 	* This allows for custom parameters to carry on to the filtered page
-	* @since 1.0.0
+	*
+	* @since	1.0.0
 	*/
 	private function append_get_parameters($new_url){
 
@@ -196,10 +197,11 @@ class Beautiful_Taxonomy_Filters_Public {
 
 	}
 
+
 	/**
 	* Retrieves the current post type
 	*
-	* @since 1.1.0
+	* @since	1.1.0
 	*/
 	public static function get_current_posttype($rewrite = true){
 		$current_post_type = get_post_type();
@@ -259,7 +261,8 @@ class Beautiful_Taxonomy_Filters_Public {
 	/**
 	* Runs on template_include filter. Check for $POST values coming from the filter and add them to the url
 	* Also check for custom GET parameters and reattach them to the url to support combination with other functionalities
-	* @since 1.0.0
+	*
+	* @since	1.0.0
 	*/
 	public function catch_filter_values(){
 
@@ -320,7 +323,6 @@ class Beautiful_Taxonomy_Filters_Public {
 		$current_taxonomies = get_object_taxonomies($current_post_type, 'objects');
 		if($current_taxonomies){
 			foreach($current_taxonomies as $key => $value){
-
 
 				//check for each taxonomy as a $_POST variable.
 				//If it exists we want to append it along with the value (term) it has.

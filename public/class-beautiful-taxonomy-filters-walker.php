@@ -39,25 +39,35 @@ class Walker_Slug_Value_Category_Dropdown extends Walker_CategoryDropdown {
 	/**
 	 * Initial settings for the walker
 	 * Find out wether they want to show descriptions or not
+	 *
+	 * @since 1.2.0
 	 */
 	private function init_settings(){
 
-		$this->post_type = Beautiful_Taxonomy_Filters_Public::get_current_posttype(false);
-
-		/*
+		/**
 		 * If this walker gets called from a widget we need to fetch that widgets settings and apply filters
 		 * Otherwise just get the settings from wp_options
 		 */
 		if( $this->call_type == 'widget' ){
 
-			$this->show_description = strip_tags($this->instance['show_description']);
-			if($this->show_description == 'inherit'){
-		    	$this->show_description = apply_filters( 'beautiful_filters_show_description', get_option('beautiful_taxonomy_filters_show_description'), $this->post_type );
-	    	}else{
-		    	$this->show_description = ($this->show_description == 'enable' ? 1 : 0);
-		    	$this->show_description = apply_filters( 'beautiful_filters_show_description', $this->show_description, $this->post_type );
-	    	}
+			$this->post_type = ( $this->instance['post_type'] != 'automatic' ? $this->instance['post_type'] : Beautiful_Taxonomy_Filters_Public::get_current_posttype(false) );
+
+			if( isset($this->instance['show_description']) ){
+				$this->show_description = strip_tags($this->instance['show_description']);
+				if($this->show_description == 'inherit'){
+			    	$this->show_description = apply_filters( 'beautiful_filters_show_description', get_option('beautiful_taxonomy_filters_show_description'), $this->post_type );
+		    	}else{
+			    	$this->show_description = ($this->show_description == 'enable' ? 1 : 0);
+			    	$this->show_description = apply_filters( 'beautiful_filters_show_description', $this->show_description, $this->post_type );
+		    	}
+			}else{
+				$this->show_description = false;
+			}
+
+
 		}else{
+
+			$this->post_type = Beautiful_Taxonomy_Filters_Public::get_current_posttype(false);
 			$this->show_description = apply_filters( 'beautiful_filters_show_description', get_option('beautiful_taxonomy_filters_show_description'), $this->post_type );
 		}
 
@@ -71,7 +81,7 @@ class Walker_Slug_Value_Category_Dropdown extends Walker_CategoryDropdown {
      * Start the element output.
      *
      * @see Walker::start_el()
-     * @since 2.1.0
+     * @since 1.0.0
      *
      * @param string $output   Passed by reference. Used to append additional content.
      * @param object $category Category data object.
