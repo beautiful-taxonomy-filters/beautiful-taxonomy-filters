@@ -142,6 +142,7 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
     public function widget( $args, $instance ) {
 
     	extract($args);
+    	$settings = apply_filters( 'beautiful_filters_settings', get_option('beautiful_taxonomy_filters_settings') );
     	$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
         $clear_all = strip_tags($instance['clear_all']);
     	$hide_empty = strip_tags($instance['hide_empty']);
@@ -150,6 +151,7 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
     	$dropdown_behaviour = strip_tags($instance['dropdown_behaviour']);
     	$activated_post_types = apply_filters( 'beautiful_filters_post_types', get_option('beautiful_taxonomy_filters_post_types') );
 		$disable_select2 = (get_option('beautiful_taxonomy_filters_disable_select2') ? get_option('beautiful_taxonomy_filters_disable_select2') : false);
+		$conditional_dropdowns = ( isset( $settings['conditional_dropdowns'] ) ? $settings['conditional_dropdowns'] : false );
 
     	//Make sure we find the current post type!
     	if($post_type == 'automatic'){
@@ -298,6 +300,9 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
 									echo str_replace('<select ', '<select data-placeholder="' . $new_label . '"', $filterdropdown);
 								}
 								?>
+								<?php if( $conditional_dropdowns ): ?>
+									<span class="beautiful-taxonomy-filters-loader"><?php echo apply_filters( 'beautiful_filters_loader', sprintf( '<img src="%s" alt="" />', admin_url( 'images/spinner.gif' ) ), $key, $current_post_type ); ?></span>
+								<?php endif; ?>
 							</div>
 						<?php endif; ?>
 					<?php endforeach; ?>

@@ -54,10 +54,13 @@ class Beautiful_Taxonomy_Filters_Public {
 
 		$disable_select2 = (get_option('beautiful_taxonomy_filters_disable_select2') ? get_option('beautiful_taxonomy_filters_disable_select2') : false);
 
-		if(!$disable_select2){
+		if( !$disable_select2 ){
 			//the basic stylesheet that should always be loaded! For select2 to display properly
 			wp_enqueue_style( 'select2', plugin_dir_url( __FILE__ ) . 'css/select2.min.css', array(), $this->version, 'all' );
 		}
+
+		//BTFs own basic stylesheet. Should also always be loaded (very minimal)
+		wp_enqueue_style( $this->name . '-basic', plugin_dir_url( __FILE__ ) . 'css/beautiful-taxonomy-filters-base.min.css', array(), $this->version, 'all' );
 
 		//Get user selected style
 		$selected_style = get_option('beautiful_taxonomy_filters_styles');
@@ -70,6 +73,9 @@ class Beautiful_Taxonomy_Filters_Public {
 				break;
 			case 'dark-material':
 				wp_enqueue_style( $this->name, plugin_dir_url( __FILE__ ) . 'css/beautiful-taxonomy-filters-dark-material.min.css', array(), $this->version, 'all' );
+				break;
+			case 'simple':
+				wp_enqueue_style( $this->name, plugin_dir_url( __FILE__ ) . 'css/beautiful-taxonomy-filters-simple.min.css', array(), $this->version, 'all' );
 				break;
 
 		}
@@ -84,24 +90,34 @@ class Beautiful_Taxonomy_Filters_Public {
 	public function enqueue_scripts() {
 
 		$disable_select2 = (get_option('beautiful_taxonomy_filters_disable_select2') ? get_option('beautiful_taxonomy_filters_disable_select2') : false);
-
+		$settings = (get_option('beautiful_taxonomy_filters_settings') ? get_option('beautiful_taxonomy_filters_settings') : false);
+		$conditional_dropdowns = ( $settings && $settings['conditional_dropdowns'] ? $settings['conditional_dropdowns'] : false );
+		$dependencies = array(
+			'jquery'
+		);
 		//If the almighty user decides there be no select2, then no select2 there be!
-		if(!$disable_select2){
+		if( !$disable_select2 ){
 			wp_enqueue_script( 'select2', plugin_dir_url( __FILE__ ) . 'js/select2/select2.full.min.js', array( 'jquery' ), $this->version, true );
-			wp_register_script( $this->name, plugin_dir_url( __FILE__ ) . 'js/beautiful-taxonomy-filters-public.js', array( 'jquery', 'select2' ), $this->version, true );
-			$localized_array = array(
-				'min_search' => apply_filters( 'beautiful_filters_selec2_minsearch', 8),
-				'allow_clear' => apply_filters( 'beautiful_filters_selec2_allowclear', true),
-				'show_description' => get_option('beautiful_taxonomy_filters_show_description')
-			);
-			//Lets make sure that if they've not chosen the placeholder option we don't allow clear since it wont do anything.
-			$dropdown_behaviour = get_option('beautiful_taxonomy_filters_dropdown_behaviour');
-			if(!$dropdown_behaviour || $dropdown_behaviour == 'show_all_option'){
-				$localized_array['allow_clear'] = false;
-			}
-			wp_localize_script( $this->name, 'btf_localization', $localized_array );
-			wp_enqueue_script( $this->name );
+			$dependencies[] = 'select2';
 		}
+
+		wp_register_script( $this->name, plugin_dir_url( __FILE__ ) . 'js/beautiful-taxonomy-filters-public.min.js', $dependencies, $this->version, true );
+		$localized_array = array(
+			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			'min_search' => apply_filters( 'beautiful_filters_selec2_minsearch', 8),
+			'allow_clear' => apply_filters( 'beautiful_filters_selec2_allowclear', true),
+			'show_description' => get_option('beautiful_taxonomy_filters_show_description'),
+			'disable_select2' => $disable_select2,
+			'conditional_dropdowns' => $conditional_dropdowns,
+		);
+		//Lets make sure that if they've not chosen the placeholder option we don't allow clear since it wont do anything.
+		$dropdown_behaviour = get_option('beautiful_taxonomy_filters_dropdown_behaviour');
+		if(!$dropdown_behaviour || $dropdown_behaviour == 'show_all_option'){
+			$localized_array['allow_clear'] = false;
+		}
+		wp_localize_script( $this->name, 'btf_localization', $localized_array );
+		wp_enqueue_script( $this->name );
+
 
 	}
 
@@ -112,9 +128,8 @@ class Beautiful_Taxonomy_Filters_Public {
 	 * @since    1.0.0
 	 */
 	public function custom_css() {
-
 		$custom_css = get_option('beautiful_taxonomy_filters_custom_css');
-		if($custom_css)
+		if( $custom_css )
 			echo '<style type="text/css">' . $custom_css . '</style>';
 
 	}
@@ -257,6 +272,118 @@ class Beautiful_Taxonomy_Filters_Public {
 
 	}
 
+	/**
+	 * Ajax function to update available term options on the fly
+	 *
+	 * @since	1.3.0
+	 */
+	public function update_filters_callback(){
+
+		/**
+		 * First of all, some security so we sleep well at night.
+		 */
+		$nonce = $_REQUEST['nonce'];
+		if ( ! wp_verify_nonce( $nonce, 'update_btf_selects_security' ) )
+			die( 'What do you think you\'re doing son?' );
+
+
+		$current_taxonomy = $_REQUEST['current_taxonomy'];
+		$selects = $_REQUEST['selects'];
+		$post_type = $_REQUEST['posttype'];
+
+		/**
+		 * Setup basic result values
+		 */
+		$result = array(
+			'selects' => $selects,
+			'post_type' => $post_type
+		);
+
+
+		$args = array(
+			'post_type' => $post_type,
+			'posts_per_page' => 10000, // we're limiting this to 10 000 to avoid peoples servers getting into trouble.
+			'no_found_rows' => true,
+			'update_post_meta_cache' => false,
+			'post_status' => 'publish',
+			'fields' => 'ids'
+		);
+		if( $selects ){
+			foreach( $selects as $select ){
+
+				/**
+				 * Don't query if term is not set
+				 */
+				if( $select['term'] == '0' ){
+					continue;
+				}
+
+				/**
+				 * Add this tax > term pair to the query
+				 */
+				$args['tax_query'][] = array(
+					'taxonomy' => $select['taxonomy'],
+					'field' => 'slug',
+					'terms' => array($select['term'])
+				);
+
+			}
+		}
+		$posts_query = new WP_Query($args);
+
+		/**
+		 * Setup our base arrays
+		 */
+		foreach( $selects as $select ){
+			if( $select['taxonomy'] === $current_taxonomy && $select['term'] != '0' )
+				continue;
+
+			$result['taxonomies'][$select['taxonomy']] = array();
+
+		}
+
+		/**
+		 * Loop through the post results and add all available terms to the $result['taxonomies'] multidimensional array
+		 * The array will look like:
+		 * Array(
+		 *		'taxslug' => array(
+		 *	 		'termslug',
+		 *			'termslug2'
+		 *		),
+		 *		'taxslug2' => array(
+		 *	 		'termslug',
+		 *			'termslug2'
+		 *		),
+		 * )
+		 */
+		if( !empty($posts_query->posts) ){
+			foreach( $posts_query->posts as $post_id ){
+
+				foreach( $selects as $select ){
+					if( $select['taxonomy'] === $current_taxonomy  && $select['term'] != '0' )
+						continue;
+
+					$terms = get_the_terms($post_id, $select['taxonomy']);
+					if( $terms ){
+						foreach( $terms as $term ){
+							if( !in_array( $term->slug, $result['taxonomies'][$select['taxonomy']] ) ){
+								$result['taxonomies'][$select['taxonomy']][] = $term->slug;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		/**
+		 * Format our result and echo back to JS
+		 */
+		$result = json_encode($result);
+		echo $result;
+		exit;
+
+	}
+
 
 	/**
 	* Runs on template_include filter. Check for $POST values coming from the filter and add them to the url
@@ -385,6 +512,39 @@ class Beautiful_Taxonomy_Filters_Public {
 
 	}
 
+
+	/**
+	 * Modifies the select elements belonging to BTF.
+	 * Mostly just adding data parameters to use with our JS functions.
+	 *
+	 * @since	1.3
+	 */
+	public function modify_select_elements( $select, $parameters ){
+
+		/**
+		 * If there's no class at all just return, not our stuff!
+		 */
+		if( !isset($parameters['class']) || $parameters['class'] == '' )
+			return $select;
+
+		/**
+		 * So there's atleast one class.. if none is ours this is still not our stuff!
+		 */
+		$classes = explode( ' ', $parameters['class'] );
+		if( !in_array( 'beautiful-taxonomy-filters-select', $classes) )
+			return $select;
+
+		/**
+		 * Save our entire wp_dropdown_categories arguments array as a serialized value.
+		 */
+		$save_parameters = $parameters;
+		if( isset( $save_parameters['walker'] ) ){
+			unset($save_parameters['walker']);
+		}
+		$new_select = str_replace( '<select', '<select data-taxonomy="' . $parameters['taxonomy'] . '" data-options="' . htmlspecialchars( json_encode( $save_parameters ) ) . '" data-nonce="' . wp_create_nonce('update_btf_selects_security') . '"', $select );
+
+		return $new_select;
+	}
 
 
 	/**

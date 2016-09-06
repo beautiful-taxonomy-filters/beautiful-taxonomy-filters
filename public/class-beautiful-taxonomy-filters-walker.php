@@ -64,7 +64,6 @@ class Walker_Slug_Value_Category_Dropdown extends Walker_CategoryDropdown {
 				$this->show_description = false;
 			}
 
-
 		}else{
 
 			$this->post_type = Beautiful_Taxonomy_Filters_Public::get_current_posttype(false);

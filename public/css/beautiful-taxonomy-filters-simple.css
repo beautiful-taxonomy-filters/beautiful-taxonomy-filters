@@ -1,0 +1,283 @@
+/**
+* Light Material Design – Inspired by googles new android design guidelines
+* Makes use of CSS3 for some finer details
+*/
+/* let's clear some floats */
+.clearfix:after,.clearfix:before{display:block;overflow:hidden;height:0;content:"\0020";}.clearfix:after{clear:both;}.clearfix{zoom:1;}
+
+.beautiful-taxonomy-filters{
+	margin:2em;
+	padding:1em;
+	border-bottom: 1px solid #CCC;
+}
+.beautiful-taxonomy-filters-tax{
+	float: left;
+	position: relative;
+}
+.filter-count-1{
+	width:100%;
+}
+.filter-count-2{
+	margin-right:5%;
+	width:47.5%;
+}
+.filter-count-2:nth-child(2n){
+	margin-right:0;
+}
+.filter-count-3{
+	margin-right:5%;
+	width:30%;
+}
+.filter-count-3:nth-child(3n){
+	margin-right:0;
+}
+.filter-count-4{
+	margin-right:5%;
+	width:21.25%;
+}
+.filter-count-4:nth-child(4n){
+	margin-right:0;
+}
+.filter-count-many{
+	margin-right:5%;
+	margin-bottom:5%;
+	width:21.25%;
+}
+.filter-count-many:nth-child(4n){
+	margin-right:0;
+}
+.beautiful-taxonomy-filters-label{
+	display: block;
+	margin-bottom:5px;
+}
+.beautiful-taxonomy-filters-select{
+	width:100%;
+}
+.beautiful-taxonomy-filters-button{
+	margin-top:20px;
+	padding:10px 30px 11px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 3px;
+	border-radius: 2px;
+	background: #333;
+	color: #FFFFFF;
+	text-transform: uppercase;
+	font-weight: normal;
+	-webkit-transition: all .3s ease-in-out;
+	-moz-transition: all .3s ease-in-out;
+	-ms-transition: all .3s ease-in-out;
+	-o-transition: all .3s ease-in-out;
+	transition: all .3s ease-in-out;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	-o-appearance: none;
+	appearance: none;
+	-ms-border-radius: 3px;
+	-o-border-radius: 3px;
+}
+.beautiful-taxonomy-filters-button:hover{
+	background:#000;
+}
+.beautiful-taxonomy-filters-button:active{
+	background: #555555;
+}
+.beautiful-taxonomy-filters-clear-all{
+	color: #dd191d;
+	font-size: 12px;
+	display: inline-block;
+	margin:5px;
+	-webkit-transition: all .3s ease-in-out;
+	-moz-transition: all .3s ease-in-out;
+	-ms-transition: all .3s ease-in-out;
+	-o-transition: all .3s ease-in-out;
+	transition: all .3s ease-in-out;
+}
+.beautiful-taxonomy-filters-clear-all:hover{
+	color: #e51c23;
+}
+.beautiful-taxonomy-filters-clear-all:active{
+	color: #d01716;
+}
+
+/*
+* Custom Select2 styling
+* Make it more in line with the Material design style
+*/
+.select2-container .select2-choice{
+	border:1px solid transparent;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 3px;
+	border-radius: 2px;
+	background-image: none;
+	-webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,0.15);
+	-moz-box-shadow: 0 1px 1px 0 rgba(0,0,0,0.15);
+	box-shadow: 0 1px 1px 0 rgba(0,0,0,0.15);
+	-ms-border-radius: 3px;
+	-o-border-radius: 3px;
+	-ms-box-shadow: 0 1px 1px 0 rgba(0,0,0,0.15);
+	-o-box-shadow: 0 1px 1px 0 rgba(0,0,0,0.15);
+}
+.select2-dropdown-open .select2-choice{
+	border:1px solid #e0e0e0;
+	background:#FFF;
+	-webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,.15) !important;
+	-moz-box-shadow: 0 2px 2px 0 rgba(0,0,0,.15) !important;
+	box-shadow: 0 2px 2px 0 rgba(0,0,0,.15) !important;
+	-ms-box-shadow: 0 2px 2px 0 rgba(0,0,0,.15) !important;
+	-o-box-shadow: 0 2px 2px 0 rgba(0,0,0,.15) !important;
+}
+.select2-container .select2-choice .select2-arrow{
+	border-left:0;
+	-webkit-border-radius:0;
+	-moz-border-radius:0;
+	border-radius:0;
+	background: #9e9e9e;
+	background-image: none;
+	-ms-border-radius:0;
+	-o-border-radius:0;
+}
+.select2-search input, .select2-search-choice-close, .select2-container .select2-choice abbr, .select2-container .select2-choice .select2-arrow b{
+	background-image: url('select2.png') !important;
+}
+.select2-search{
+	padding-top:4px;
+}
+.select2-search input{
+	border:1px solid #e0e0e0 !important;
+	background:url('select2.png') no-repeat 100% -22px;
+}
+.select2-drop{
+	-webkit-border-radius: 0 0 2px 2px;
+	-moz-border-radius: 0 0 2px 2px;
+	border-radius: 0 0 2px 2px;
+	-webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,.15) !important;
+	-moz-box-shadow: 0 2px 2px 0 rgba(0,0,0,.15) !important;
+	box-shadow: 0 2px 2px 0 rgba(0,0,0,.15) !important;
+	-ms-border-radius: 0 0 2px 2px;
+	-o-border-radius: 0 0 2px 2px;
+	-ms-box-shadow: 0 2px 2px 0 rgba(0,0,0,.15) !important;
+	-o-box-shadow: 0 2px 2px 0 rgba(0,0,0,.15) !important;
+}
+.select2-drop.select2-drop-above{
+	-webkit-border-radius: 0 0 2px 2px;
+	-moz-border-radius: 0 0 2px 2px;
+	border-radius: 0 0 2px 2px;
+	-webkit-box-shadow: 0 -2px 2px 0 rgba(0,0,0,.15) !important;
+	-moz-box-shadow: 0 -2px 2px 0 rgba(0,0,0,.15) !important;
+	box-shadow: 0 -2px 2px 0 rgba(0,0,0,.15) !important;
+	-ms-border-radius: 0 0 2px 2px;
+	-o-border-radius: 0 0 2px 2px;
+	-ms-box-shadow: 0 -2px 2px 0 rgba(0,0,0,.15) !important;
+	-o-box-shadow: 0 -2px 2px 0 rgba(0,0,0,.15) !important;
+}
+.select2-drop-active{
+	border:1px solid #e0e0e0;
+	border-top:none;
+}
+.select2-results .select2-highlighted,
+.select2-container--default .select2-results__option--highlighted[aria-selected]{
+	background:#9e9e9e;
+}
+.select2-results .level-1{
+	padding-left:10px;
+}
+.select2-results .level-2{
+	padding-left:20px;
+}
+.select2-drop.select2-drop-above.select2-drop-active{
+	border-top:1px solid #e0e0e0;
+}
+.select2-dropdown-open.select2-drop-above .select2-choice, .select2-dropdown-open.select2-drop-above .select2-choices{
+	border:1px solid #e0e0e0;
+	background-image: none;
+}
+.select2-dropdown-open .select2-choice, .select2-dropdown-open .select2-choices{
+	-moz-border-radius:0;
+	-webkit-border-radius:0;
+	-ms-border-radius:0;
+	-o-border-radius:0;
+	border-radius:0;
+	background-image: none;
+}
+.select2-container .term-description{
+	font-size: 0.75em;
+	font-style: italic;
+}
+.select2-results__option{
+	line-height: 1.25;
+}
+
+
+/* Retina-ize icons */
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 2dppx)  {
+    .select2-search input,
+    .select2-search-choice-close,
+    .select2-container .select2-choice abbr,
+    .select2-container .select2-choice .select2-arrow b {
+        background-image: url('select2x2.png') !important;
+        background-size: 60px 40px !important;
+        background-repeat: no-repeat !important;
+    }
+
+    .select2-search input {
+        background-position: 100% -21px !important;
+    }
+}
+
+
+@media all and (max-width: 40em){
+	.filter-count-4, .filter-count-3, .filter-count-many{
+		margin-right:5%;
+		width:47.5%;
+		margin-bottom:5%;
+	}
+	.filter-count-4:nth-child(4n), .filter-count-many:nth-child(4n), .filter-count-3:nth-child(3n){
+		margin-right: 5%;
+	}
+	.filter-count-4:nth-child(2n), .filter-count-many:nth-child(2n), .filter-count-3:nth-child(2n){
+		margin-right:0;
+	}
+}
+
+@media all and (max-width: 30em){
+	.filter-count-4, .filter-count-3, .filter-count-many{
+		margin-right:0%;
+		margin-bottom:5%;
+		width:100%;
+	}
+	.filter-count-4:nth-child(4n), .filter-count-many:nth-child(4n), .filter-count-3:nth-child(3n){
+		margin-right: 0;
+	}
+	.filter-count-4:nth-child(2n), .filter-count-many:nth-child(2n), .filter-count-3:nth-child(2n){
+		margin-right:0;
+	}
+}
+
+/*
+* Active filters
+*/
+.beautiful-taxonomy-filters-active-filter{
+	margin:.5em 2em;
+}
+.beautiful-taxonomy-filters-info-heading{
+	margin-top:0px;
+	margin-bottom:.5em;
+}
+.beautiful-taxonomy-filters-single-tax .single-tax-key{
+	font-weight: bold;
+}
+
+
+/*
+* SIDEBAR WIDGET STYLING
+*/
+.beautiful-taxonomy-filters-widget .beautiful-taxonomy-filters-tax{
+	width:100%;
+	margin-bottom:20px;
+}
+
+
+
+
+
