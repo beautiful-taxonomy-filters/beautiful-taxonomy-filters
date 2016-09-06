@@ -3,8 +3,8 @@ Contributors: Jonathandejong, tigerton
 Donate link: http://fancy.to/k9qxt
 Tags: Taxonomy, taxonomies, filter, filtering, pretty permalinks, terms, term, widget, pretty permalinks, rewrite, custom posttype, cpt, beautiful, select2, dropdowns, material design, GET, multisite compatible, polylang compatible, select filter, SEO friendly
 Requires at least: 3.0.1
-Tested up to: 4.5
-Stable tag: 1.2.9
+Tested up to: 4.4
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Supercharge your custom post type archives by letting visitors filter posts by t
 
 == Description ==
 
-The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide your visitors with filtering for your post types. With this you get a complete solution for adding filtering based on taxonomy terms/categories/tags. It will also automatically add rewrite rules for pretty looking filter URLs. It’s completely automatic, works without javascript and is based on the [WordPress Plugin boilerplate](https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate) for a *standardized, organized and object-oriented* codebase. It uses [select2](http://ivaynberg.github.io/select2/) for pretty looking and user-friendly dropdowns but will fall back to ordinary ones if javascript is not supported.
+The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide your visitors with filtering for your post types. With this you get a complete solution for adding filtering based on custom taxonomy terms/categories/tags. It will also automatically add rewrite rules for pretty looking filter URLs. It’s completely automatic, works without javascript and is based on the [WordPress Plugin boilerplate](https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate) for a *standardized, organized and object-oriented* codebase. It uses [select2](http://ivaynberg.github.io/select2/) for pretty looking and user friendly dropdowns but will fall back to ordinary ones if javascript is not supported.
 **No more horrible looking URLs or hacky Javascript solutions**
 
 = Features =
@@ -25,18 +25,21 @@ The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide
 * Comes with a complete functional filter module for you to put in your theme.
 * Three alternatives for putting the filter modules in your theme:
   * Widgets (Also lets you "hard set" a post type for use anywhere)
-  * Functions (for granular control)
+  * do_action hooks (for granular control)
   * Automagic setting which will magically place the modules in your archive from thin air. Wizards at work…
 * Choose from different styles for the component, or disable styling and do it yourself in style.css! Just want to tweak a style? Add your custom CSS directly on the settings page.
-* Many more settings for fine-tuning the filter modules behaviour:
+* Many more settings for fine-tuning the filter modules behavior:
   * A ”Clear all” link for the filter component.
   * Choose between placeholders or "show all" in the dropdowns.
   * Hide empty terms in the dropdowns.
   * Show a post count next to the term name
+  * Disable select2
+  * Show term description
+  * Disable headings you don't want
   * More to come!
 * Ability to show your visitors information about their current active filtering and control the look of this.
 * Allows for custom GET parameters to be included. Extend the filter your way with maybe a custom search-parameter or whatever you like.
-* Many [filters and actions](https://wordpress.org/plugins/beautiful-taxonomy-filters/other_notes/) for modifying the plugins behaviour. For you control freaks out there…
+* Many [filters and actions](https://wordpress.org/plugins/beautiful-taxonomy-filters/other_notes/) for modifying the plugins behavior. For you control freaks out there…
 
 
 = Languages =
@@ -46,6 +49,7 @@ The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide
 * Dutch (Thanks to Piet Bos)
 * French (Thanks to [Brice Capobianco](https://profiles.wordpress.org/brikou))
 * Simplified Chinese (Thanks to [Amos Lee](http://www.wpzhiku.com/))
+* Portuguese (Thanks to [Luis Martins](http://www.wearemultiweb.com/))
 ____
 Do you want to translate this plugin to another language? I recommend using POEdit (http://poedit.net/) or if you prefer to do it straight from the WordPress admin interface (https://wordpress.org/plugins/loco-translate/). When you’re done, send us the file(s) to jonathan@tigerton.se and we’ll add it to the official plugin!
 
@@ -97,7 +101,7 @@ Just start tagging up your posts and you’ll see it shows up! Also, make sure t
 In order for the rewrite rules to work with a taxonomy that has a rewrite slug you also have to add the same slug to the `query_var` parameter of register_taxonomy. It wont have any visible impact for you but it's what's needed for the filtered urls to work!
 
 = Is it compatible with Polylang/WPML? =
-It is currently only compatible with Polylang but support for WPML is coming. We've not been able to test every single setting in polylang so bear with us if there are a few bugs to work out (feedback is much appreciated). In order for this to work properly you should set the post types and all connected taxonomies to be translatable. The filtered urls will still work even if you don't set the posttype to be translatable but when switching language Polylang still think it should add the new language to the URL which means it'll throw a 404 error. This is to be expected and NOT due to this plugin. If you experience 404 errors make sure you flush your rewrite rules by going to settings > permalinks in the admin dashboard.
+It is currently only compatible with Polylang but support for WPML is coming. We've not been able to test every single setting in polylang so bear with us if there are a few bugs to work out (feedback is much appreciated). In order for this to work properly you should set the post types and all connected taxonomies to be translatable. The filtered urls will still work even if you don't set the post type to be translatable but when switching language Polylang still think it should add the new language to the URL which means it'll throw a 404 error. This is to be expected and NOT due to this plugin. If you experience 404 errors make sure you flush your rewrite rules by going to settings > permalinks in the admin dashboard.
 
 Note that it will still work on a site using WPML, it just doesn't have the support for translated taxonomies etc.
 
@@ -138,18 +142,47 @@ Why thank you! We don't have proper donate link but if you want to you can send 
 
 == Screenshots ==
 
-1. Basic setup settings for the plugin.
-2. Filter module settings.
-3. Style settings for the modules.
-4. The filter info widget.
-5. The filter widget.
-6. The filter module with the "light material" style.
-7. The filter module in work with select2 for user friendly dropdowns.
-8. Example of a beautified permalink structure.
-9. The widgets on the twentyfourteen theme.
+1. Basic options.
+2. Advanced options.
+3. The filter module using the light material look in WordPress twentyfifteen theme.
+4. The filter module with a dropdown open and using descriptions for terms.
+5. The filter widget in WordPress twentyfifteen theme.
+6. The filter widget settings.
+7. Example of a beautified permalink structure (4 different taxonomies/terms).
 
 
 == Changelog ==
+
+= 2.0 =
+* FEATURE: It's finally here! AJAX-powered conditional dropdowns. Select a term in one taxonomy and see the selectable terms change in all other taxonomies. No more "no posts found" results for the visitors. __This is a BETA feature which you have to enable in the advanced settings. If you find issues please create a topic in the forums.__
+
+A loader will appear and the dropdowns will be disabled while the AJAX works its magic if it takes longer than 800ms. any new AJAX triggered before the previous has finished will also abort the previous one.
+
+You can replace the default loader .gif (WordPress spinner) using the new filter:
+`
+function my_custom_loader( $loader, $taxonomy, $posttype ){
+
+	return $loader; // $loader is an img tag
+
+}
+add_filter('beautiful_filters_loader', 'my_custom_loader', 10, 3);
+`
+
+* FEATURE: A new style option "Simple" which just arranges everything without adding colors, drop shadows etc. also tweaked other styles for new select2 classes.
+* IMPROVEMENT: Select2: Now a wrapping span element is always added to the results of the dropdown which carries over all classnames from the original option element. Use this to style hierarchical taxonomies. `.select2-results__option .level-1{ padding-left: 1em; }`.
+* IMPROVEMENT: Added Portuguese (Thanks to [Luis Martins](http://www.wearemultiweb.com/)).
+* IMPROVEMENT: Added Catalan (Thanks to [Maiol Xercavins](https://wordpress.org/support/profile/diavolo669)).
+* IMPROVEMENT: Added Swiss (Thanks to [Raphael Hüni](http://werbelinie.ch/)).
+* IMPROVEMENT: Fixed some untranslatable strings.
+* IMPROVEMENT: Updated POT file and Swedish translation.
+* IMPROVEMENT: Greatly improved the information on the help and about tabs. Now there's links to the forum, FAQ, hooks and github repo. All to make it easier for you to nag at me!
+* IMPROVEMENT: Updated screenshots for wordpress.org
+* IMPROVEMENT: Added a very basic stylesheet always included (already minimized to 486b) with BTF.
+
+= 1.3.0 =
+Just a minor update right now.. bigger things to come. carry on!
+
+* IMPROVEMENT: Updated select2 lib to v 4.0.3. Hopefully fixing some issues with later versions of Safari on IOS
 
 = 1.2.9 =
 * BUGFIX: Fixed undefined index for widget walker.
@@ -157,6 +190,7 @@ Why thank you! We don't have proper donate link but if you want to you can send 
 * IMPROVEMENT: Updated german translations. Thanks to [Nils Schönwald](https://wordpress.org/support/profile/schoenwaldnils).
 * IMPROVEMENT/BUGFIX: Updated select2 library to 4.0.1 (latest stable). This seems to fix issue of `.change` event not happening on original select element.
 * IMPROVEMENT: Fixed some commenting inconsistencies. Nothing to see here folks.
+
 
 = 1.2.8 =
 IMPORTANT: In this update we've done a big overhaul of the settings page. This was important to be able to keep improving BTF settings and features. Unfortunately this means that any of your advanced settings will have to be reset. After updating please take a look at the "Advanced options" tab to make sure everything is set as you want.
@@ -520,6 +554,16 @@ function modify_clear_button($string){
 add_filter('beautiful_filters_clear_button', 'modify_clear_button', 10, 1);
 `
 
+= beautiful_filters_loader =
+`
+function my_custom_loader( $loader, $taxonomy, $posttype ){
+
+	return $loader; // $loader is an img tag
+
+}
+add_filter('beautiful_filters_loader', 'my_custom_loader', 10, 3);
+`
+
 = beautiful_filters_active_terms =
 
 $terms is the terms string for the active filter info
@@ -531,7 +575,7 @@ function modify_active_taxonomy($terms, $taxonomy){
 	return $terms;
 }
 
-add_filter('beautiful_filters_active_terms', 'modify_active_terms', 10, 2);
+add_filter('beautiful_filters_active_terms', 'modify_active_taxonomy', 10, 2);
 `
 
 = beautiful_filters_disable_heading =

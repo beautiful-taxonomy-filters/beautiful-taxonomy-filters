@@ -113,10 +113,20 @@ class Beautiful_Taxonomy_Filters_Admin {
 				$this->add_admin_notice( $message );
 
 			}
+
+			//Older than 2.0.0
+			if( version_compare($current_version, '2.0.0', '<') ){
+
+				$message = sprintf( wp_kses( __( 'Beautiful Taxonomy Filters now supports conditional dropdowns to avoid empty results. Head over to the <a href="%s">advanced tab</a> to enable the beta feature.', 'beautiful-taxonomy-filters' ), array(  'a' => array( 'href' => array() ) ) ), esc_url( admin_url() . 'options-general.php?page=taxonomy-filters&tab=advanced' ) );
+				$this->add_admin_notice( $message );
+
+			}
+
 			//Finally update the current version
 			update_option('beautiful_taxonomy_filters_version', $this->version);
 
 		}
+
 
 		if( !$current_version ){
 
@@ -257,7 +267,7 @@ class Beautiful_Taxonomy_Filters_Admin {
 		// Automagically insert the modules using loop_start hook
 	 	add_settings_field(
 			'beautiful_taxonomy_filters_automagic',
-			'<span class="btf-tooltip" title="' . __('Experimental feature!  Attempts to automagically insert the modules in your archive. If the placement isn\'t what you want you\'ll have to use one of the other methods.', 'beautiful-taxonomy-filters') . '">?</span>' .__('Automagically insert the modules in the archives:', 'beautiful-taxonomy-filters'),
+			'<span class="btf-tooltip" title="' . __('Experimental feature!  Attempts to automagically insert the modules in your archive. If the placement isn\'t what you want you\'ll have to use one of the other methods.', 'beautiful-taxonomy-filters') . '">?</span>' . __('Automagically insert the modules in the archives:', 'beautiful-taxonomy-filters'),
 			array($this, 'automagic_setting_callback_function'),
 			'taxonomy-filters',
 			'taxonomy_filters_basic_settings_section'
@@ -292,11 +302,28 @@ class Beautiful_Taxonomy_Filters_Admin {
 		/**
 		 * Advanced settings
 		 */
+		// Add checkbox to let users opt in to use the AJAX based dropdown relationship
+	 	add_settings_field(
+			'beautiful_taxonomy_filters_settings',
+			'<span class="btf-tooltip" title="' . __('When selecting a term in one taxonomy dropdown the others will update accordingly making sure to only show terms that fit the current selection.', 'beautiful-taxonomy-filters') . '">?</span>' . __('Enable conditional dropdown values:', 'beautiful-taxonomy-filters'),
+			array($this, 'conditional_dropdowns_setting_callback_function'),
+			'advanced-taxonomy-filters',
+			'taxonomy_filters_advanced_settings_section'
+		);
 
 		// Add checkbox to let users choose to disable select2 library
 	 	add_settings_field(
 			'beautiful_taxonomy_filters_disable_select2',
-			'<span class="btf-tooltip" title="' . __('Disables the use of Select2 for improved dropdowns. Regular select elements will be used instead.', 'beautiful-taxonomy-filters') . '">?</span>' .__('Disable the select2 library:', 'beautiful-taxonomy-filters'),
+			'<span class="btf-tooltip" title="' . __('Disables the use of Select2 for improved dropdowns. Regular select elements will be used instead.', 'beautiful-taxonomy-filters') . '">?</span>' . __('Disable the select2 library:', 'beautiful-taxonomy-filters'),
+			array($this, 'disable_select2_setting_callback_function'),
+			'advanced-taxonomy-filters',
+			'taxonomy_filters_advanced_settings_section'
+		);
+
+		// Add checkbox to let users choose to disable select2 library
+	 	add_settings_field(
+			'beautiful_taxonomy_filters_disable_select2',
+			'<span class="btf-tooltip" title="' . __('Disables the use of Select2 for improved dropdowns. Regular select elements will be used instead.', 'beautiful-taxonomy-filters') . '">?</span>' . __('Disable the select2 library:', 'beautiful-taxonomy-filters'),
 			array($this, 'disable_select2_setting_callback_function'),
 			'advanced-taxonomy-filters',
 			'taxonomy_filters_advanced_settings_section'
@@ -375,6 +402,11 @@ class Beautiful_Taxonomy_Filters_Admin {
 		register_setting( 'advanced-taxonomy-filters', 'beautiful_taxonomy_filters_disable_postcount' );
 		register_setting( 'advanced-taxonomy-filters', 'beautiful_taxonomy_filters_dropdown_behaviour' );
 
+		/**
+		 * Register the new setting that should eventually hold all settings as an associative array
+		 */
+		register_setting( 'advanced-taxonomy-filters', 'beautiful_taxonomy_filters_settings' );
+
 	}
 
 	/**
@@ -425,6 +457,11 @@ class Beautiful_Taxonomy_Filters_Admin {
 	function advanced_setting_section_callback_function(){
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/advanced/advanced-section-display.php';
 	}
+
+	// Disable Select2
+ 	function conditional_dropdowns_setting_callback_function() {
+ 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/advanced/conditional-dropdowns-settings-display.php';
+ 	}
 
 	// Disable Select2
  	function disable_select2_setting_callback_function() {

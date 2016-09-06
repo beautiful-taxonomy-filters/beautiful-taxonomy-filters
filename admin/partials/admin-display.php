@@ -19,10 +19,10 @@
 	<h2 class="nav-tab-wrapper">
 		<?php
 	    $tabs = array(
-		    'basic' => 'Basic options',
-		    'advanced' => 'Advanced options',
-		    'help' => 'Help',
-		    'about' => 'About'
+		    'basic' => __('Basic options', 'beautiful-taxonomy-filters'),
+		    'advanced' => __('Advanced options', 'beautiful-taxonomy-filters'),
+		    'help' => __('Help', 'beautiful-taxonomy-filters'),
+		    'about' => __('About', 'beautiful-taxonomy-filters')
 	    );
 	    //set current tab
 	    $tab = ( isset($_GET['tab']) ? $_GET['tab'] : 'basic' );

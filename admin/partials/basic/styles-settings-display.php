@@ -13,11 +13,12 @@
  */
 
 
-$selected_style = get_option('beautiful_taxonomy_filters_styles'); 
+$selected_style = get_option('beautiful_taxonomy_filters_styles');
 $styles = array(
-	'basic' => 'No Styling',
-	'light-material' => 'Light Material Design',
-	'dark-material' => 'Dark Material Design'
+	'basic' => __('No Styling', 'beautiful-taxonomy-filters'),
+	'simple' => __('Simple', 'beautiful-taxonomy-filters'),
+	'light-material' => __('Light Material Design', 'beautiful-taxonomy-filters'),
+	'dark-material' => __('Dark Material Design', 'beautiful-taxonomy-filters')
 );
 echo '<select name="beautiful_taxonomy_filters_styles">';
 foreach($styles as $key => $value){

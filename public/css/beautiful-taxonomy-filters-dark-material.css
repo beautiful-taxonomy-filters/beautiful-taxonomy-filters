@@ -167,7 +167,8 @@
 	border:1px solid #e0e0e0;
 	border-top:none;
 }
-.select2-results .select2-highlighted{
+.select2-results .select2-highlighted,
+.select2-container--default .select2-results__option--highlighted[aria-selected]{
 	background:#9e9e9e;
 }
 .select2-results .level-1{

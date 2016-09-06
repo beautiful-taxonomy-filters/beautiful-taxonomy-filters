@@ -29,6 +29,8 @@
  */
 
 //Fetch the available settings for the filter modules behaviour
+$settings = apply_filters( 'beautiful_filters_settings', get_option('beautiful_taxonomy_filters_settings'), $current_post_type );
+$conditional_dropdowns = ( isset( $settings['conditional_dropdowns'] ) ? $settings['conditional_dropdowns'] : false );
 $show_clear_all = apply_filters( 'beautiful_filters_clear_all', get_option('beautiful_taxonomy_filters_clear_all'), $current_post_type );
 $hide_empty = apply_filters( 'beautiful_filters_hide_empty', get_option('beautiful_taxonomy_filters_hide_empty'), $current_post_type );
 $show_count = apply_filters( 'beautiful_filters_show_count', get_option('beautiful_taxonomy_filters_show_count'), $current_post_type );
@@ -56,6 +58,7 @@ $disable_select2 = (get_option('beautiful_taxonomy_filters_disable_select2') ? g
 				$terms = get_terms($key);
 				?>
 				<?php if(!empty($terms) && !is_wp_error($terms)): ?>
+					<?php do_action( 'beautiful_actions_before_select', $key, $current_post_type); //Allow custom markup before each select ?>
 					<div class="beautiful-taxonomy-filters-tax filter-count-<?php echo $count; if($count > 5){ echo ' filter-count-many'; } ?>" id="beautiful-taxonomy-filters-tax-<?php echo $key; ?>">
 						<label for="select-<?php echo $key; ?>" class="beautiful-taxonomy-filters-label"><?php echo apply_filters( 'beautiful_filters_taxonomy_label', $taxonomy->labels->name, $taxonomy->name); ?></label>
 						<?php
@@ -101,13 +104,19 @@ $disable_select2 = (get_option('beautiful_taxonomy_filters_disable_select2') ? g
 
 						}
 						?>
+
+						<?php if( $conditional_dropdowns ): ?>
+							<span class="beautiful-taxonomy-filters-loader"><?php echo apply_filters( 'beautiful_filters_loader', sprintf( '<img src="%s" alt="" />', admin_url( 'images/spinner.gif' ) ), $key, $current_post_type ); ?></span>
+						<?php endif; ?>
 					</div>
+					<?php do_action( 'beautiful_actions_after_select', $key, $current_post_type); //Allow custom markup before each select ?>
 				<?php endif; ?>
 			<?php endforeach; ?>
 			<?php do_action( 'beautiful_actions_ending_form_inner', $current_post_type); //allow custom markup at end of inner form ?>
 		</div>
 		<?php do_action( 'beautiful_actions_before_submit_button', $current_post_type); //allow custom markup before submit button ?>
 		<button type="submit" class="beautiful-taxonomy-filters-button"><?php echo apply_filters( 'beautiful_filters_apply_button', __('Apply filter', 'beautiful-taxonomy-filters') ); ?></button>
+		<?php do_action( 'beautiful_actions_after_submit_button', $current_post_type); //allow custom markup before submit button ?>
 		<?php if($show_clear_all): ?>
 			<a href="<?php echo get_post_type_archive_link($current_post_type); ?>" class="beautiful-taxonomy-filters-clear-all" title="<?php _e('Click to clear all active filters', 'beautiful-taxonomy-filters'); ?>"><?php echo apply_filters( 'beautiful_filters_clear_button', __('Clear all', 'beautiful-taxonomy-filters') ); ?></a>
 		<?php endif; ?>

@@ -69,7 +69,7 @@ class Beautiful_Taxonomy_Filters {
 	public function __construct() {
 
 		$this->Beautiful_Taxonomy_Filters = 'beautiful-taxonomy-filters';
-		$this->version = '1.2.9';
+		$this->version = '2.0.0';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -197,7 +197,11 @@ class Beautiful_Taxonomy_Filters {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 		$this->loader->add_action( 'wp_head', $plugin_public, 'custom_css' );
 		$this->loader->add_action( 'loop_start', $plugin_public, 'automagic_insertion' ); //sounds dirty...
+		$this->loader->add_filter( 'wp_dropdown_cats', $plugin_public, 'modify_select_elements', 10, 2 );
 		$this->loader->add_filter( 'template_redirect', $plugin_public, 'catch_filter_values' );
+		$this->loader->add_action( 'wp_ajax_update_filters_callback', $plugin_public, 'update_filters_callback' );
+		$this->loader->add_action( 'wp_ajax_nopriv_update_filters_callback', $plugin_public, 'update_filters_callback' );
+
 		//Our own custom actions to let users insert our code into their themes in a friendly way
 		$this->loader->add_action( 'show_beautiful_filters', $plugin_public, 'beautiful_filters', 10, 1 );
 		$this->loader->add_action( 'show_beautiful_filters_info', $plugin_public, 'beautiful_filters_info' );

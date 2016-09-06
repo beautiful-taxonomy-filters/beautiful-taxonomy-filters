@@ -1,0 +1,157 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Beautiful taxonomy filter\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: Fri Oct 10 2014 11:26:31 GMT+0200 (CEST)\n"
+"PO-Revision-Date: Wed Jun 01 2016 19:13:24 GMT+0200 (CEST)\n"
+"Last-Translator: maiol.xercavins <maiol.xercavins@gmail.com>\n"
+"Language-Team: \n"
+"Language: Catalan\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;"
+"__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
+"_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
+"esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
+"esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Loco-Target-Locale: ca_ES\n"
+"X-Generator: Loco - https://localise.biz/\n"
+"X-Poedit-SearchPath-0: .."
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:21
+msgid "Beautiful Taxonomy Filters"
+msgstr "Beautiful Taxonomy Filters"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:157
+msgid "Setup settings"
+msgstr "Ajusts de configuració"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:165
+msgid "Style settings"
+msgstr "Ajusts d'estil"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:173
+msgid "Activate for these post types:"
+msgstr "Activar per a aquests posts personalitzats"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:182
+msgid "Exclude these taxonomies:"
+msgstr "Excloure aquestes taxonomies."
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:191
+msgid "Enable a \"Clear all\" link:"
+msgstr "Activar un enllaç \"Esborrar tot\":"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:200
+msgid "Styling:"
+msgstr "Estil:"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:209
+msgid "Custom CSS Styling:"
+msgstr "Estils CSS personalitzats:"
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:27
+#: ..
+#: admin/partials/beautiful-taxonomy-filters-section-display.php:15
+msgid "How to use Beautiful Taxonomy Filters"
+msgstr "Com fer servir Beautiful Taxonomy Filters"
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:30
+msgid ""
+"Select which post types you want to use the filtering on.</br> <b>Note:</b> "
+"if the post type aren't connected to one or more taxonomies you wont see any "
+"results."
+msgstr ""
+"Selecciona els tipus d'entrades personalitzades (CPT) que vulguis fer servir "
+"en el filtrat.</br><b>Nota:</b> si el tipus d'entrada no està connectat a "
+"una o més taxonomies no veuràs cap resultat."
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:33
+msgid ""
+"Exclude any taxonomies you don't want the users to be able to filter on."
+"</br> <b>Note:</b> Only taxonomies that are connected to post types you have "
+"selected above will be affected"
+msgstr ""
+"Excloure qualsevol taxonomia que no vulguis que els usuaris siguin capaços "
+"de filtrar.</br><b>Nota:</b> Només les taxonomies connectades a tipus "
+"d'entrades que hagis seleccionat prèviament es veuran afectades. "
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:36
+msgid "Save your changes."
+msgstr "Guarda els canvis. "
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:37
+msgid ""
+"<i>success! Your previously ugly taxonomy filtering is now oh so beautiful!"
+"</i>"
+msgstr ""
+"<i>Fantàstic! Els teus anteriors i lleigs filtres de taxonomies ara són Oh! "
+"Tant bonics! </i> "
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:40
+msgid "To use the provided select dropdown filters. Copy:"
+msgstr "Per a usar els filtres desplegables proporcionats. Copia: "
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:40
+msgid "and paste it in your"
+msgstr "i enganxa en el teu "
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:40
+msgid "file in your template. It should be placed somewhere above"
+msgstr "fitxer de plantilla. Hauria de ser situat en algun lloc per sobre de "
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:41
+msgid ""
+"<b>Note:</b> The layout of archive.php may differ drastically between "
+"different themes. We can't help you with the positioning of the function in "
+"your theme so please either just try some locations (you can just remove the "
+"function again if something breaks) or ask in your themes support forum (if "
+"available). Best of luck!"
+msgstr ""
+"<b>Nota:</b> La disposició (layout) de l'arxiu \"archive.php\" pot variar "
+"dràsticament entre diferents temes. No podem ajudar-te amb el posicionament "
+"d'aquesta funció en el teu tema així que, si us plau, intenta provar en "
+"alguns llocs (pots treure la funció si alguna cosa va malament) o preguntar "
+"en el fòrum de suport del teu tema (si en disposa). Moltes sort!"
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:42
+msgid ""
+"<b>Note 2:</b> The function will only show a filter if the post type archive "
+"is for a post type you've selected in the settings above. So don't worry "
+"about filters in the wrong place."
+msgstr ""
+"<b>Nota 2:</b>  La funció només mostrarà el filtre si el fitxer és una "
+"entrada personalitzada que has seleccionat en els ajustaments anteriors. "
+"Així que no et preocupis dels filtres en llocs equivocats."
+
+#: ../admin/partials/beautiful-taxonomy-filters-style-section-display.php:15
+msgid ""
+"This section lets you control the layout and design of the filter you can "
+"use in your archive pages."
+msgstr ""
+"Aquesta selecció permet control·lar la disposició i el disseny del filtre "
+"que pots usar en les teves pàgines d'arxiu (\"archive.php\")."
+
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:79
+msgid "All "
+msgstr "Tots"
+
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:98
+msgid "Apply filter"
+msgstr "Aplicar el filtre"
+
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:100
+msgid "Click to clear all active filters"
+msgstr "Click per esborrar tots els filtres actius"
+
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:100
+msgid "Clear all"
+msgstr "Esborrar tots"
+
+#: ../public/partials/beautiful-taxonomy-filters-public-info-display.php:39
+msgid "Active filters"
+msgstr "Filtres actius"

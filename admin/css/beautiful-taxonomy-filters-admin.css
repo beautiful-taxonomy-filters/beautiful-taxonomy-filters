@@ -1,3 +1,9 @@
+.clearfix:after {
+    content:"";
+    display:block;
+    clear:both;
+}
+
 .btf-tooltip{
 	display: inline-block;
 	margin-right: 5px;
@@ -14,7 +20,9 @@
 	border-radius: 100%;
 	font-size: 9px;
 	cursor: help;
+
 }
+
 .beautiful-taxonomy-filters-tabs{
 	padding: 15px;
 	background: #FFF;
@@ -25,4 +33,21 @@
     border-right-color: rgb(204, 204, 204);
     border-bottom-color: rgb(204, 204, 204);
     border-left-color: rgb(204, 204, 204);
+
+}
+
+.beautiful-taxonomy-filters-right-col{
+	width: 65%;
+	float: left;
+}
+
+.beautiful-taxonomy-filters-right-col p{
+	max-width: 700px;
+}
+
+.beautiful-taxonomy-filters-left-col{
+	width: 30%;
+	padding-left: 5%;
+	float: right;
+	text-align: center;
 }
