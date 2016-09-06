@@ -50,6 +50,8 @@ The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide
 * French (Thanks to [Brice Capobianco](https://profiles.wordpress.org/brikou))
 * Simplified Chinese (Thanks to [Amos Lee](http://www.wpzhiku.com/))
 * Portuguese (Thanks to [Luis Martins](http://www.wearemultiweb.com/))
+* Catalan (Thanks to [Maiol Xercavins](https://wordpress.org/support/profile/diavolo669))
+* Swiss (Thanks to [Raphael Hüni](http://werbelinie.ch/))
 ____
 Do you want to translate this plugin to another language? I recommend using POEdit (http://poedit.net/) or if you prefer to do it straight from the WordPress admin interface (https://wordpress.org/plugins/loco-translate/). When you’re done, send us the file(s) to jonathan@tigerton.se and we’ll add it to the official plugin!
 
