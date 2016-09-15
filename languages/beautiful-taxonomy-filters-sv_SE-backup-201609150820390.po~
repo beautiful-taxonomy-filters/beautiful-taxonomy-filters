@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Beautiful taxonomy filter\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-11-10 09:35+0800\n"
-"PO-Revision-Date: Thu Jun 02 2016 13:27:27 GMT+0200 (CEST)\n"
+"PO-Revision-Date: Thu Jun 02 2016 14:05:36 GMT+0200 (CEST)\n"
 "Last-Translator: admin <admin@local.dev>\n"
 "Language-Team: \n"
 "Language: Swedish\n"
@@ -164,7 +164,7 @@ msgstr "Stänger av select2 som används för förbättrade nedrullningslistor."
 
 #: ../admin/class-beautiful-taxonomy-filters-admin.php:299
 msgid "Disable the select2 library:"
-msgstr "Inaktivera select2 biblioteket"
+msgstr "Inaktivera select2 biblioteket:"
 
 #: ../admin/class-beautiful-taxonomy-filters-admin.php:308
 msgid "Adds a link next to the submit button that clears all current filters."
@@ -227,7 +227,7 @@ msgstr "Tar bort inläggsräknaren i filterinfo-modulen."
 
 #: ../admin/class-beautiful-taxonomy-filters-admin.php:362
 msgid "Disable the filter info modules post count:"
-msgstr "Stäng av filterinfo-modulens inläggsräknare."
+msgstr "Stäng av filterinfo-modulens inläggsräknare:"
 
 #: ../admin/partials/admin-display.php:17
 msgid "Beautiful Taxonomy Filters"

@@ -4,7 +4,7 @@ Donate link: http://fancy.to/k9qxt
 Tags: Taxonomy, taxonomies, filter, filtering, pretty permalinks, terms, term, widget, pretty permalinks, rewrite, custom posttype, cpt, beautiful, select2, dropdowns, material design, GET, multisite compatible, polylang compatible, select filter, SEO friendly
 Requires at least: 3.0.1
 Tested up to: 4.4
-Stable tag: 2.0.0
+Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -155,7 +155,13 @@ Why thank you! We don't have proper donate link but if you want to you can send 
 
 == Changelog ==
 
-= 2.0 =
+= 2.1.0
+* IMPROVEMENT: The conditional dropdowns now also apply when loading a filter result page. Please post all issues to the support forums.
+* IMPROVEMENT: Updated POT file.
+* IMPROVEMENT: Updated Swedish translation.
+* IMPROVEMENT: Added Bulgarian translation (Thanks to [Georgi Marokov](https://github.com/Georgi-Marokov)).
+
+= 2.0.0 =
 * FEATURE: It's finally here! AJAX-powered conditional dropdowns. Select a term in one taxonomy and see the selectable terms change in all other taxonomies. No more "no posts found" results for the visitors. __This is a BETA feature which you have to enable in the advanced settings. If you find issues please create a topic in the forums.__
 
 A loader will appear and the dropdowns will be disabled while the AJAX works its magic if it takes longer than 800ms. any new AJAX triggered before the previous has finished will also abort the previous one.
