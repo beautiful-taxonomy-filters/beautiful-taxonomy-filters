@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Beautiful taxonomy filter\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-11-10 09:35+0800\n"
-"POT-Revision-Date: Thu Jun 02 2016 13:23:52 GMT+0200 (CEST)\n"
+"POT-Revision-Date: Thu Jun 02 2016 13:26:44 GMT+0200 (CEST)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -294,6 +294,22 @@ msgstr ""
 
 #: ../admin/partials/basic/post_type-settings-display.php:34
 msgid "Open in new tab"
+msgstr ""
+
+#: ../admin/partials/basic/styles-settings-display.php:18
+msgid "No Styling"
+msgstr ""
+
+#: ../admin/partials/basic/styles-settings-display.php:19
+msgid "Simple"
+msgstr ""
+
+#: ../admin/partials/basic/styles-settings-display.php:20
+msgid "Light Material Design"
+msgstr ""
+
+#: ../admin/partials/basic/styles-settings-display.php:21
+msgid "Dark Material Design"
 msgstr ""
 
 #: ../admin/partials/help/help.php:6
