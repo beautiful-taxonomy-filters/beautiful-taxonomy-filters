@@ -91,6 +91,39 @@ class Beautiful_Taxonomy_Filters_Rewrite_Rules {
 	        ) + $new_rewrite_rules;
 	    }
 
+      // Add new rewrite rule to handle query_var != rewrite slug
+      $new_rewrite_rule =  $post_type->rewrite['slug'];
+      $new_query_string = 'index.php?post_type=' . $post_type->name;
+
+
+      $n = 1;
+      foreach( $taxonomies as $taxonomy ){
+
+        $qv = $taxonomy->query_var;
+  			$rw = '' != $taxonomy->rewrite['slug'] ? $taxonomy->rewrite['slug'] : $qv;
+
+        // Skip tax if excluded
+        if ( !empty( $excluded_taxonomies ) && in_array( $rw, $excluded_taxonomies ) )
+          continue;
+
+        $new_rewrite_rule .= sprintf("(?:/%s/([^/]+))?", $rw);
+        $new_query_string .= sprintf('&%s=%s', $qv, $wp_rewrite->preg_index($n) );
+
+        $n++;
+      }
+
+      $new_paged_rewrite_rule = $new_rewrite_rule . 'page/([0-9]{1,})';
+      $new_paged_query_string = $new_query_string . '&paged=' . $wp_rewrite->preg_index( $n );
+      // Make the trailing backslash optional
+      $new_paged_rewrite_rule = $new_paged_rewrite_rule . '/?$';
+      $new_rewrite_rule = $new_rewrite_rule . '/?$';
+
+      $new_rewrite_rules = array(
+        $new_paged_rewrite_rule => $new_paged_query_string,
+        $new_rewrite_rule => $new_query_string
+      ) + $new_rewrite_rules;
+			// End query_var != rewrite slug
+
 	    return $new_rewrite_rules;
 
 	}
