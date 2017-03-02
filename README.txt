@@ -4,7 +4,7 @@ Donate link: http://fancy.to/k9qxt
 Tags: Taxonomy, taxonomies, filter, filtering, pretty permalinks, terms, term, widget, pretty permalinks, rewrite, custom posttype, cpt, beautiful, select2, dropdowns, material design, GET, multisite compatible, polylang compatible, select filter, SEO friendly
 Requires at least: 3.0.1
 Tested up to: 4.4
-Stable tag: 2.1.0
+Stable tag: 2.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,8 @@ The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide
 * Exclude taxonomies you just don’t want the visitors to filter on.
 * Beautifies the resulting URLs. You won’t see any /posttype/?taxonomy1=term. Instead you’ll see /posttype/taxonomy/term.
 * The pretty URLs are much more SEO friendly so you'll give a boost to those filtered pages. Just remember to use canonicals where it's appropriate.
-* Polylang compatible (beta).
+* BETA: Conditional dropdowns. Make sure your visitors never end up with empty filtered results. AJAX reloads the values in each dropdown based on previously selected values.
+* Polylang compatible.
 * Multisite compatible. No network settings at the moment.
 * Comes with a complete functional filter module for you to put in your theme.
 * Three alternatives for putting the filter modules in your theme:
@@ -47,11 +48,16 @@ The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide
 * Swedish
 * Spanish (Thanks to Juan Javier Moreno Restituto)
 * Dutch (Thanks to Piet Bos)
+* German (Thanks to [Matthias Bonnes](http://macbo.de/))
 * French (Thanks to [Brice Capobianco](https://profiles.wordpress.org/brikou))
 * Simplified Chinese (Thanks to [Amos Lee](http://www.wpzhiku.com/))
 * Portuguese (Thanks to [Luis Martins](http://www.wearemultiweb.com/))
+* Portuguese Brasil (Thanks to Bruno Sousa)
 * Catalan (Thanks to [Maiol Xercavins](https://wordpress.org/support/profile/diavolo669))
 * Swiss (Thanks to [Raphael Hüni](http://werbelinie.ch/))
+* Bulgarian (Thanks to [Georgi Marokov](https://github.com/Georgi-Marokov))
+* Romanian (Thanks to [Roberto Tamas](www.novace.ro))
+
 ____
 Do you want to translate this plugin to another language? I recommend using POEdit (http://poedit.net/) or if you prefer to do it straight from the WordPress admin interface (https://wordpress.org/plugins/loco-translate/). When you’re done, send us the file(s) to jonathan@tigerton.se and we’ll add it to the official plugin!
 
@@ -80,12 +86,24 @@ Do you want to translate this plugin to another language? I recommend using POEd
 
 Yes. Either use the widget and set a specific post type in it's settings or add a parameter of your custom post type slug to the `show_beautiful_filters` action. This "hardcodes" the filter module to that post type and lets you use it pretty much anywhere in your theme. Hardcore right..
 `
-<?php do_action('show_beautiful_filters', 'posttypeslug'); ?>
+<?php do_action( 'show_beautiful_filters', 'posttypeslug' ); ?>
 `
 
 = Is there a way to change the order of the taxonomies? =
 
 Well of course! You can either change the order in which you register your taxonomies OR you can use the filter
+`
+function moveElement( &$array, $a, $b ) {
+    $out = array_splice($array, $a, 1);
+    array_splice($array, $b, 0, $out);
+}
+
+function custom_tax_ordering( $taxonomies, $current_post_type ) {
+	moveElement( $taxonomies, 2, 0 );
+	return $taxonomies;
+}
+add_filter( 'beautiful_filters_taxonomy_order', 'custom_tax_ordering' );
+`
 
 = Does this support multiple selecting multiple terms from the same taxonomy? =
 
@@ -100,46 +118,20 @@ Just start tagging up your posts and you’ll see it shows up! Also, make sure t
 **Posts** are not supported because we haven't been able to create proper rewrite rules for the multiple filtering to work. Posts are handled differently by WordPress than other custom post types (you have probably noticed that there's no /posts/ in the permalink for example). Due to this the same rewrite rules that works for custom post types doesn't work for posts. If you're just looking to filter your posts by their categories with a dropdown you can use this function [wp_dropdown_categories](http://codex.wordpress.org/Function_Reference/wp_dropdown_categories). It's good practice to use a custom post type when you're not going to use it as news/blog -posts so perhaps you should create a Custom post type instead and make use of this beautiful plugin!
 
 = The filter isn't working with my taxonomies using a rewrite slug =
+**Since v 2.2 this has been fixed. Make sure you keep BTF updated**
 In order for the rewrite rules to work with a taxonomy that has a rewrite slug you also have to add the same slug to the `query_var` parameter of register_taxonomy. It wont have any visible impact for you but it's what's needed for the filtered urls to work!
 
 = Is it compatible with Polylang/WPML? =
-It is currently only compatible with Polylang but support for WPML is coming. We've not been able to test every single setting in polylang so bear with us if there are a few bugs to work out (feedback is much appreciated). In order for this to work properly you should set the post types and all connected taxonomies to be translatable. The filtered urls will still work even if you don't set the post type to be translatable but when switching language Polylang still think it should add the new language to the URL which means it'll throw a 404 error. This is to be expected and NOT due to this plugin. If you experience 404 errors make sure you flush your rewrite rules by going to settings > permalinks in the admin dashboard.
-
-Note that it will still work on a site using WPML, it just doesn't have the support for translated taxonomies etc.
+It is 100% compatible with Polylang. WPML is a bit wonky but might work depending on your setup. In order for this to work properly you should set the post types and all connected taxonomies to be translatable. The filtered urls will still work even if you don't set the post type to be translatable but when switching language Polylang still think it should add the new language to the URL which means it'll throw a 404 error. This is to be expected and NOT due to this plugin. If you experience 404 errors make sure you flush your rewrite rules by going to settings > permalinks in the admin dashboard.
 
 = Is it compatible with XXXXXX? =
 You will be able to use this plugin with any **public registered custom post type** regardless if it's been created by yourself or a plugin. **However** the displaying of the CPT must be via it's archive template. That means that a plugin that uses shortcodes to display the entire post listing on a static page will not work out of the box. It will also not work out of the box with plugins that in some way alter the permalink to the CPT archive [WPMU Devs Events+ for example](https://premium.wpmudev.org/project/events-plus/).
 
 = But I'm using Events+ and I really want this! =
-You can make Events+ compatible with BTF by adding this snippet to your themes functions.php file. Note that you'll have to change the "events" string if you've set a different one in the Events+ settings.
-
-`
-function curPageURL() {
- $pageURL = 'http';
- if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
- $pageURL .= "://";
- if ($_SERVER["SERVER_PORT"] != "80") {
-  $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
- } else {
-  $pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
- }
- return $pageURL;
-}
-
-add_action( 'template_redirect', 'template_redirect_cb' );
-function template_redirect_cb() {
-	$url = curPageURL();
-	if ( strpos( $url,'eab_events_category' ) !== false ) {
-		$u = str_replace( "eab_events_category/", "", $url );
-		$u = str_replace( "events/", "blog/events/", $u );
-		wp_redirect( $u );
-	}
-}
-`
 [See here for more info](http://premium.wpmudev.org/forums/topic/i-would-change-the-sidebar-on-the-events-page-i-created)
 
 = I really love this plugin and I want to donate a little something-something =
-Why thank you! We don't have proper donate link but if you want to you can send us a giftcard on [fancy](https://fancy.com). We will use it to buy cool stuff for the office!
+Why thank you! We don't have proper donate link but if you want to you can send us a giftcard on [fancy](https://fancy.com). We will use it to buy cool stuff for the office! Make it out to jontedejong@gmail.com
 
 
 == Screenshots ==
@@ -155,7 +147,45 @@ Why thank you! We don't have proper donate link but if you want to you can send 
 
 == Changelog ==
 
-= 2.1.0
+= 2.2.1 =
+* FEATURE: Disable fuzzy search in select2. It's as easy as adding this filter:
+`
+function disable_fuzzy_search( $boolean ) {
+	return true;
+
+}
+add_filter('beautiful_filters_disable_fuzzy', 'disable_fuzzy_search', 10, 1);
+`
+(Thanks to [babouz44](https://wordpress.org/support/users/babouz44/) for the help).
+
+* BUGFIX: Was a little quick on the RTL. **now** it will work as it should :)
+
+= 2.2.0 =
+* BUGFIX: You can now have a different taxonomy rewrite slug than it's query_var and it'll work just fine anyway. Adds better compatibility with plugins that registers their own taxonomies. Big thanks to [Kristoffer Lorentsen](https://github.com/krilor). Have a cookie 🍪
+* BUGFIX: Found a bug when conditional dropdowns was used without select2. Don't ask.
+* IMPROVEMENT: Select2 will now automatically detect RTL languages. You can also set this manually using the filter:
+`
+function modify_rtl( $rtl ) {
+	return true;
+}
+add_filter( 'beautiful_filters_rtl', 'modify_rtl' );
+`
+
+* IMPROVEMENT: Select2 will now automatically detect current language (if using Polylang or WPML) and apply the correct translation file. You can also set this manually yourself using the new filter:
+`
+function modify_current_language( $language ) {
+	return 'sv';
+}
+add_filter( 'beautiful_filters_language', 'modify_current_language' );
+`
+
+* IMPROVEMENT: Some overall improvement to the select2 JS script. Just a bit of refactoring.
+
+= 2.1.1 =
+* IMPROVEMENT: Added Portuguese Brasil translation (Thanks to Bruno Sousa).
+* IMPROVEMENT: Added Romanian translation (Thanks to [Roberto Tamas](www.novace.ro)).
+
+= 2.1.0 =
 * IMPROVEMENT: The conditional dropdowns now also apply when loading a filter result page. Please post all issues to the support forums.
 * IMPROVEMENT: Updated POT file.
 * IMPROVEMENT: Updated Swedish translation.
@@ -407,6 +437,35 @@ function modify_categories_dropdown( $placeholder, $taxonomy ) {
     return 'New placeholder';
 }
 add_filter( 'beautiful_filters_dropdown_placeholder', 'modify_dropdown_placeholder', 10, 2 );
+`
+
+= beautiful_filters_language =
+Changes the language code for the current page load.
+`
+function modify_current_language( $language ) {
+	return 'sv';
+}
+add_filter( 'beautiful_filters_language', 'modify_current_language' );
+`
+
+= beautiful_filters_rtl =
+Changes wether the page is RTL or not.
+`
+function modify_current_language( $rtl ) {
+	return true;
+}
+add_filter( 'beautiful_filters_rtl', 'modify_rtl' );
+`
+
+= beautiful_filters_disable_fuzzy =
+Disables select2 fuzzy search. particularly useful for terms that are all numbers.
+
+`
+function disable_fuzzy_search( $boolean ) {
+	return true;
+
+}
+add_filter('beautiful_filters_disable_fuzzy', 'disable_fuzzy_search', 10, 1);
 `
 
 = beautiful_filters_clear_all =

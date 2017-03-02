@@ -40,38 +40,39 @@ class Beautiful_Taxonomy_Filters_Rewrite_Rules {
 
 	    global $wp_rewrite;
 
-	    if( ! is_object( $post_type ) )
-	        $post_type = get_post_type_object( $post_type );
+	    if ( ! is_object( $post_type ) ) {
+			$post_type = get_post_type_object( $post_type );
+		}
 
 	    $new_rewrite_rules = array();
 	    $taxonomies = get_object_taxonomies( $post_type->name, 'objects' );
 
 	    // Add taxonomy filters to the query vars array
-	    foreach( $taxonomies as $taxonomy ){
-		    if(!empty($excluded_taxonomies)){
-			    if($taxonomy->rewrite['slug'] != ''){
-				    if(!in_array($taxonomy->rewrite['slug'], $excluded_taxonomies)){
+	    foreach ( $taxonomies as $taxonomy ) {
+		    if ( ! empty( $excluded_taxonomies ) ) {
+			    if ( '' != $taxonomy->rewrite['slug'] ) {
+				    if ( ! in_array( $taxonomy->rewrite['slug'], $excluded_taxonomies ) ) {
 					    $query_vars[] = $taxonomy->query_var;
 					}
-			    }else{
-				    if(!in_array($taxonomy->query_var, $excluded_taxonomies)){
+			    } else {
+				    if ( ! in_array( $taxonomy->query_var, $excluded_taxonomies ) ) {
 					    $query_vars[] = $taxonomy->query_var;
 					}
 			    }
-		    }else{
+		    } else {
 
 				$query_vars[] = $taxonomy->query_var;
 
 		    }
 	    }
 	    // Loop over all the possible combinations of the query vars
-	    for( $i = 1; $i <= count( $query_vars );  $i++ ) {
+	    for ( $i = 1; $i <= count( $query_vars );  $i++ ) {
 
-			$new_rewrite_rule =  $post_type->rewrite['slug'] . '/';
+			$new_rewrite_rule = $post_type->rewrite['slug'] . '/';
 			$new_query_string = 'index.php?post_type=' . $post_type->name;
 
 	        // Prepend the rewrites & queries
-	        for( $n = 1; $n <= $i; $n++ ) {
+	        for ( $n = 1; $n <= $i; $n++ ) {
 	            $new_rewrite_rule .= '(' . implode( '|', $query_vars ) . ')/(.+?)/';
 	            $new_query_string .= '&' . $wp_rewrite->preg_index( $n * 2 - 1 ) . '=' . $wp_rewrite->preg_index( $n * 2 );
 	        }
@@ -87,13 +88,46 @@ class Beautiful_Taxonomy_Filters_Rewrite_Rules {
 	        // Add the new rewrites
 	        $new_rewrite_rules = array(
 	        	$new_paged_rewrite_rule => $new_paged_query_string,
-	            $new_rewrite_rule => $new_query_string
+	            $new_rewrite_rule => $new_query_string,
 	        ) + $new_rewrite_rules;
 	    }
+
+		// Also add rewrite rules to handle query_var != rewrite slug.
+		$new_rewrite_rule = $post_type->rewrite['slug'];
+		$new_query_string = 'index.php?post_type=' . $post_type->name;
+
+		$n = 1;
+		foreach ( $taxonomies as $taxonomy ) {
+
+			$qv = $taxonomy->query_var;
+			$rw = ( '' != $taxonomy->rewrite['slug'] ? $taxonomy->rewrite['slug'] : $qv );
+
+			// Skip tax if excluded
+			if ( ! empty( $excluded_taxonomies ) && in_array( $rw, $excluded_taxonomies ) ) {
+				continue;
+			}
+
+			$new_rewrite_rule .= sprintf( '(?:/%s/([^/]+))?', $rw );
+			$new_query_string .= sprintf( '&%s=%s', $qv, $wp_rewrite->preg_index( $n ) );
+
+			$n++;
+		}
+
+		// Add paging.
+		$new_paged_rewrite_rule = $new_rewrite_rule . 'page/([0-9]{1,})';
+		$new_paged_query_string = $new_query_string . '&paged=' . $wp_rewrite->preg_index( $n );
+
+		// Make the trailing backslash optional.
+		$new_paged_rewrite_rule = $new_paged_rewrite_rule . '/?$';
+		$new_rewrite_rule = $new_rewrite_rule . '/?$';
+
+		$new_rewrite_rules = array(
+			$new_paged_rewrite_rule => $new_paged_query_string,
+			$new_rewrite_rule => $new_query_string,
+		) + $new_rewrite_rules;
 
 	    return $new_rewrite_rules;
 
 	}
 
 }
-?>

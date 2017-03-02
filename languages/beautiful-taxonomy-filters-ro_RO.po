@@ -1,0 +1,157 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Beautiful taxonomy filter\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: Fri Oct 10 2014 11:26:31 GMT+0200 (CEST)\n"
+"PO-Revision-Date: 2016-09-14 14:33+0300\n"
+"Language-Team: \n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?"
+"2:1));\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;"
+"__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
+"_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
+"esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
+"esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Loco-Target-Locale: ca_ES\n"
+"X-Generator: Poedit 1.8.9\n"
+"Last-Translator: \n"
+"Language: ro\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:21
+msgid "Beautiful Taxonomy Filters"
+msgstr "Beautiful Taxonomy Filters"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:157
+msgid "Setup settings"
+msgstr "Setari"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:165
+msgid "Style settings"
+msgstr "Setari de stil"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:173
+msgid "Activate for these post types:"
+msgstr "Activeaza pentru urmatoarele tipuri de postari:"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:182
+msgid "Exclude these taxonomies:"
+msgstr "Exclude aceste taxonomii:"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:191
+msgid "Enable a \"Clear all\" link:"
+msgstr "Afiseaza link-ul “Reseteaza filtrele”"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:200
+msgid "Styling:"
+msgstr "Stile"
+
+#: ../admin/class-beautiful-taxonomy-filters-admin.php:209
+msgid "Custom CSS Styling:"
+msgstr "Stil CSS personalizat"
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:27 ..
+#: admin/partials/beautiful-taxonomy-filters-section-display.php:15
+msgid "How to use Beautiful Taxonomy Filters"
+msgstr "Cum sa folosesti Beautiful Taxonomy Filters"
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:30
+msgid ""
+"Select which post types you want to use the filtering on.</br> <b>Note:</b> "
+"if the post type aren't connected to one or more taxonomies you wont see any "
+"results."
+msgstr ""
+"Selecteaza pe ce postari vrei sa folosesti filtrul.</br> <b>Nota:</b> daca "
+"aceste postari nu sunt conectate la una sau mai multe taxonomii, nu vei "
+"vedea nici un rezultat."
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:33
+msgid ""
+"Exclude any taxonomies you don't want the users to be able to filter on.</"
+"br> <b>Note:</b> Only taxonomies that are connected to post types you have "
+"selected above will be affected"
+msgstr ""
+"Exclude orice taxanomie pe care nu doresti ca userii sa aplice filtrul pe ea."
+"</br> <b>Nota:</b> Doar taxonomiile pe care le-ai conectat la tipurile de "
+"postari pe care le-ai selectat mai sus voi fi afectate."
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:36
+msgid "Save your changes."
+msgstr "Salveaza modificarile."
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:37
+msgid ""
+"<i>success! Your previously ugly taxonomy filtering is now oh so beautiful!</"
+"i>"
+msgstr ""
+"<i>succes! Filtrul de taxonomi pe care il foloseai este acum mult mai frumos!"
+"</i>"
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:40
+msgid "To use the provided select dropdown filters. Copy:"
+msgstr "To use the provided select dropdown filters. Copy:"
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:40
+msgid "and paste it in your"
+msgstr "and paste it in your"
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:40
+msgid "file in your template. It should be placed somewhere above"
+msgstr "file in your template. It should be placed somewhere above"
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:41
+msgid ""
+"<b>Note:</b> The layout of archive.php may differ drastically between "
+"different themes. We can't help you with the positioning of the function in "
+"your theme so please either just try some locations (you can just remove the "
+"function again if something breaks) or ask in your themes support forum (if "
+"available). Best of luck!"
+msgstr ""
+"<b>Note:</b> The layout of archive.php may differ drastically between "
+"different themes. We can't help you with the positioning of the function in "
+"your theme so please either just try some locations (you can just remove the "
+"function again if something breaks) or ask in your themes support forum (if "
+"available). Best of luck!"
+
+#: ../admin/partials/beautiful-taxonomy-filters-admin-display.php:42
+msgid ""
+"<b>Note 2:</b> The function will only show a filter if the post type archive "
+"is for a post type you've selected in the settings above. So don't worry "
+"about filters in the wrong place."
+msgstr ""
+"<b>Note 2:</b> The function will only show a filter if the post type archive "
+"is for a post type you've selected in the settings above. So don't worry "
+"about filters in the wrong place."
+
+#: ../admin/partials/beautiful-taxonomy-filters-style-section-display.php:15
+msgid ""
+"This section lets you control the layout and design of the filter you can "
+"use in your archive pages."
+msgstr ""
+"This section lets you control the layout and design of the filter you can "
+"use in your archive pages."
+
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:79
+msgid "All "
+msgstr " "
+
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:98
+msgid "Apply filter"
+msgstr "Filtrează"
+
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:100
+msgid "Click to clear all active filters"
+msgstr "Click pentru a reseta toate filtrele active."
+
+#: ../public/partials/beautiful-taxonomy-filters-public-display.php:100
+msgid "Clear all"
+msgstr "Resetează filtrele"
+
+#: ../public/partials/beautiful-taxonomy-filters-public-info-display.php:39
+msgid "Active filters"
+msgstr "Filtre active"

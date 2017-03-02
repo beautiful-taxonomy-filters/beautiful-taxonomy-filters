@@ -89,26 +89,51 @@ class Beautiful_Taxonomy_Filters_Public {
 	 */
 	public function enqueue_scripts() {
 
-		$disable_select2 = (get_option('beautiful_taxonomy_filters_disable_select2') ? get_option('beautiful_taxonomy_filters_disable_select2') : false);
-		$settings = (get_option('beautiful_taxonomy_filters_settings') ? get_option('beautiful_taxonomy_filters_settings') : false);
+		/**
+		 * Getting some settings.
+		 */
+		$disable_select2 = ( get_option( 'beautiful_taxonomy_filters_disable_select2' ) ? get_option( 'beautiful_taxonomy_filters_disable_select2' ) : false );
+		$settings = ( get_option( 'beautiful_taxonomy_filters_settings' ) ? get_option( 'beautiful_taxonomy_filters_settings' ) : false );
 		$conditional_dropdowns = ( $settings && $settings['conditional_dropdowns'] ? $settings['conditional_dropdowns'] : false );
 		$dependencies = array(
-			'jquery'
+			'jquery',
 		);
+		$language = false;
+
 		//If the almighty user decides there be no select2, then no select2 there be!
-		if( !$disable_select2 ){
+		if ( ! $disable_select2 ) {
 			wp_enqueue_script( 'select2', plugin_dir_url( __FILE__ ) . 'js/select2/select2.full.min.js', array( 'jquery' ), $this->version, true );
 			$dependencies[] = 'select2';
+			/**
+			 * So language is a thing.
+			 * Let's check for polylang or WPML and add that as language for select2.
+			 */
+			if ( function_exists( 'pll_current_language' ) ) {
+				$language = pll_current_language( 'slug' );
+			} elseif ( defined( 'ICL_LANGUAGE_CODE' ) ) {
+				$language = ICL_LANGUAGE_CODE;
+			}
+
+			/**
+			 * So if we have a language, and the translation file for select2 exists,
+			 * we should probably load that too.. just sayin.
+			 */
+			if ( $language && file_exists( plugin_dir_path( __FILE__ ) . sprintf( 'js/select2/i18n/%s.js', $language ) ) ) {
+				wp_enqueue_script( 'select2-' . $language, plugin_dir_url( __FILE__ ) . sprintf( 'js/select2/i18n/%s.js', $language ), array( 'jquery', 'select2' ), $this->version, true );
+			}
 		}
 
 		wp_register_script( $this->name, plugin_dir_url( __FILE__ ) . 'js/beautiful-taxonomy-filters-public.min.js', $dependencies, $this->version, true );
 		$localized_array = array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			'min_search' => apply_filters( 'beautiful_filters_selec2_minsearch', 8),
-			'allow_clear' => apply_filters( 'beautiful_filters_selec2_allowclear', true),
-			'show_description' => get_option('beautiful_taxonomy_filters_show_description'),
+			'min_search' => apply_filters( 'beautiful_filters_selec2_minsearch', 8 ),
+			'allow_clear' => apply_filters( 'beautiful_filters_selec2_allowclear', true ),
+			'show_description' => get_option( 'beautiful_taxonomy_filters_show_description' ),
 			'disable_select2' => $disable_select2,
 			'conditional_dropdowns' => $conditional_dropdowns,
+			'language' => apply_filters( 'beautiful_filters_language', $language ),
+			'rtl' => apply_filters( 'beautiful_filters_rtl', is_rtl() ),
+			'disable_fuzzy' => apply_filters( 'beautiful_filters_disable_fuzzy', false ),
 		);
 		//Lets make sure that if they've not chosen the placeholder option we don't allow clear since it wont do anything.
 		$dropdown_behaviour = get_option('beautiful_taxonomy_filters_dropdown_behaviour');
@@ -314,7 +339,7 @@ class Beautiful_Taxonomy_Filters_Public {
 				/**
 				 * Don't query if term is not set
 				 */
-				if( $select['term'] == '0' ){
+				if ( $select['term'] == '0' || $select['term'] == '' ) {
 					continue;
 				}
 

@@ -9,32 +9,63 @@
     var timer;
 
 
+	function matchStart (term, text) {
+		if (text.toUpperCase().indexOf(term.toUpperCase()) === 0) {
+			return true;
+		}
+		return false;
+	}
+
+
 	/**
 	 * Lets select2 all night long
-	 *
 	 */
-	function create_select2_dropdown(){
+	function create_select2_dropdown( select_el ){
+
+		var args = {
+			allowClear: btf_localization.allow_clear,
+			dropdownCssClass: ':all:',
+			containerCssClass: ':all:',
+			syncCssClasses: true,
+			minimumResultsForSearch: parseInt(btf_localization.min_search)
+		};
 
 		if( btf_localization.show_description == '1' ){
-			var select2 = $('.beautiful-taxonomy-filters-select').select2({
-				allowClear: btf_localization.allow_clear,
-				minimumResultsForSearch: parseInt(btf_localization.min_search),
-				templateResult: formatResult,
-				templateSelection: formatSelection,
-				dropdownCssClass: ':all:',
-				containerCssClass: ':all:',
-				syncCssClasses: true
-			});
-		}else{
-			var select2 = $('.beautiful-taxonomy-filters-select').select2({
-				allowClear: btf_localization.allow_clear,
-				dropdownCssClass: ':all:',
-				containerCssClass: ':all:',
-				syncCssClasses: true,
-				minimumResultsForSearch: parseInt(btf_localization.min_search)
-			});
+			args.templateResult = formatResult;
+			args.templateSelection = formatSelection;
 		}
 
+		/**
+		 * Support language
+		 */
+		if( btf_localization.language !== '' ) {
+			args.language = btf_localization.language;
+		}
+
+		/**
+		 * Support RTL
+		 */
+		if( btf_localization.rtl == '1' ) {
+			args.dir = 'rtl';
+		}
+
+		var select2;
+		if ( btf_localization.disable_fuzzy == '1' ) {
+			$.fn.select2.amd.require(['select2/compat/matcher'], function (oldMatcher) {
+				args.matcher = oldMatcher(matchStart);
+				if ( typeof select_el !== 'undefined' ) {
+					select2 = select_el.select2(args);
+				}else{
+					select2 = $('.beautiful-taxonomy-filters-select').select2(args);
+				}
+			});
+		} else {
+			if ( typeof select_el !== 'undefined' ) {
+				select2 = select_el.select2(args);
+			}else{
+				select2 = $('.beautiful-taxonomy-filters-select').select2(args);
+			}
+		}
 
 	}
 
@@ -58,7 +89,7 @@
 		);
 		return $term;
 
-	};
+	}
 
 
 	/**
@@ -79,7 +110,7 @@
 			'<span>' + new_term + '</span>'
 		);
 		return $term;
-	};
+	}
 
 
 	/**
@@ -126,7 +157,7 @@
 				taxonomy = sel.data('taxonomy'),
 				val = sel.val();
 
-			if( val == '' ){
+			if( val === '' ){
 				val = 0;
 			}
 
@@ -176,7 +207,7 @@
 								val = option.val(),
 								option_text = option.text();
 
-							if( val == '' || val == 0 ){
+							if( val === '' || val === 0 ){
 								return true;
 
 							}
@@ -193,9 +224,10 @@
 						/**
 						 * If select2 is being used we need to destroy the instance and run a new one.
 						 */
-						if( btf_localization.disable_select2 != 1 ){
-							form.find('select.beautiful-taxonomy-filters-select[data-taxonomy="' + taxonomy + '"]').select2('destroy');
-							create_select2_dropdown();
+						if( btf_localization.disable_select2 != '1' ){
+							var select_el = form.find('select.beautiful-taxonomy-filters-select[data-taxonomy="' + taxonomy + '"]');
+							select_el.select2('destroy');
+							create_select2_dropdown(select_el);
 						}
 
 						/**
@@ -204,6 +236,7 @@
 						 */
 
 					});
+
 				}
 			},
 			error: function(){

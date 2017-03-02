@@ -69,7 +69,7 @@ class Beautiful_Taxonomy_Filters {
 	public function __construct() {
 
 		$this->Beautiful_Taxonomy_Filters = 'beautiful-taxonomy-filters';
-		$this->version = '2.0.0';
+		$this->version = '2.2.1';
 
 		$this->load_dependencies();
 		$this->set_locale();
