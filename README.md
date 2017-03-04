@@ -1,21 +1,8 @@
 # Beautiful taxonomy filters
-Contributors: Jonathandejong, tigerton
-Donate link: http://fancy.to/k9qxt
-Tags: Taxonomy, taxonomies, filter, filtering, pretty permalinks, terms, term, widget, pretty permalinks, rewrite, custom posttype, cpt, beautiful, select2, dropdowns, material design, GET, multisite compatible, polylang compatible, select filter, SEO friendly
-Requires at least: 3.0.1
-Tested up to: 4.4
-Stable tag: 2.2.1
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
-
-Supercharge your custom post type archives by letting visitors filter posts by their terms/categories. This plugin handles the whole thing for you!
-
-== Description ==
-
 The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide your visitors with filtering for your post types. With this you get a complete solution for adding filtering based on custom taxonomy terms/categories/tags. It will also automatically add rewrite rules for pretty looking filter URLs. It’s completely automatic, works without javascript and is based on the [WordPress Plugin boilerplate](https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate) for a *standardized, organized and object-oriented* codebase. It uses [select2](http://ivaynberg.github.io/select2/) for pretty looking and user friendly dropdowns but will fall back to ordinary ones if javascript is not supported.
 **No more horrible looking URLs or hacky Javascript solutions**
 
-= Features =
+## Features
 * Activate filtering on any registered public custom post type.
 * Exclude taxonomies you just don’t want the visitors to filter on.
 * Beautifies the resulting URLs. You won’t see any /posttype/?taxonomy1=term. Instead you’ll see /posttype/taxonomy/term.
@@ -42,8 +29,7 @@ The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide
 * Allows for custom GET parameters to be included. Extend the filter your way with maybe a custom search-parameter or whatever you like.
 * Many [filters and actions](https://wordpress.org/plugins/beautiful-taxonomy-filters/other_notes/) for modifying the plugins behavior. For you control freaks out there…
 
-
-= Languages =
+### Languages
 * English
 * Swedish
 * Spanish (Thanks to Juan Javier Moreno Restituto)
@@ -58,21 +44,8 @@ The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide
 * Bulgarian (Thanks to [Georgi Marokov](https://github.com/Georgi-Marokov))
 * Romanian (Thanks to [Roberto Tamas](www.novace.ro))
 
-____
-Do you want to translate this plugin to another language? I recommend using POEdit (http://poedit.net/) or if you prefer to do it straight from the WordPress admin interface (https://wordpress.org/plugins/loco-translate/). When you’re done, send us the file(s) to jonathan@tigerton.se and we’ll add it to the official plugin!
 
-= Other =
-* Based on [WordPress Plugin Boilerplate](https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate)
-* Uses [Select2](http://ivaynberg.github.io/select2/) to enhance dropdowns
-
-= Featured on =
-* [WP Tavern](http://www.wptavern.com/beautiful-taxonomy-filters-for-wordpress-custom-post-types)
-* [RiverTheme](http://www.rivertheme.com/top-22-free-wordpress-plugins-of-december-2014/)
-* [The WhiP (WPMU DEV)](http://premium.wpmudev.org/blog/this-week-in-wordpress-5/)
-* [TotalPhotoshop](http://www.total-photoshop.com/)
-
-
-== Installation ==
+## Installation
 
 1. Upload `beautiful-taxonomy-filters` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
@@ -80,7 +53,7 @@ Do you want to translate this plugin to another language? I recommend using POEd
 4. For more customization have a look at the [filters and actions](https://wordpress.org/plugins/beautiful-taxonomy-filters/other_notes/)
 
 
-== Frequently Asked Questions ==
+## Frequently Asked Questions
 
 = Can I show the filter module on a static page / in my header / in my footer? =
 
