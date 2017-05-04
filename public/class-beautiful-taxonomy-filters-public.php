@@ -123,7 +123,7 @@ class Beautiful_Taxonomy_Filters_Public {
 			}
 		}
 
-		wp_register_script( $this->name, plugin_dir_url( __FILE__ ) . 'js/beautiful-taxonomy-filters-public.min.js', $dependencies, $this->version, true );
+		wp_register_script( $this->name, plugin_dir_url( __FILE__ ) . 'js/beautiful-taxonomy-filters-public.js', $dependencies, $this->version, true );
 		$localized_array = array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'min_search' => apply_filters( 'beautiful_filters_selec2_minsearch', 8 ),
@@ -159,6 +159,31 @@ class Beautiful_Taxonomy_Filters_Public {
 
 	}
 
+
+	/**
+	 * Maybe add some body classes to allow for customizations using CSS and JS.
+	 */
+	public function add_body_classes( $classes ) {
+
+		$post_types = apply_filters( 'beautiful_filters_post_types', get_option( 'beautiful_taxonomy_filters_post_types' ) );
+		$current_post_type = btf_get_current_posttype();
+
+		if ( ! $post_types ) {
+			return $classes;
+		}
+
+		if ( post_type_exists( $current_post_type ) && in_array( $current_post_type, $post_types ) ) {
+			$classes[] = 'btf-archive';
+		}
+
+		if ( is_btf_filtered() ) {
+			$classes[] = 'btf-filtered';
+		}
+
+		return $classes;
+	}
+
+
 	/**
 	* Appends the already existing GET parameters to the url.
 	* This allows for custom parameters to carry on to the filtered page
@@ -185,6 +210,11 @@ class Beautiful_Taxonomy_Filters_Public {
 	}
 
 
+	/**
+	 * Returns all taxonomies that should be used for BTF with the current post type.
+	 * @param  string  $current_post_type
+	 * @return array/false Either an array of taxonomy slugs or false.
+	 */
 	private static function check_taxonomies($current_post_type){
 
 		//Get the taxonomies of the current post type
@@ -577,7 +607,7 @@ class Beautiful_Taxonomy_Filters_Public {
 	*
 	* @since 1.0.0
 	*/
-	public static function beautiful_filters($post_type){
+	public static function beautiful_filters( $post_type ) {
 		//Fetch the plugins options
 		//Apply filters on them to let users modify the options before they're being used!
 		$post_types = apply_filters( 'beautiful_filters_post_types', get_option('beautiful_taxonomy_filters_post_types') );

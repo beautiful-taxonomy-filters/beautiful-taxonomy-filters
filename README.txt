@@ -3,8 +3,8 @@ Contributors: Jonathandejong, tigerton
 Donate link: http://fancy.to/k9qxt
 Tags: Taxonomy, taxonomies, filter, filtering, pretty permalinks, terms, term, widget, pretty permalinks, rewrite, custom posttype, cpt, beautiful, select2, dropdowns, material design, GET, multisite compatible, polylang compatible, select filter, SEO friendly
 Requires at least: 3.0.1
-Tested up to: 4.4
-Stable tag: 2.2.1
+Tested up to: 4.7
+Stable tag: 2.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -146,6 +146,17 @@ Why thank you! We don't have proper donate link but if you want to you can send 
 
 
 == Changelog ==
+
+= 2.3.1 =
+* BUGFIX: in_array warning on new installs. Move along, nothing to see here.
+
+= 2.3.0 =
+* IMPROVEMENT: New API functions are now available. They can be found in /includes/api.php. Most usable is probably `is_btf_filtered()` which will return true or false if the current page is filtered by BTF. Not currently in use everywhere in the code tho so don't peak..
+* IMPROVEMENT: "Clear all" only appear if there are actually something to clear.. Courtesy of the new api.
+* IMPROVEMENT: Body classes are now added if on a BTF enabled archive and if there is currently a filter active. `btf-archive` and `btf-filtered` are added to the body class. Use these however you want!
+* BUGFIX: Don't mess with the "all option" when conditional dropdowns are active without select2.
+
+
 
 = 2.2.1 =
 * FEATURE: Disable fuzzy search in select2. It's as easy as adding this filter:
