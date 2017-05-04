@@ -69,7 +69,7 @@ class Beautiful_Taxonomy_Filters {
 	public function __construct() {
 
 		$this->Beautiful_Taxonomy_Filters = 'beautiful-taxonomy-filters';
-		$this->version = '2.2.1';
+		$this->version = '2.3.1';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -107,6 +107,11 @@ class Beautiful_Taxonomy_Filters {
 		 * of the plugin.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-beautiful-taxonomy-filters-i18n.php';
+
+		/**
+		 * BTF API functions
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/api.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the Dashboard.
@@ -201,6 +206,7 @@ class Beautiful_Taxonomy_Filters {
 		$this->loader->add_filter( 'template_redirect', $plugin_public, 'catch_filter_values' );
 		$this->loader->add_action( 'wp_ajax_update_filters_callback', $plugin_public, 'update_filters_callback' );
 		$this->loader->add_action( 'wp_ajax_nopriv_update_filters_callback', $plugin_public, 'update_filters_callback' );
+		$this->loader->add_filter( 'body_class', $plugin_public, 'add_body_classes' );
 
 		//Our own custom actions to let users insert our code into their themes in a friendly way
 		$this->loader->add_action( 'show_beautiful_filters', $plugin_public, 'beautiful_filters', 10, 1 );

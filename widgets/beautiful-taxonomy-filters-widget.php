@@ -310,7 +310,7 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
 				</div>
 				<?php do_action( 'beautiful_actions_before_submit_button', $current_post_type); //allow custom markup before submit button ?>
 				<button type="submit" class="beautiful-taxonomy-filters-button"><?php echo apply_filters( 'beautiful_filters_apply_button', __('Apply filter', 'beautiful-taxonomy-filters') ); ?></button>
-				<?php if($clear_all): ?>
+				<?php if($clear_all && is_btf_filtered() ) : ?>
 					<a href="<?php echo get_post_type_archive_link($current_post_type); ?>" class="beautiful-taxonomy-filters-clear-all" title="<?php _e('Click to clear all active filters', 'beautiful-taxonomy-filters'); ?>"><?php echo apply_filters( 'beautiful_filters_clear_button', __('Clear all', 'beautiful-taxonomy-filters') ); ?></a>
 				<?php endif; ?>
 				<?php do_action( 'beautiful_actions_ending_form', $current_post_type); //allow custom markup at beginning of form ?>

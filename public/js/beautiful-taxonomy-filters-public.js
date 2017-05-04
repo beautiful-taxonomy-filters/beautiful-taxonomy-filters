@@ -9,6 +9,9 @@
     var timer;
 
 
+	/**
+	 * Old-timer function used by select2 to match by characters in their order of appearance (or whatever).
+	 */
 	function matchStart (term, text) {
 		if (text.toUpperCase().indexOf(term.toUpperCase()) === 0) {
 			return true;
@@ -24,8 +27,6 @@
 
 		var args = {
 			allowClear: btf_localization.allow_clear,
-			dropdownCssClass: ':all:',
-			containerCssClass: ':all:',
 			syncCssClasses: true,
 			minimumResultsForSearch: parseInt(btf_localization.min_search)
 		};
@@ -60,11 +61,13 @@
 				}
 			});
 		} else {
+
 			if ( typeof select_el !== 'undefined' ) {
 				select2 = select_el.select2(args);
 			}else{
 				select2 = $('.beautiful-taxonomy-filters-select').select2(args);
 			}
+
 		}
 
 	}
@@ -207,7 +210,11 @@
 								val = option.val(),
 								option_text = option.text();
 
-							if( val === '' || val === 0 ){
+							/**
+							 * empty or 0 is probably an "all" option and we should leave these alone!
+							 * also.. leave britney alone!
+							 */
+							if( val === '' || val === 0 || val == '0' ){
 								return true;
 
 							}
