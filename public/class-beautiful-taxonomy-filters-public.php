@@ -292,7 +292,7 @@ class Beautiful_Taxonomy_Filters_Public {
 			//Get the post type object
 			$post_type_object = get_post_type_object($current_post_type);
 			//Return the rewrite slug which is the one we actually want!
-			return $post_type_object->rewrite['slug'];
+			return apply_filters('beautiful_filters_slug', $post_type_object->rewrite['slug'], $post_type_object);
 		}else{
 			return $current_post_type;
 		}
@@ -624,7 +624,7 @@ class Beautiful_Taxonomy_Filters_Public {
 			//Get the post type object
 			$post_type_object = get_post_type_object($current_post_type);
 			//Take the rewrite slug which is the one we actually want!
-			$current_post_type_rewrite = $post_type_object->rewrite['slug'];
+			$current_post_type_rewrite = apply_filters('beautiful_filters_slug', $post_type_object->rewrite['slug'], $post_type_object);
 
 		}elseif(isset($_POST['post_type']) && $_POST['post_type'] != ''){
 
@@ -632,7 +632,7 @@ class Beautiful_Taxonomy_Filters_Public {
 			//Get the post type object
 			$post_type_object = get_post_type_object($current_post_type);
 			//Take the rewrite slug which is the one we actually want!
-			$current_post_type_rewrite = $post_type_object->rewrite['slug'];
+			$current_post_type_rewrite = apply_filters('beautiful_filters_slug', $post_type_object->rewrite['slug'], $post_type_object);
 
 		}else{ //If there was no post type from the form (for some reason) and there is no post type supplied by the public function, try to get it anyway!
 

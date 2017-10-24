@@ -164,7 +164,7 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
 	    	//Get the post type object
 			$post_type_object = get_post_type_object($current_post_type);
 			//Return the rewrite slug which is the one we actually want!
-			$current_post_type_rewrite = $post_type_object->rewrite['slug'];
+			$current_post_type_rewrite = apply_filters('beautiful_filters_slug', $post_type_object->rewrite['slug'], $post_type_object);
     	}
 
    		//If there is no current post type, bail early!
