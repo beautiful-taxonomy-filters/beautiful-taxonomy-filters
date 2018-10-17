@@ -7,8 +7,7 @@
 
 /**
  * Check wether the current page is filtered by BTF.
- * @param  string  $current_post_type A post type supplied to check against.
- * @return true/false
+ * @return boolean
  */
 function is_btf_filtered() {
 
@@ -17,10 +16,25 @@ function is_btf_filtered() {
 		return false;
 	}
 
+	// Convert $taxonomies to simpler check keys based on their query_var parameter.
+	// Do this because the key in $taxonomies is not necessarily the same as the one used by WP_Query. query_var is!
+	$check_taxonomies = array();
+	if ( ! empty( $taxonomies ) ) {
+		foreach ( $taxonomies as $taxonomy ) {
+			$taxonomy = array_filter(
+				(array) $taxonomy, function( $taxonomy_key ) {
+						return ( 'query_var' == $taxonomy_key );
+				}, ARRAY_FILTER_USE_KEY
+			);
+			$check_taxonomies[ $taxonomy['query_var'] ] = 1;
+		}
+	}
+
 	global $wp_query;
 	if ( $wp_query->query ) {
 		foreach ( $wp_query->query as $key => $value ) {
-			if ( array_key_exists( $key, $taxonomies ) && '' != $value ) {
+
+			if ( array_key_exists( $key, $check_taxonomies ) && '' != $value ) {
 				return true;
 			}
 		}
@@ -35,7 +49,7 @@ function is_btf_filtered() {
 /**
 * Retrieves the current post type
 *
-* @since	1.1.0
+* @since    1.1.0
 */
 function btf_get_current_posttype() {
 	$current_post_type = get_post_type();
@@ -47,7 +61,7 @@ function btf_get_current_posttype() {
 		} else {
 			//didnt find the post type in the template, fall back to the wp_query!
 			global $wp_query;
-			if ( array_key_exists( 'post_type', $wp_query->query ) && '' != $wp_query->query['post_type'] ) {
+			if ( isset( $wp_query->query ) && array_key_exists( 'post_type', $wp_query->query ) && ! empty( $wp_query->query['post_type'] ) ) {
 				$current_post_type = $wp_query->query['post_type'];
 			}
 		}
