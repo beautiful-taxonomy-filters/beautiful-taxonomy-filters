@@ -2,9 +2,9 @@
 Contributors: Jonathandejong, tigerton
 Donate link: http://fancy.to/k9qxt
 Tags: Taxonomy, taxonomies, filter, filtering, pretty permalinks, terms, term, widget, pretty permalinks, rewrite, custom posttype, cpt, beautiful, select2, dropdowns, material design, GET, multisite compatible, polylang compatible, select filter, SEO friendly
-Requires at least: 3.0.1
-Tested up to: 4.7
-Stable tag: 2.3.1
+Requires at least: 4.3.0
+Tested up to: 5.2
+Stable tag: 2.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -146,6 +146,43 @@ Why thank you! We don't have proper donate link but if you want to you can send 
 
 
 == Changelog ==
+= 2.4.3 =
+* BUGFIX: Fixed if statement causing PHP warning.
+* IMPROVEMENT: Conditional dropdowns now attempts to *not* disable any value in the first dropdown being filtered, making it a bit more intuitive.
+
+= 2.4.2 =
+* BUGFIX: Missing slash in pagination rules. Thanks @fabianlindfors
+
+= 2.4.1 =
+* BUGFIX: Did not check if new rewrite rules was empty before attempting to merge them.
+
+= 2.4.0 =
+* _This version should fix issues caused by last update_
+* IMPROVEMENT: Complete rewrite of the rewrite rules (huehuehue). _note:_ BTF no longer allows for any order of taxonomies in URL. Only the order in which they are registered.
+* BUGFIX: Fixed some warning when no taxonomies we're registered on startup.
+
+= 2.3.5 =
+* FEATURE: Added shortcode for filter module. Use `[show_beautiful_filters post_type="yourcptslug"]` where you want!
+* BUGFIX: Fixed issue where API function is_btf_filtered() returned false if query_var is different than registered taxonomy slug.
+* BUGFIX: Some bugfixes for non existing contents etc. Just be happy with the shortcodes and carry on with your day!
+
+= 2.3.4 =
+* BUGFIX: HTML characters now properly decode when using conditional dropdowns.
+* BUGFIX: Fixed Polylang urls incorrect when using homepage slug in URL.
+* BUGFIX: Countable warning in post count for terms.
+* BUGFIX: Fixed issue where has_archive was not honored.
+
+= 2.3.3 =
+* BUGFIX: Made a booboo with the previous versions new improved dropdown query. Please update right away and don't try to find me.
+
+= 2.3.2 =
+* IMPROVEMENT: Vastly improved the conditional dropdowns query. It should now work even with pretty large sets of posts and terms.
+* IMPROVEMENT: Norwegian translation added. Thank you Ørjan Hoyd H Vøllestad.
+* BUGFIX: Widget now uses correct label for dropdown placeholders/labels.
+* BUGFIX: Added initial slash to pagination in urls. Thanks @frantorres.
+* BUGFIX: A pesky little php warning.
+* BUGFIX: Some other stuff I can barely remember..
+
 
 = 2.3.1 =
 * BUGFIX: in_array warning on new installs. Move along, nothing to see here.
@@ -443,8 +480,7 @@ $taxonomy is the current taxonomy.
 In order to change the placeholders you must use this filter rather than the *modify_categories_dropdown* argument "show_option_all".
 
 `
-function modify_categories_dropdown( $placeholder, $taxonomy ) {
-
+function modify_dropdown_placeholder( $placeholder, $taxonomy ) {
     return 'New placeholder';
 }
 add_filter( 'beautiful_filters_dropdown_placeholder', 'modify_dropdown_placeholder', 10, 2 );

@@ -13,7 +13,6 @@
  */
 ?>
 <div class="wrap">
-	<?php screen_icon(); ?>
 	<h2><?php _e('Beautiful Taxonomy Filters', 'beautiful-taxonomy-filters'); ?></h2>
 	<p><a href="<?php echo admin_url() ?>/options-general.php?page=taxonomy-filters&tab=help" class"margin"><?php _e('How to use Beautiful Taxonomy Filters', 'beautiful-taxonomy-filters'); ?></a></p>
 	<h2 class="nav-tab-wrapper">

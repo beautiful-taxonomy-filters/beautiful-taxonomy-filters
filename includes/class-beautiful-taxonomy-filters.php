@@ -69,7 +69,7 @@ class Beautiful_Taxonomy_Filters {
 	public function __construct() {
 
 		$this->Beautiful_Taxonomy_Filters = 'beautiful-taxonomy-filters';
-		$this->version = '2.3.1';
+		$this->version                    = '2.4.3';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -133,6 +133,11 @@ class Beautiful_Taxonomy_Filters {
 		 * The class that contains our custom wp_get_categories walker
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-beautiful-taxonomy-filters-walker.php';
+
+		/**
+		 * The class that contains our shortcodes
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-beautiful-taxonomy-filters-shortcodes.php';
 
 		/**
 		 * Our widget class
@@ -211,6 +216,9 @@ class Beautiful_Taxonomy_Filters {
 		//Our own custom actions to let users insert our code into their themes in a friendly way
 		$this->loader->add_action( 'show_beautiful_filters', $plugin_public, 'beautiful_filters', 10, 1 );
 		$this->loader->add_action( 'show_beautiful_filters_info', $plugin_public, 'beautiful_filters_info' );
+
+		// And we also setup two shortcodes for those people who is trapped in the past! (sorry guys).
+		$plugin_shortcodes = new Beautiful_Taxonomy_Filters_Shortcodes( $this->get_Beautiful_Taxonomy_Filters(), $this->get_version() );
 
 
 	}
