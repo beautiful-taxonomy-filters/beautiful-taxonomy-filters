@@ -23,7 +23,7 @@ msgstr ""
 "esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
 "X-Poedit-SearchPath-0: ."
 
-#: admin/class-beautiful-taxonomy-filters-admin.php:112 
+#: admin/class-beautiful-taxonomy-filters-admin.php:112
 #: admin/class-beautiful-taxonomy-filters-admin.php:133
 msgid ""
 "Beautiful Taxonomy Filters has had a change in the settings structure. "
@@ -109,14 +109,14 @@ msgstr ""
 msgid "Enable conditional dropdown values:"
 msgstr ""
 
-#: admin/class-beautiful-taxonomy-filters-admin.php:317 
+#: admin/class-beautiful-taxonomy-filters-admin.php:317
 #: admin/class-beautiful-taxonomy-filters-admin.php:326
 msgid ""
 "Disables the use of Select2 for improved dropdowns. Regular select elements "
 "will be used instead."
 msgstr ""
 
-#: admin/class-beautiful-taxonomy-filters-admin.php:317 
+#: admin/class-beautiful-taxonomy-filters-admin.php:317
 #: admin/class-beautiful-taxonomy-filters-admin.php:326
 msgid "Disable the select2 library:"
 msgstr ""
@@ -159,7 +159,7 @@ msgid ""
 "a placeholder text along with the ability to deselect the current term."
 msgstr ""
 
-#: admin/class-beautiful-taxonomy-filters-admin.php:371 
+#: admin/class-beautiful-taxonomy-filters-admin.php:371
 #: widgets/beautiful-taxonomy-filters-widget.php:84
 msgid "Dropdown deselect/default behaviour:"
 msgstr ""
@@ -188,7 +188,7 @@ msgstr ""
 msgid "Add an active filter info module to the sidebar"
 msgstr ""
 
-#: widgets/beautiful-taxonomy-filters-info-widget.php:90 
+#: widgets/beautiful-taxonomy-filters-info-widget.php:90
 #: public/partials/beautiful-taxonomy-filters-public-info-display.php:40
 msgid "Result of filter: %d"
 msgstr ""
@@ -201,24 +201,24 @@ msgstr ""
 msgid "Enable a \"clear all\" link: "
 msgstr ""
 
-#: widgets/beautiful-taxonomy-filters-widget.php:50 
-#: widgets/beautiful-taxonomy-filters-widget.php:59 
-#: widgets/beautiful-taxonomy-filters-widget.php:68 
-#: widgets/beautiful-taxonomy-filters-widget.php:77 
+#: widgets/beautiful-taxonomy-filters-widget.php:50
+#: widgets/beautiful-taxonomy-filters-widget.php:59
+#: widgets/beautiful-taxonomy-filters-widget.php:68
+#: widgets/beautiful-taxonomy-filters-widget.php:77
 #: widgets/beautiful-taxonomy-filters-widget.php:86
 msgid "Inherit"
 msgstr ""
 
-#: widgets/beautiful-taxonomy-filters-widget.php:51 
-#: widgets/beautiful-taxonomy-filters-widget.php:60 
-#: widgets/beautiful-taxonomy-filters-widget.php:69 
+#: widgets/beautiful-taxonomy-filters-widget.php:51
+#: widgets/beautiful-taxonomy-filters-widget.php:60
+#: widgets/beautiful-taxonomy-filters-widget.php:69
 #: widgets/beautiful-taxonomy-filters-widget.php:78
 msgid "Enable"
 msgstr ""
 
-#: widgets/beautiful-taxonomy-filters-widget.php:52 
-#: widgets/beautiful-taxonomy-filters-widget.php:61 
-#: widgets/beautiful-taxonomy-filters-widget.php:70 
+#: widgets/beautiful-taxonomy-filters-widget.php:52
+#: widgets/beautiful-taxonomy-filters-widget.php:61
+#: widgets/beautiful-taxonomy-filters-widget.php:70
 #: widgets/beautiful-taxonomy-filters-widget.php:79
 msgid "Disable"
 msgstr ""
@@ -235,12 +235,12 @@ msgstr ""
 msgid "Show term description: "
 msgstr ""
 
-#: widgets/beautiful-taxonomy-filters-widget.php:87 
+#: widgets/beautiful-taxonomy-filters-widget.php:87
 #: admin/partials/advanced/dropdown-behaviour-settings-display.php:17
 msgid "All option"
 msgstr ""
 
-#: widgets/beautiful-taxonomy-filters-widget.php:88 
+#: widgets/beautiful-taxonomy-filters-widget.php:88
 #: admin/partials/advanced/dropdown-behaviour-settings-display.php:20
 msgid "Placeholder"
 msgstr ""
@@ -259,22 +259,22 @@ msgid ""
 "for that posttype."
 msgstr ""
 
-#: widgets/beautiful-taxonomy-filters-widget.php:269 
+#: widgets/beautiful-taxonomy-filters-widget.php:269
 #: widgets/beautiful-taxonomy-filters-widget.php:298
 msgid "All "
 msgstr ""
 
-#: widgets/beautiful-taxonomy-filters-widget.php:312 
+#: widgets/beautiful-taxonomy-filters-widget.php:312
 #: public/partials/beautiful-taxonomy-filters-public-display.php:118
 msgid "Apply filter"
 msgstr ""
 
-#: widgets/beautiful-taxonomy-filters-widget.php:314 
+#: widgets/beautiful-taxonomy-filters-widget.php:314
 #: public/partials/beautiful-taxonomy-filters-public-display.php:121
 msgid "Click to clear all active filters"
 msgstr ""
 
-#: widgets/beautiful-taxonomy-filters-widget.php:314 
+#: widgets/beautiful-taxonomy-filters-widget.php:314
 #: public/partials/beautiful-taxonomy-filters-public-display.php:121
 msgid "Clear all"
 msgstr ""
@@ -336,14 +336,14 @@ msgid ""
 "I recommend using <a href=\"%1$s\">POEdit</a> or if you prefer to do it "
 "straight from the WordPress admin interface use <a href=\"%2$s\">Loco "
 "Translate</a>. When you’re done, send us the file(s) to <a href=\"%3$s\">"
-"jonathan@tigerton.se</a> and we’ll add it to the official plugin!"
+"me@jonte.dev</a> and we’ll add it to the official plugin!"
 msgstr ""
 
 #: admin/partials/about/about.php:12
 msgid ""
 "Beautiful Taxonomy Filters is maintained by <a href=\"%1$s\" "
 "target=\"_blank\">Jonathan</a> at the agency <a href=\"%2$s\" "
-"target=\"_blank\">Tigerton</a>."
+"target=\"_blank\">Jonathan de Jong</a>."
 msgstr ""
 
 #: admin/partials/about/about.php:13
@@ -504,7 +504,7 @@ msgid ""
 msgstr ""
 
 #. URI of the plugin
-msgid "http://tigerton.se"
+msgid "http://jonte.dev"
 msgstr ""
 
 #. Author of the plugin

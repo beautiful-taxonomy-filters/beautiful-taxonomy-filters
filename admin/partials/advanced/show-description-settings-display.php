@@ -5,7 +5,7 @@
  *
  * This file is used to setup a settings field
  *
- * @link       http://tigerton.se
+ *
  * @since      1.0.0
  *
  * @package    Beautiful_Taxonomy_Filters
@@ -16,4 +16,3 @@
 $show_description = (get_option('beautiful_taxonomy_filters_show_description') ? get_option('beautiful_taxonomy_filters_show_description') : false);
 ?>
 <input type="checkbox" name="beautiful_taxonomy_filters_show_description" value="1" <?php if($show_description){ echo 'checked="checked"'; } ?> />
-

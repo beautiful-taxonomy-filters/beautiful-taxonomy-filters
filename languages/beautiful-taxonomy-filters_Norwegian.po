@@ -84,12 +84,12 @@ msgid "Beautiful Taxonomy Filters on Github"
 msgstr "Beautiful Taxanomy Filters på GitHub"
 
 #: admin/partials/about/about.php:12
-msgid "Beautiful Taxonomy Filters is maintained by <a href=\"%1$s\" target=\"_blank\">Jonathan</a> at the agency <a href=\"%2$s\" target=\"_blank\">Tigerton</a>."
-msgstr "Beautiful Taxonomy Filters driftes av <a href=\"%1$s\" target=\"_blank\">Jonathan</a> på <a href=\"%2$s\" target=\"_blank\">Tigerton</a>."
+msgid "Beautiful Taxonomy Filters is maintained by <a href=\"%1$s\" target=\"_blank\">Jonathan</a> at the agency <a href=\"%2$s\" target=\"_blank\">Jonathan de Jong</a>."
+msgstr "Beautiful Taxonomy Filters driftes av <a href=\"%1$s\" target=\"_blank\">Jonathan</a> på <a href=\"%2$s\" target=\"_blank\">Jonathan de Jong</a>."
 
 #: admin/partials/about/about.php:6
-msgid "I recommend using <a href=\"%1$s\">POEdit</a> or if you prefer to do it straight from the WordPress admin interface use <a href=\"%2$s\">Loco Translate</a>. When you’re done, send us the file(s) to <a href=\"%3$s\">jonathan@tigerton.se</a> and we’ll add it to the official plugin!"
-msgstr "Jeg anbefaler å bruke <a href=\"%1$s\">POEdit</a> eller hvis du foretrekker å gjøre det direkte i WordPress admin grensesnittet, bruk <a href=\"%2$s\">Loco Translate</a>. Når du er ferdig, send filen(e) til <a href=\"%3$s\">jonathan@tigerton.se</a> slik at vi kan legge det til."
+msgid "I recommend using <a href=\"%1$s\">POEdit</a> or if you prefer to do it straight from the WordPress admin interface use <a href=\"%2$s\">Loco Translate</a>. When you’re done, send us the file(s) to <a href=\"%3$s\">me@jonte.dev</a> and we’ll add it to the official plugin!"
+msgstr "Jeg anbefaler å bruke <a href=\"%1$s\">POEdit</a> eller hvis du foretrekker å gjøre det direkte i WordPress admin grensesnittet, bruk <a href=\"%2$s\">Loco Translate</a>. Når du er ferdig, send filen(e) til <a href=\"%3$s\">me@jonte.dev</a> slik at vi kan legge det til."
 
 #: admin/partials/about/about.php:5
 msgid "Do you want to translate this plugin to another language?"
@@ -116,27 +116,27 @@ msgid "Beautiful Taxonomy Filters now supports conditional dropdowns to avoid em
 msgstr "Beautiful Taxonomy Filters støtter nå betingede nedtrekksfelt for å unngå tomme resultater. Gå til <a href=\"%s\">avansert</a> for slå på denne beta funksjonen. "
 
 #. Author URI of the plugin/theme
-#: 
+#:
 msgid "https://github.com/jonathan-dejong"
 msgstr "https://github.com/jonathan-dejong"
 
 #. Author of the plugin/theme
-#: 
+#:
 msgid "Jonathan de Jong"
 msgstr "Jonathan de Jong"
 
 #. Description of the plugin/theme
-#: 
+#:
 msgid "Supercharges your custom post type archives by letting visitors filter the posts by their terms/categories."
 msgstr "Gi dine egne posttyper noe ekstra og la besøkende på nettsiden filtrere postene dine etter beskrivelser og kategorier."
 
 #. Plugin URI of the plugin/theme
-#: 
-msgid "http://tigerton.se"
-msgstr "http://tigerton.se"
+#:
+msgid "http://jonte.dev"
+msgstr "http://jonte.dev"
 
 #. Plugin Name of the plugin/theme
-#: 
+#:
 msgid "Beautiful taxonomy filter"
 msgstr "Beautiful taxonomy filter"
 
@@ -445,4 +445,3 @@ msgstr "Taxonomy filtre"
 #: admin/class-beautiful-taxonomy-filters-admin.php:133
 msgid "Beautiful Taxonomy Filters has had a change in the settings structure. Please head over to the <a href=\"%s\">advanced tab</a> to make sure everything is correct."
 msgstr "Beautiful Taxonomy Filters har gjennomgått en endring i innstillingene. Gå til <a href=\"%s\">avansert</a> for å sjekke at alt er riktig."
-

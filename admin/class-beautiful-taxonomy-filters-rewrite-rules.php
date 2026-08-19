@@ -3,7 +3,7 @@
 /**
  * Generates all the rewrite rules for a given post type.
  *
- * @link       http://tigerton.se
+ *
  * @since      1.0.0
  *
  *
@@ -19,7 +19,7 @@
  *
  * @package    Beautiful_Taxonomy_Filters
  * @subpackage Beautiful_Taxonomy_Filters/admin
- * @author Jonathan de Jong <jonathan@tigerton.se>
+ * @author Jonathan de Jong <me@jonte.dev>
  * @since 1.0
  */
 
@@ -82,63 +82,6 @@ class Beautiful_Taxonomy_Filters_Rewrite_Rules {
 		);
 
 		return $new_rewrite_rules;
-
-		// NOTE: We switched solution to the one up above in version 2.4.0
-		// This solution is elegant because it allows for any ordering of the taxonomies BUT it cant handle query_vars that are different from the rewrite slug.
-
-		/*
-		// Add the taxonomy rewrite slugs and query_vars to be looped and have their rules created.
-		foreach ( $taxonomies as $taxonomy ) {
-			$query_vars[] = $taxonomy->query_var;
-			$rewrite_slugs[] = ( ! empty( $taxonomy->rewrite['slug'] ) ) ? $taxonomy->rewrite['slug'] : $taxonomy->query_var;
-		}
-
-		// Loop over all the possible combinations of the query vars
-		for ( $i = 1; $i <= count( $query_vars );  $i++ ) {
-
-			if ( ! empty( $args['polylang_languages'] ) ) {
-				$new_rewrite_rule = trailingslashit( '(' . implode( '|', $args['polylang_languages'] ) . ')' ) . trailingslashit( $post_type_slug );
-				$new_query_string = 'index.php?lang=' . $wp_rewrite->preg_index( 1 ) . '&post_type=' . $post_type->name;
-				$n = 2;
-
-				// Prepend the rewrites & queries
-				for ( $n; $n <= $i + 2; $n++ ) {
-					$new_rewrite_rule .= '(' . implode( '|', $rewrite_slugs ) . ')/(.+?)/';
-					$new_query_string .= '&' . $wp_rewrite->preg_index( $n ) . '=' . $wp_rewrite->preg_index( $n + 1 );
-					$n++;
-				}
-				// Allow paging of filtered post type - WordPress expects 'page' in the URL but uses 'paged' in the query string so paging doesn't fit into our regex
-				$new_paged_rewrite_rule = $new_rewrite_rule . 'page/([0-9]{1,})/';
-				$new_paged_query_string = $new_query_string . '&paged=' . $wp_rewrite->preg_index( $i * 2 + 2 );
-
-			} else {
-				$new_rewrite_rule = trailingslashit( $post_type_slug );
-				$new_query_string = 'index.php?post_type=' . $post_type->name;
-				$n = 1;
-
-				// Prepend the rewrites & queries
-				for ( $n; $n <= $i; $n++ ) {
-					$new_rewrite_rule .= '(' . implode( '|', $rewrite_slugs ) . ')/(.+?)/';
-					$new_query_string .= '&' . $wp_rewrite->preg_index( $n * 2 - 1 ) . '=' . $wp_rewrite->preg_index( $n * 2 );
-				}
-				// Allow paging of filtered post type - WordPress expects 'page' in the URL but uses 'paged' in the query string so paging doesn't fit into our regex
-				$new_paged_rewrite_rule = $new_rewrite_rule . 'page/([0-9]{1,})/';
-				$new_paged_query_string = $new_query_string . '&paged=' . $wp_rewrite->preg_index( $i * 2 + 1 );
-
-			}
-
-			// Make the trailing backslash optional
-			$new_paged_rewrite_rule = $new_paged_rewrite_rule . '?$';
-			$new_rewrite_rule       = $new_rewrite_rule . '?$';
-
-			// Add the new rewrites
-			$new_rewrite_rules = array(
-				$new_paged_rewrite_rule => $new_paged_query_string,
-				$new_rewrite_rule       => $new_query_string,
-			) + $new_rewrite_rules;
-		}
-		*/
-
 	}
 
 }

@@ -3,12 +3,12 @@
 /**
  * The dashboard-specific functionality of the plugin.
  *
- * @link       http://tigerton.se
+ *
  * @since      1.0.0
  *
  * @package    Beautiful_Taxonomy_Filters
  * @subpackage Beautiful_Taxonomy_Filters/includes
- * @author     Jonathan de Jong <jonathan@tigerton.se>
+ * @author     Jonathan de Jong <me@jonte.dev>
  */
 
 class Beautiful_Taxonomy_Filters_Admin {
@@ -85,7 +85,7 @@ class Beautiful_Taxonomy_Filters_Admin {
 		$notices = get_transient( 'btf_notice' );
 		if ( $notices !== false ) {
 			foreach ( $notices as $notice ) {
-				echo '<div class="update-nag"><p>' . $notice . '</p></div>';
+				printf( '<div class="update-nag"><p>%s</p></div>', esc_html( $notice ) );
 			}
 
 			delete_transient( 'btf_notice' );
@@ -108,7 +108,7 @@ class Beautiful_Taxonomy_Filters_Admin {
 
 			//Older than 1.2.8
 			if ( version_compare( $current_version, '1.2.8', '<' ) ) {
-
+				// Translators: %s is a link to the settings page.
 				$message = sprintf( wp_kses( __( 'Beautiful Taxonomy Filters has had a change in the settings structure. Please head over to the <a href="%s">advanced tab</a> to make sure everything is correct.', 'beautiful-taxonomy-filters' ), array( 'a' => array( 'href' => array() ) ) ), esc_url( admin_url() . 'options-general.php?page=taxonomy-filters&tab=advanced' ) );
 				$this->add_admin_notice( $message );
 
@@ -116,7 +116,7 @@ class Beautiful_Taxonomy_Filters_Admin {
 
 			//Older than 2.0.0
 			if ( version_compare( $current_version, '2.0.0', '<' ) ) {
-
+				// Translators: %s is a link to the settings advanced page.
 				$message = sprintf( wp_kses( __( 'Beautiful Taxonomy Filters now supports conditional dropdowns to avoid empty results. Head over to the <a href="%s">advanced tab</a> to enable the beta feature.', 'beautiful-taxonomy-filters' ), array( 'a' => array( 'href' => array() ) ) ), esc_url( admin_url() . 'options-general.php?page=taxonomy-filters&tab=advanced' ) );
 				$this->add_admin_notice( $message );
 
@@ -135,7 +135,7 @@ class Beautiful_Taxonomy_Filters_Admin {
 		}
 
 		if ( ! $current_version ) {
-
+			// Translators: %s is a link to the settings advanced page.
 			$message = sprintf( wp_kses( __( 'Beautiful Taxonomy Filters has had a change in the settings structure. Please head over to the <a href="%s">advanced tab</a> to make sure everything is correct.', 'beautiful-taxonomy-filters' ), array( 'a' => array( 'href' => array() ) ) ), esc_url( admin_url() . 'options-general.php?page=taxonomy-filters&tab=advanced' ) );
 			$this->add_admin_notice( $message );
 

@@ -8,18 +8,6 @@
     var active = false;
     var timer;
 
-
-	/**
-	 * Old-timer function used by select2 to match by characters in their order of appearance (or whatever).
-	 */
-	function matchStart (term, text) {
-		if (text.toUpperCase().indexOf(term.toUpperCase()) === 0) {
-			return true;
-		}
-		return false;
-	}
-
-
 	/**
 	 * Lets select2 all night long
 	 */
@@ -28,7 +16,7 @@
 		var args = {
 			allowClear: btf_localization.allow_clear,
 			syncCssClasses: true,
-			minimumResultsForSearch: parseInt(btf_localization.min_search)
+			minimumResultsForSearch: 1 // Temporarily set to 1 because select2 misbehaves without the search.
 		};
 
 		if( btf_localization.show_description == '1' ){
@@ -51,25 +39,14 @@
 		}
 
 		var select2;
-		if ( btf_localization.disable_fuzzy == '1' ) {
-			$.fn.select2.amd.require(['select2/compat/matcher'], function (oldMatcher) {
-				args.matcher = oldMatcher(matchStart);
-				if ( typeof select_el !== 'undefined' ) {
-					select2 = select_el.select2(args);
-				}else{
-					select2 = $('.beautiful-taxonomy-filters-select').select2(args);
-				}
-			});
-		} else {
 
-			if ( typeof select_el !== 'undefined' ) {
+		if ( typeof select_el !== 'undefined' ) {
+			if ( ! $(select_el).hasClass('select2-hidden-accessible') ) {
 				select2 = select_el.select2(args);
-			}else{
-				select2 = $('.beautiful-taxonomy-filters-select').select2(args);
 			}
-
+		}else{
+			select2 = $('.beautiful-taxonomy-filters-select').select2(args);
 		}
-
 	}
 
 
@@ -80,7 +57,8 @@
 	function formatResult (term) {
 		if (!term.id ){ return term.text; }
 
-		var new_term = term.text;
+		//var new_term = term.text;
+		var new_term = term.element.innerHTML;
 		if( term.text.indexOf(":.:") !== -1) {
 			new_term = new_term.replace(':.:', ' <br><span class="term-description">');
 			new_term = new_term.replace(':-:', '</span>');
@@ -100,11 +78,16 @@
 	 *
 	 */
 	function formatSelection (term) {
+		if (!term.id ) {
+			return term.text;
+		}
 
-
-		if (!term.id || term.text.indexOf(":.:") === -1) { return term.text; }
+		if ( term.text.indexOf(":.:") === -1 ) {
+			return term.element.innerHTML;
+		}
 
 		//run a regexp on the text to find :.:<any characters:-: and then replace it
+		//var new_term = term.text;
 		var new_term = term.text;
 		var re = /(:\.:[\s\S]*?:-:)/;
 		var reg_results = re.exec(new_term);
@@ -121,7 +104,6 @@
 	 * @param el	jQuery object of the select that changed.
 	 */
 	function conditional_terms_ajax_new( el ){
-
 		/**
 		 * If there's already an active AJAX request kill it.
 		 */
@@ -234,10 +216,8 @@
 
 						// If select2 is being used we need to destroy the instance and run a new one.
 						if( btf_localization.disable_select2 != '1' ){
-							select_element.select2('destroy');
-							create_select2_dropdown(select_element);
+							select_element.trigger('change.select2');
 						}
-
 					});
 				}
 
@@ -382,15 +362,8 @@
 						 */
 						if( btf_localization.disable_select2 != '1' ){
 							var select_el = form.find('select.beautiful-taxonomy-filters-select[data-taxonomy="' + taxonomy + '"]');
-							select_el.select2('destroy');
-							create_select2_dropdown(select_el);
+							select_el.trigger('change.select2');
 						}
-
-						/**
-						 * These do not work consistently.. select2 has some work to do.
-						 * form.find('select.beautiful-taxonomy-filters-select[data-taxonomy="' + taxonomy + '"]').trigger('change.select2');
-						 */
-
 					});
 
 				}
@@ -445,16 +418,12 @@
 			for( var i = 0; i < forms.length; i++ ){
 				var selects = $(forms[i]).find('.beautiful-taxonomy-filters-select');
 				for( var j = 0; j < selects.length; j++ ){
-					if( $(selects[j]).val() !== 0 ){
+					if( $(selects[j]).val() != 0 ){
 						conditional_terms_ajax_new( $(selects[j]) );
 						break;
-
 					}
-
 				}
-
 			}
-
 
 			/**
 			 * Trigger whenever select is changed
@@ -462,10 +431,8 @@
 			$('.beautiful-taxonomy-filters, .beautiful-taxonomy-filters-widget').on('change', '.beautiful-taxonomy-filters-select', function(){
 				var el = $(this);
 				conditional_terms_ajax_new( el );
-
 			});
 		}
-
 	});
 
 })( jQuery );

@@ -90,8 +90,8 @@ msgstr ""
 "posts by their terms/categories."
 
 #. URI of the plugin
-msgid "http://tigerton.se"
-msgstr "http://tigerton.se"
+msgid "http://jonte.dev"
+msgstr "http://jonte.dev"
 
 #. Author of the plugin
 msgid "Jonathan de Jong"
@@ -101,7 +101,7 @@ msgstr "Jonathan de Jong"
 msgid "https://github.com/jonathan-dejong"
 msgstr "https://github.com/jonathan-dejong"
 
-#: admin/class-beautiful-taxonomy-filters-admin.php:112 
+#: admin/class-beautiful-taxonomy-filters-admin.php:112
 #: admin/class-beautiful-taxonomy-filters-admin.php:133
 msgid ""
 "Beautiful Taxonomy Filters has had a change in the settings structure. "
@@ -182,14 +182,14 @@ msgstr ""
 msgid "Custom CSS Styling:"
 msgstr "Skräddarsydd CSS"
 
-#: admin/class-beautiful-taxonomy-filters-admin.php:317 
+#: admin/class-beautiful-taxonomy-filters-admin.php:317
 #: admin/class-beautiful-taxonomy-filters-admin.php:326
 msgid ""
 "Disables the use of Select2 for improved dropdowns. Regular select elements "
 "will be used instead."
 msgstr "Stänger av select2 som används för förbättrade nedrullningslistor."
 
-#: admin/class-beautiful-taxonomy-filters-admin.php:317 
+#: admin/class-beautiful-taxonomy-filters-admin.php:317
 #: admin/class-beautiful-taxonomy-filters-admin.php:326
 msgid "Disable the select2 library:"
 msgstr "Inaktivera select2 biblioteket:"
@@ -238,7 +238,7 @@ msgstr ""
 "Skapar antingen ett Visa alla alternativ högst upp i nedrullningslistan, "
 "eller om select2 är aktiverat, en platshållare om inget val är gjort."
 
-#: admin/class-beautiful-taxonomy-filters-admin.php:371 
+#: admin/class-beautiful-taxonomy-filters-admin.php:371
 #: widgets/beautiful-taxonomy-filters-widget.php:84
 msgid "Dropdown deselect/default behaviour:"
 msgstr "Rullgardinernas avmarkering/default beteende:"
@@ -267,7 +267,7 @@ msgstr "Beautiful Taxonomy Filters behöver <a href=\"%s\">ställas in</a>."
 msgid "Add an active filter info module to the sidebar"
 msgstr "Lägg till en aktiv filterinfo modul till sidospalten"
 
-#: widgets/beautiful-taxonomy-filters-info-widget.php:90 
+#: widgets/beautiful-taxonomy-filters-info-widget.php:90
 #: public/partials/beautiful-taxonomy-filters-public-info-display.php:40
 msgid "Result of filter: %d"
 msgstr "Resultat av filtrering: %d"
@@ -280,24 +280,24 @@ msgstr "Lägg till en filtermodul till sidospalten"
 msgid "Enable a \"clear all\" link: "
 msgstr "Aktivera en \"rensa allt\" länk:"
 
-#: widgets/beautiful-taxonomy-filters-widget.php:50 
-#: widgets/beautiful-taxonomy-filters-widget.php:59 
-#: widgets/beautiful-taxonomy-filters-widget.php:68 
-#: widgets/beautiful-taxonomy-filters-widget.php:77 
+#: widgets/beautiful-taxonomy-filters-widget.php:50
+#: widgets/beautiful-taxonomy-filters-widget.php:59
+#: widgets/beautiful-taxonomy-filters-widget.php:68
+#: widgets/beautiful-taxonomy-filters-widget.php:77
 #: widgets/beautiful-taxonomy-filters-widget.php:86
 msgid "Inherit"
 msgstr "Ärv"
 
-#: widgets/beautiful-taxonomy-filters-widget.php:51 
-#: widgets/beautiful-taxonomy-filters-widget.php:60 
-#: widgets/beautiful-taxonomy-filters-widget.php:69 
+#: widgets/beautiful-taxonomy-filters-widget.php:51
+#: widgets/beautiful-taxonomy-filters-widget.php:60
+#: widgets/beautiful-taxonomy-filters-widget.php:69
 #: widgets/beautiful-taxonomy-filters-widget.php:78
 msgid "Enable"
 msgstr "Aktivera"
 
-#: widgets/beautiful-taxonomy-filters-widget.php:52 
-#: widgets/beautiful-taxonomy-filters-widget.php:61 
-#: widgets/beautiful-taxonomy-filters-widget.php:70 
+#: widgets/beautiful-taxonomy-filters-widget.php:52
+#: widgets/beautiful-taxonomy-filters-widget.php:61
+#: widgets/beautiful-taxonomy-filters-widget.php:70
 #: widgets/beautiful-taxonomy-filters-widget.php:79
 msgid "Disable"
 msgstr "Inaktivera"
@@ -314,12 +314,12 @@ msgstr "Visa antal inlägg:"
 msgid "Show term description: "
 msgstr "Visa kategoriernas beskrivning:"
 
-#: widgets/beautiful-taxonomy-filters-widget.php:87 
+#: widgets/beautiful-taxonomy-filters-widget.php:87
 #: admin/partials/advanced/dropdown-behaviour-settings-display.php:17
 msgid "All option"
 msgstr "\"Alla\" alternativet"
 
-#: widgets/beautiful-taxonomy-filters-widget.php:88 
+#: widgets/beautiful-taxonomy-filters-widget.php:88
 #: admin/partials/advanced/dropdown-behaviour-settings-display.php:20
 msgid "Placeholder"
 msgstr "Platshållare"
@@ -340,22 +340,22 @@ msgstr ""
 "Genom att välja en specifik posttyp fungerar filtret oavsett var det ligger "
 "men enbart för den valda posttypen."
 
-#: widgets/beautiful-taxonomy-filters-widget.php:269 
+#: widgets/beautiful-taxonomy-filters-widget.php:269
 #: widgets/beautiful-taxonomy-filters-widget.php:298
 msgid "All "
 msgstr "Alla "
 
-#: widgets/beautiful-taxonomy-filters-widget.php:312 
+#: widgets/beautiful-taxonomy-filters-widget.php:312
 #: public/partials/beautiful-taxonomy-filters-public-display.php:118
 msgid "Apply filter"
 msgstr "Filtrera"
 
-#: widgets/beautiful-taxonomy-filters-widget.php:314 
+#: widgets/beautiful-taxonomy-filters-widget.php:314
 #: public/partials/beautiful-taxonomy-filters-public-display.php:121
 msgid "Click to clear all active filters"
 msgstr "Klicka för att rensa alla aktiva filter"
 
-#: widgets/beautiful-taxonomy-filters-widget.php:314 
+#: widgets/beautiful-taxonomy-filters-widget.php:314
 #: public/partials/beautiful-taxonomy-filters-public-display.php:121
 msgid "Clear all"
 msgstr "Rensa alla"
@@ -403,21 +403,21 @@ msgid ""
 "I recommend using <a href=\"%1$s\">POEdit</a> or if you prefer to do it "
 "straight from the WordPress admin interface use <a href=\"%2$s\">Loco "
 "Translate</a>. When you’re done, send us the file(s) to <a href=\"%3$s\">"
-"jonathan@tigerton.se</a> and we’ll add it to the official plugin!"
+"me@jonte.dev</a> and we’ll add it to the official plugin!"
 msgstr ""
 "Jag rekommenderar att använda <a href=\"%1$s\">POEdit</a> eller <a "
 "href=\"%2$s\">Loco Translate</a> om du hellre översätter direkt från "
 "WordPress adminpanel. När du är klar skickar du filerna till <a "
-"href=\"%3$s\">jonathan@tigerton.se</a> så lägger vi till översättningen!"
+"href=\"%3$s\">me@jonte.dev</a> så lägger vi till översättningen!"
 
 #: admin/partials/about/about.php:12
 msgid ""
 "Beautiful Taxonomy Filters is maintained by <a href=\"%1$s\" "
 "target=\"_blank\">Jonathan</a> at the agency <a href=\"%2$s\" "
-"target=\"_blank\">Tigerton</a>."
+"target=\"_blank\">Jonathan de Jong</a>."
 msgstr ""
 "Beautiful Taxonomy Filters underhålls av <a href=\"%1$s\" target=\"_blank\">"
-"Jonathan</a> på webbyrån <a href=\"%2$s\" target=\"_blank\">Tigerton</a>."
+"Jonathan</a> på webbyrån <a href=\"%2$s\" target=\"_blank\">Jonathan de Jong</a>."
 
 #: admin/partials/about/about.php:13
 msgid "Beautiful Taxonomy Filters on Github"

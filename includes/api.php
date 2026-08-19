@@ -68,7 +68,7 @@ function btf_get_current_posttype() {
 	}
 
 	$btf_post_types = apply_filters( 'beautiful_filters_post_types', get_option( 'beautiful_taxonomy_filters_post_types' ) );
-	if ( $btf_post_types && in_array( $current_post_type, $btf_post_types ) ) {
+	if ( is_array( $btf_post_types ) && in_array( $current_post_type, $btf_post_types ) ) {
 		return $current_post_type;
 	}
 

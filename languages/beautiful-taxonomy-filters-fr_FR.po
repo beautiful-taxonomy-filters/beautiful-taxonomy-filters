@@ -140,7 +140,7 @@ msgstr ""
 #. translators: plugin header field 'PluginURI'
 #: beautiful-taxonomy-filters.php:0
 #@ beautiful-taxonomy-filters
-msgid "http://tigerton.se"
+msgid "http://jonte.dev"
 msgstr ""
 
 #. translators: plugin header field 'Description'
@@ -191,4 +191,3 @@ msgstr "Effacer tout"
 #@ beautiful-taxonomy-filters
 msgid "Active filters"
 msgstr "Filtres activés"
-
