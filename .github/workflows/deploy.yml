@@ -18,6 +18,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Verify version matches the release tag
+        run: bash .github/scripts/check-versions.sh "${{ github.event.release.tag_name }}"
+
       - name: WordPress Plugin Deploy
         id: deploy
         uses: 10up/action-wordpress-plugin-deploy@stable
