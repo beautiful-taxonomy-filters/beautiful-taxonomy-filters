@@ -1,10 +1,10 @@
 === Beautiful taxonomy filters ===
-Contributors: Jonathandejong, tigerton
+Contributors: Jonathandejong
 Donate link: http://fancy.to/k9qxt
-Tags: Taxonomy, taxonomies, filter, filtering, pretty permalinks, terms, term, widget, pretty permalinks, rewrite, custom posttype, cpt, beautiful, select2, dropdowns, material design, GET, multisite compatible, polylang compatible, select filter, SEO friendly
+Tags: Taxonomy, filter, pretty permalinks, terms, widget
 Requires at least: 4.3.0
-Tested up to: 5.2
-Stable tag: 2.4.3
+Tested up to: 7.1
+Stable tag: 2.4.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,7 +59,7 @@ The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide
 * Romanian (Thanks to [Roberto Tamas](www.novace.ro))
 
 ____
-Do you want to translate this plugin to another language? I recommend using POEdit (http://poedit.net/) or if you prefer to do it straight from the WordPress admin interface (https://wordpress.org/plugins/loco-translate/). When you’re done, send us the file(s) to jonathan@tigerton.se and we’ll add it to the official plugin!
+Do you want to translate this plugin to another language? I recommend using POEdit (http://poedit.net/) or if you prefer to do it straight from the WordPress admin interface (https://wordpress.org/plugins/loco-translate/). When you’re done, send us the file(s) to me@jonte.dev and we’ll add it to the official plugin!
 
 = Other =
 * Based on [WordPress Plugin Boilerplate](https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate)
@@ -146,6 +146,30 @@ Why thank you! We don't have proper donate link but if you want to you can send 
 
 
 == Changelog ==
+= 2.4.9 =
+* BUGFIX: The `[show_beautiful_filters]` and `[show_beautiful_filters_info]` shortcodes now render at the position of the shortcode instead of above the content. If you previously relied on the old placement you may need to move the shortcode or adjust your styling.
+* IMPROVEMENT: Hardened the filter modules against a rare PHP 8 fatal error when a custom `beautiful_filters_post_types` filter returns a non-array value.
+* IMPROVEMENT: The conditional dropdowns AJAX endpoint now returns a proper JSON error response on a failed security check.
+
+= 2.4.8 =
+* IMPROVEMENT: Tested up to WordPress 7.1.
+* BUGFIX: Fixed a PHP 8+ fatal error that could occur on archive pages when an array-style query parameter was present in the URL. Also hardened a couple of related PHP 8 notices.
+
+= 2.4.7 =
+* BUGFIX: Sorted a security issue. Please make sure you update to this version or later.
+
+= 2.4.6 =
+* BUGFIX: Fixed issue where the allowed post types option value `beautiful_taxonomy_filters_post_types` could be something other than an array and caused fatal errors.
+
+= 2.4.5 =
+* BUGFIX: Fixes some issues with Select2. without search it will fail to stay open for no apparent reason so search is always enabled.
+* BUGFIX: Fixed so that select2 honours changed quantities from the select options.
+* IMPROVEMENT: Select2 now does not destroy and recreate the dropdowns all the time, instead we force it to recognise a change event.
+* IMPROVEMENT: Latest select2 library in use.
+
+= 2.4.4 =
+* BUGFIX: Sorted the recent security issue. Please make sure you update to this version or later.
+
 = 2.4.3 =
 * BUGFIX: Fixed if statement causing PHP warning.
 * IMPROVEMENT: Conditional dropdowns now attempts to *not* disable any value in the first dropdown being filtered, making it a bit more intuitive.

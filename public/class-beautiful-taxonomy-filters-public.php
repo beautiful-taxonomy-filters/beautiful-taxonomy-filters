@@ -3,12 +3,12 @@
 /**
  * The public-facing functionality of the plugin.
  *
- * @link       http://tigerton.se
+ *
  * @since      1.0.0
  *
  * @package    Beautiful_Taxonomy_Filters
  * @subpackage Beautiful_Taxonomy_Filters/includes
- * @author     Jonathan de Jong <jonathan@tigerton.se>
+ * @author     Jonathan de Jong <me@jonte.dev>
  */
 
 class Beautiful_Taxonomy_Filters_Public {
@@ -155,7 +155,7 @@ class Beautiful_Taxonomy_Filters_Public {
 	public function custom_css() {
 		$custom_css = get_option( 'beautiful_taxonomy_filters_custom_css' );
 		if ( $custom_css ) {
-			echo '<style type="text/css">' . $custom_css . '</style>';
+			echo '<style type="text/css">' . wp_strip_all_tags( $custom_css ) . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 	}
@@ -192,9 +192,8 @@ class Beautiful_Taxonomy_Filters_Public {
 	* @since    1.0.0
 	*/
 	private function append_get_parameters( $new_url ) {
-
-		if ( ! empty( $_GET ) ) {
-			$previous_parameters = $_GET;
+		$previous_parameters = $_GET; // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.NonceVerification.Recommended
+		if ( ! empty( $previous_parameters ) ) {
 			$i                   = 0;
 			foreach ( $previous_parameters as $key => $value ) {
 				//sanitize for safety
@@ -256,7 +255,7 @@ class Beautiful_Taxonomy_Filters_Public {
 			'no_found_rows'          => true,
 			'posts_per_page'         => 10000, // We don't set this to -1 because we don't want to crash ppls sites which have A LOT of posts
 			'post_type'              => $post_type,
-			'tax_query'              => array(
+			'tax_query'              => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 				array(
 					'taxonomy' => $taxonomy,
 					'field'    => 'slug',
@@ -278,82 +277,121 @@ class Beautiful_Taxonomy_Filters_Public {
 	 */
 	public function update_filters_callback() {
 
-		/**
-		 * First of all, some security so we sleep well at night.
-		 */
-		$nonce = $_REQUEST['nonce'];
+		// Security check
+		$nonce = sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 		if ( ! wp_verify_nonce( $nonce, 'update_btf_selects_security' ) ) {
-			die( 'What do you think you\'re doing son?' );
+			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'beautiful-taxonomy-filters' ) ), 403 );
 		}
 
 		global $wpdb;
-		$selects    = $_REQUEST['selects'];
-		$post_type  = $_REQUEST['posttype'];
-		$taxonomies = $_REQUEST['taxonomies'];
+		$selects    = map_deep( wp_unslash( (array) $_REQUEST['selects'] ), 'sanitize_text_field' ); // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		$post_type  = sanitize_text_field( $_REQUEST['posttype'] ); // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		$taxonomies = array_map( 'sanitize_text_field', wp_unslash( (array) $_REQUEST['taxonomies'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
 		$all_other_terms_query = new WP_Term_Query(
-			array(
+			[
 				'taxonomy' => $taxonomies,
 				'fields'   => 'ids',
-			)
+			]
 		);
-		// Implode them to a string so we can use it in the sql.
-		$all_other_terms = implode( ',', $all_other_terms_query->terms );
-
-		// TODO: Fix so it takes child terms into account
-		$sql      = '
-        SELECT COUNT( DISTINCT ' .$wpdb->prefix . 'posts.ID ) as term_count, terms.term_id as term_id, terms.name as term_name, terms.slug as term_slug, term_taxonomy.taxonomy as taxonomy
-        FROM ' .$wpdb->prefix . 'posts
-        INNER JOIN ' .$wpdb->prefix . 'term_relationships AS term_relationships
-            ON ' .$wpdb->prefix . 'posts.ID = term_relationships.object_id
-        INNER JOIN ' .$wpdb->prefix . 'term_taxonomy AS term_taxonomy USING( term_taxonomy_id )
-        INNER JOIN ' .$wpdb->prefix . 'terms AS terms USING( term_id )';
-		$sql_ands = '';
+		$all_other_terms = implode( ',', array_map( 'absint', $all_other_terms_query->terms ) );
+		$sql_joins       = [];
+		$sql_ands        = [];
 
 		if ( $selects ) {
 			foreach ( $selects as $select ) {
-
-				/**
-				 * Don't query if term is not set
-				 */
-				if ( $select['term'] == '0' || $select['term'] == '' ) {
+				// Don't query if term is not set.
+				if ( ! isset( $select['term'] ) || $select['term'] === 0 || $select['term'] === '0' || $select['term'] === '' ) {
 					continue;
 				}
 
-				$sql .= sprintf( ' LEFT JOIN ' .$wpdb->prefix . 'term_relationships as %1$s_term_relationship ON (' .$wpdb->prefix . 'posts.ID = %1$s_term_relationship.object_id)', $select['taxonomy'] );
+				// This value is used to build a raw SQL identifier (table alias) below, which
+				// $wpdb->prepare() can't parameterize, so we whitelist it against taxonomy_exists()
+				// on the exact, unmodified value. That's a case-sensitive lookup into $wp_taxonomies,
+				// a fixed dictionary only trusted server-side code (register_taxonomy()) can populate,
+				// so a match guarantees $taxonomy is one of those known-good strings and can't carry
+				// SQL metacharacters - no separate character stripping is needed on top of it.
+				// (We deliberately don't run this through sanitize_key()/lowercase it first: taxonomy
+				// keys aren't guaranteed lowercase, and doing so would break legitimate taxonomies
+				// that use mixed case.)
+				$taxonomy = $select['taxonomy'];
+				if ( ! is_string( $taxonomy ) || ! taxonomy_exists( $taxonomy ) ) {
+					continue;
+				}
 
-				$sql_ands .= sprintf( ' AND ( %1$s_term_relationship.term_taxonomy_id IN (%2$s) )', $select['taxonomy'], $select['term'] );
+				// Cast as array and run it through absint to prevent SQL injection.
+				// This also allows us to easier handle multiple term selections in the future.
+				$term_ids = array_map( 'absint', explode( ',', $select['term'] ) );
 
+				// Bail if it's now empty for some reason.
+				// Shouldn't really happen but better safe than sorry.
+				if ( empty( $term_ids ) ) {
+					continue;
+				}
+
+				// Add the taxonomy join.
+				$sql_joins[] = "
+					LEFT JOIN {$wpdb->prefix}term_relationships as {$taxonomy}_term_relationship
+					ON {$wpdb->prefix}posts.ID = {$taxonomy}_term_relationship.object_id
+				";
+
+				// Add the AND condition for the current taxonomy.
+				$placeholders = implode( ',', array_fill( 0, count( $term_ids ), '%d' ) );
+				$sql_ands[] = $wpdb->prepare(
+					"AND ( {$taxonomy}_term_relationship.term_taxonomy_id IN ( $placeholders ) )", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+					$term_ids
+				);
 			}
 		}
 
-		$sql .= sprintf( ' WHERE ' .$wpdb->prefix . 'posts.post_type = \'%s\' AND ' .$wpdb->prefix . 'posts.post_status = \'publish\'', $post_type );
-		$sql .= $sql_ands;
+		// Let's build the SQL query.
+		// We use the prepare method here because WP requires us to do so.
+		// But we have to do it a bit differently because it's a rather limited method that butchers the SQL, especially when trying to use it with an IN statement.
+		// I've searched high and low for anyone that has found a way to properly use IN with prepared statements...
+		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
+		$sql = $wpdb->prepare(
+			"
+			SELECT COUNT( DISTINCT {$wpdb->prefix}posts.ID ) as term_count,
+						terms.term_id as term_id,
+						terms.name as term_name,
+						terms.slug as term_slug,
+						term_taxonomy.taxonomy as taxonomy
+			FROM {$wpdb->prefix}posts
+			INNER JOIN {$wpdb->prefix}term_relationships AS term_relationships
+				ON {$wpdb->prefix}posts.ID = term_relationships.object_id
+			INNER JOIN {$wpdb->prefix}term_taxonomy AS term_taxonomy USING( term_taxonomy_id )
+			INNER JOIN {$wpdb->prefix}terms AS terms USING( term_id )
+			# Add dynamic JOIN conditions
+			" . implode( ' ', $sql_joins ) . "
+			WHERE {$wpdb->prefix}posts.post_type = %s AND {$wpdb->prefix}posts.post_status = 'publish'
+			# Add dynamic AND conditions
+			" . implode( ' ', $sql_ands ) . "
+			# Add the final AND condition. We can't use a placeholder here because it's a list of ids and it gets fcked up.
+			AND terms.term_id IN ( ". $all_other_terms ." )
+			# end with grouping and ordering
+			GROUP BY terms.term_id
+			HAVING term_count > 0
+			ORDER BY term_count DESC
+			LIMIT 1000
+			",
+			$post_type
+		);
+		// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
 
-		$sql .= " AND terms.term_id IN ($all_other_terms)
-		GROUP BY terms.term_id
-		HAVING term_count > 0
-		ORDER BY term_count DESC
-		LIMIT 1000
-		";
+		$related_terms = $wpdb->get_results( $sql ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+		$sorted = [];
 
-		// Get all terms with posts in them!
-		$related_terms = $wpdb->get_results( $sql );
-		// Sort them by their taxonomy.
-		$sorted = array();
 		if ( $related_terms ) {
 			foreach ( $related_terms as $term ) {
-				// Run it through WordPress filters and decode HTML entities as well.
-				$term->term_name             = html_entity_decode( apply_filters( 'list_cats', $term->term_name, $term->taxonomy ) );
+				$term->term_name = html_entity_decode( apply_filters( 'list_cats', $term->term_name, $term->taxonomy ) );
 				$sorted[ $term->taxonomy ][] = $term;
 			}
 		}
 
-		// Return our new terms.
-		echo json_encode( $sorted );
+		echo wp_json_encode( $sorted );
 		exit();
-
 	}
+
 
 
 	/**
@@ -363,20 +401,19 @@ class Beautiful_Taxonomy_Filters_Public {
 	* @since    1.0.0
 	*/
 	public function catch_filter_values() {
-
 		//Nope, this pageload was not due to our filter!
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 		if ( ! isset( $_POST['btf_do_filtering_nonce'] ) || ! wp_verify_nonce( $_POST['btf_do_filtering_nonce'], 'Beutiful-taxonomy-filters-do-filter' ) ) {
 			return;
 		}
 
 		//get current post type archive
-		if ( isset( $_POST['post_type'] ) && '' != $_POST['post_type'] ) {
-			$current_post_type = $_POST['post_type'];
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+		if ( isset( $_POST['post_type'] ) && '' !== $_POST['post_type'] ) {
+			$current_post_type = sanitize_text_field( wp_unslash( $_POST['post_type'] ) );
 		} else {
 			//If there was no post type from the form (for some reason), try to get it anyway!
-
 			$current_post_type = self::get_current_posttype( false );
-
 		}
 
 		//post type validation
@@ -393,7 +430,7 @@ class Beautiful_Taxonomy_Filters_Public {
 
 				//check for each taxonomy as a $_POST variable.
 				//If it exists we want to append it along with the value (term) it has.
-				$term = ( isset( $_POST[ 'select-' . $key ] ) ? $_POST[ 'select-' . $key ] : false );
+				$term = ( isset( $_POST[ 'select-' . $key ] ) ? wp_unslash( $_POST[ 'select-' . $key ] ) : false ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				if ( $term ) {
 					$term_object = get_term( $term, $key );
 					//If the taxonomy has a rewrite slug we need to use that instead!
@@ -484,7 +521,7 @@ class Beautiful_Taxonomy_Filters_Public {
 		if ( isset( $save_parameters['walker'] ) ) {
 			unset( $save_parameters['walker'] );
 		}
-		$new_select = str_replace( '<select', '<select data-taxonomy="' . $parameters['taxonomy'] . '" data-options="' . htmlspecialchars( json_encode( $save_parameters ) ) . '" data-nonce="' . wp_create_nonce( 'update_btf_selects_security' ) . '"', $select );
+		$new_select = str_replace( '<select', '<select data-taxonomy="' . $parameters['taxonomy'] . '" data-options="' . htmlspecialchars( wp_json_encode( $save_parameters ) ) . '" data-nonce="' . wp_create_nonce( 'update_btf_selects_security' ) . '"', $select );
 
 		return $new_select;
 	}
@@ -495,13 +532,18 @@ class Beautiful_Taxonomy_Filters_Public {
 	*
 	* @since 1.0.0
 	*/
-	public static function beautiful_filters( $post_type ) {
+	public static function beautiful_filters( $post_type, $args = array() ) {
+		// Whether to echo the module (default, for template tags/actions/widgets/automagic)
+		// or capture and return it (used by the shortcode so it renders in place).
+		$echo = ! isset( $args['echo'] ) || $args['echo'];
+
 		//Fetch the plugins options
 		//Apply filters on them to let users modify the options before they're being used!
 		$post_types = apply_filters( 'beautiful_filters_post_types', get_option( 'beautiful_taxonomy_filters_post_types' ) );
 
-		//If there's no post types, bail early!
-		if ( ! $post_types ) {
+		//If there's no post types, bail early! Also guard against a filter returning a non-array,
+		//which would fatal in the in_array() checks below on PHP 8.
+		if ( empty( $post_types ) || ! is_array( $post_types ) ) {
 			return;
 		}
 
@@ -514,9 +556,9 @@ class Beautiful_Taxonomy_Filters_Public {
 			//Take the rewrite slug which is the one we actually want!
 			$current_post_type_rewrite = $post_type_object->rewrite['slug'];
 
-		} elseif ( isset( $_POST['post_type'] ) && $_POST['post_type'] != '' ) {
+		} elseif ( isset( $_POST['post_type'] ) && $_POST['post_type'] != '' ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.NonceVerification.Missing
 
-			$current_post_type = $_POST['post_type'];
+			$current_post_type = sanitize_text_field( $_POST['post_type'] ); //phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 			//Get the post type object
 			$post_type_object = get_post_type_object( $current_post_type );
 			//Take the rewrite slug which is the one we actually want!
@@ -540,7 +582,15 @@ class Beautiful_Taxonomy_Filters_Public {
 		//On a post type that we want the filter on, and we have atleast one valid taxonomy
 		if ( in_array( $current_post_type, $post_types ) && ! empty( $current_taxonomies ) ) {
 
+			if ( ! $echo ) {
+				ob_start();
+			}
+
 			require plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/beautiful-taxonomy-filters-public-display.php';
+
+			if ( ! $echo ) {
+				return ob_get_clean();
+			}
 
 		}
 
@@ -551,7 +601,9 @@ class Beautiful_Taxonomy_Filters_Public {
 	*
 	* @since 1.0.0
 	*/
-	public static function beautiful_filters_info() {
+	public static function beautiful_filters_info( $args = array() ) {
+		// Whether to echo the module (default) or capture and return it (shortcode).
+		$echo = ! isset( $args['echo'] ) || $args['echo'];
 
 		global $wp_query;
 		$current_taxonomies = ( isset( $wp_query->tax_query->queries ) ) ? $wp_query->tax_query->queries : false;
@@ -562,12 +614,21 @@ class Beautiful_Taxonomy_Filters_Public {
 		$post_types         = apply_filters( 'beautiful_filters_post_types', get_option( 'beautiful_taxonomy_filters_post_types' ) );
 		$current_post_type  = self::get_current_posttype( false );
 
-		//If there is no current post type, bail early!
-		if ( ! post_type_exists( $current_post_type ) || ! in_array( $current_post_type, $post_types ) ) {
+		//If there is no current post type, bail early! The is_array() check guards against a filter
+		//returning a non-array, which would fatal in in_array() on PHP 8.
+		if ( ! is_array( $post_types ) || ! post_type_exists( $current_post_type ) || ! in_array( $current_post_type, $post_types ) ) {
 			return;
 		}
 
+		if ( ! $echo ) {
+			ob_start();
+		}
+
 		require plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/beautiful-taxonomy-filters-public-info-display.php';
+
+		if ( ! $echo ) {
+			return ob_get_clean();
+		}
 
 	}
 

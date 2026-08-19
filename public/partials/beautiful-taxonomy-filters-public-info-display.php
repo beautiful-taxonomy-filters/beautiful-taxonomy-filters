@@ -5,7 +5,7 @@
  *
  * This file is used to provide the visitors with information about the currently active filters
  *
- * @link       http://tigerton.se
+ *
  * @since      1.0.0
  *
  * @package    Beautiful_Taxonomy_Filters
@@ -34,10 +34,15 @@ if(!$current_post_type || !in_array($current_post_type, $activated_post_types)){
 <div class="beautiful-taxonomy-filters-active-filter">
 	<?php do_action( 'beautiful_actions_beginning_filterinfo', $current_post_type); //Allow custom markup before filter info ?>
 	<?php if(!$hide_heading): ?>
-		<h3 class="beautiful-taxonomy-filters-info-heading"><?php echo apply_filters( 'beautiful_filters_info_heading', __('Active filters', 'beautiful-taxonomy-filters') ); ?></h3>
+		<h3 class="beautiful-taxonomy-filters-info-heading"><?php echo esc_html( apply_filters( 'beautiful_filters_info_heading', esc_html__('Active filters', 'beautiful-taxonomy-filters') ) ); ?></h3>
 	<?php endif; ?>
 	<?php if(!$hide_postcount): ?>
-		<p class="beautiful-taxonomy-filters-postcount"><?php echo apply_filters( 'beautiful_filters_info_postcount', sprintf( __( 'Result of filter: %d', 'beautiful-taxonomy-filters' ), $wp_query->found_posts ) ); ?></p>
+		<p class="beautiful-taxonomy-filters-postcount">
+			<?php
+			// Translators: %s is the number of posts found
+			echo esc_html( apply_filters( 'beautiful_filters_info_postcount', sprintf( esc_html__( 'Result of filter: %d', 'beautiful-taxonomy-filters' ), $wp_query->found_posts ) ) );
+			?>
+		</p>
 
 	<?php endif; ?>
 	<?php $posttypes_taxonomies = get_object_taxonomies($current_post_type, 'objects'); ?>
@@ -99,8 +104,8 @@ if(!$current_post_type || !in_array($current_post_type, $activated_post_types)){
 				$imploded_terms = implode(', ', $active_terms);
 				$label = $taxonomy_info->labels->name . ':';
 				?>
-				<span class="single-tax-key"><?php echo apply_filters('beautiful_filters_active_taxonomy', $label, $taxonomy['taxonomy']); ?></span>
-				<span class="single-tax-value"><?php echo apply_filters('beautiful_filters_active_terms', $imploded_terms, $taxonomy['taxonomy']); ?></span>
+				<span class="single-tax-key"><?php echo esc_html( apply_filters('beautiful_filters_active_taxonomy', $label, $taxonomy['taxonomy']) ); ?></span>
+				<span class="single-tax-value"><?php echo esc_html( apply_filters('beautiful_filters_active_terms', $imploded_terms, $taxonomy['taxonomy']) ); ?></span>
 			</div>
 		<?php endforeach; ?>
 		<?php if(!empty($posttypes_taxonomies)): foreach($posttypes_taxonomies as $taxonomy): ?>
@@ -109,8 +114,8 @@ if(!$current_post_type || !in_array($current_post_type, $activated_post_types)){
 				$label = $taxonomy->labels->name . ':';
 				$value = $taxonomy->labels->all_items;
 				?>
-				<span class="single-tax-key"><?php echo apply_filters('beautiful_filters_active_taxonomy', $label, $taxonomy->query_var); ?></span>
-				<span class="single-tax-value"><?php echo apply_filters('beautiful_filters_active_terms', $value, $taxonomy->query_var); ?></span>
+				<span class="single-tax-key"><?php echo esc_html( apply_filters('beautiful_filters_active_taxonomy', $label, $taxonomy->query_var) ); ?></span>
+				<span class="single-tax-value"><?php echo esc_html( apply_filters('beautiful_filters_active_terms', $value, $taxonomy->query_var) ); ?></span>
 			</div>
 		<?php endforeach; endif; ?>
 
@@ -149,8 +154,8 @@ if(!$current_post_type || !in_array($current_post_type, $activated_post_types)){
 					$label = $taxonomy->labels->name . ':';
 					$value = $taxonomy->labels->all_items;
 					?>
-					<span class="single-tax-key"><?php echo apply_filters('beautiful_filters_active_taxonomy', $label, $taxonomy->query_var); ?></span>
-					<span class="single-tax-value"><?php echo apply_filters('beautiful_filters_active_terms', $value, $taxonomy->query_var); ?></span>
+					<span class="single-tax-key"><?php echo esc_html( apply_filters('beautiful_filters_active_taxonomy', $label, $taxonomy->query_var) ); ?></span>
+					<span class="single-tax-value"><?php echo esc_html( apply_filters('beautiful_filters_active_terms', $value, $taxonomy->query_var) ); ?></span>
 				</div>
 			<?php endforeach; ?>
 

@@ -1,0 +1,30 @@
+name: Update WordPress.org assets & readme
+
+# Syncs the WordPress.org plugin page assets (banners, screenshots) and the
+# readme to the SVN repo WITHOUT cutting a new plugin release. Runs whenever the
+# relevant files change on the default branch, so you can fix a typo in
+# README.txt or swap a banner without publishing a version.
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'README.txt'
+      - 'subversion/**'
+      - '.github/workflows/assets.yml'
+
+jobs:
+  assets:
+    name: Update assets & readme
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update assets & readme
+        uses: 10up/action-wordpress-plugin-asset-update@stable
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: beautiful-taxonomy-filters
+          ASSETS_DIR: subversion

@@ -5,7 +5,7 @@
  *
  * @package    Beautiful_Taxonomy_Filters
  * @subpackage Beautiful_Taxonomy_Filters/widget
- * @author     Jonathan de Jong <jonathan@tigerton.se>
+ * @author     Jonathan de Jong <me@jonte.dev>
  */
 class Beautiful_Taxonomy_Filters_Info_Widget extends WP_Widget {
 
@@ -20,7 +20,7 @@ class Beautiful_Taxonomy_Filters_Info_Widget extends WP_Widget {
 			'beautiful-taxonomy-filters-info-widget', // Base ID
 			'Beautiful Active Filter info', // Name
 			array(
-				'description' => __( 'Add an active filter info module to the sidebar', 'beautiful-taxonomy-filters' ),
+				'description' => esc_html__( 'Add an active filter info module to the sidebar', 'beautiful-taxonomy-filters' ),
 			) // Args
 		);
 	}
@@ -31,11 +31,11 @@ class Beautiful_Taxonomy_Filters_Info_Widget extends WP_Widget {
 	 * @since    1.0.0
 	 */
 	public function form( $instance ) {
-		$title = ( isset( $instance['title'] ) ) ? strip_tags( $instance['title'] ) : '';
+		$title = ( isset( $instance['title'] ) ) ? wp_strip_all_tags( $instance['title'] ) : '';
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:', 'beautiful-taxonomy-filters' ); ?></label>
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
 		</p>
 
 		<?php
@@ -49,7 +49,7 @@ class Beautiful_Taxonomy_Filters_Info_Widget extends WP_Widget {
 	public function update( $new_instance, $old_instance ) {
 		// processes widget options to be saved
 		$instance          = $old_instance;
-		$instance['title'] = strip_tags( $new_instance['title'] );
+		$instance['title'] = wp_strip_all_tags( $new_instance['title'] );
 		return $instance;
 	}
 
@@ -82,13 +82,19 @@ class Beautiful_Taxonomy_Filters_Info_Widget extends WP_Widget {
 		/*
 		* The content of the widget
 		*/
-		echo $before_widget;
+		echo $before_widget; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		if ( ! empty( $title ) ) {
-			echo $before_title . $title . $after_title; }
+			echo $before_title . $title . $after_title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
 		?>
 		<div class="beautiful-taxonomy-filters-active-filter-widget">
 			<?php if ( ! $hide_postcount ) : ?>
-				<p class="beautiful-taxonomy-filters-postcount"><?php echo apply_filters( 'beautiful_filters_info_postcount', sprintf( __( 'Result of filter: %d', 'beautiful-taxonomy-filters' ), $wp_query->found_posts ) ); ?></p>
+				<p class="beautiful-taxonomy-filters-postcount">
+					<?php
+					// Translators: %d is a number of posts found by the current filter.
+					echo apply_filters( 'beautiful_filters_info_postcount', sprintf( esc_html__( 'Result of filter: %d', 'beautiful-taxonomy-filters' ), $wp_query->found_posts ) );  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					?>
+				</p>
 
 			<?php endif; ?>
 			<?php $posttypes_taxonomies = get_object_taxonomies( $current_post_type, 'objects' ); ?>
@@ -150,8 +156,8 @@ class Beautiful_Taxonomy_Filters_Info_Widget extends WP_Widget {
 						$imploded_terms = implode( ', ', $active_terms );
 						$label          = $taxonomy_info->labels->name . ':';
 						?>
-						<span class="single-tax-key"><?php echo apply_filters( 'beautiful_filters_active_taxonomy', $label, $taxonomy['taxonomy'] ); ?></span>
-						<span class="single-tax-value"><?php echo apply_filters( 'beautiful_filters_active_terms', $imploded_terms, $taxonomy['taxonomy'] ); ?></span>
+						<span class="single-tax-key"><?php echo esc_html( apply_filters( 'beautiful_filters_active_taxonomy', $label, $taxonomy['taxonomy'] ) ); ?></span>
+						<span class="single-tax-value"><?php echo esc_html( apply_filters( 'beautiful_filters_active_terms', $imploded_terms, $taxonomy['taxonomy'] ) ); ?></span>
 					</div>
 				<?php endforeach; ?>
 				<?php
@@ -163,8 +169,8 @@ class Beautiful_Taxonomy_Filters_Info_Widget extends WP_Widget {
 											$label = $taxonomy->labels->name . ':';
 											$value = $taxonomy->labels->all_items;
 											?>
-											<span class="single-tax-key"><?php echo apply_filters( 'beautiful_filters_active_taxonomy', $label, $taxonomy->query_var ); ?></span>
-						<span class="single-tax-value"><?php echo apply_filters( 'beautiful_filters_active_terms', $value, $taxonomy->query_var ); ?></span>
+											<span class="single-tax-key"><?php echo esc_html( apply_filters( 'beautiful_filters_active_taxonomy', $label, $taxonomy->query_var ) ); ?></span>
+											<span class="single-tax-value"><?php echo esc_html( apply_filters( 'beautiful_filters_active_terms', $value, $taxonomy->query_var ) ); ?></span>
 										</div>
 									<?php
 				endforeach;
@@ -206,8 +212,8 @@ endif;
 							$label = $taxonomy->labels->name . ':';
 							$value = $taxonomy->labels->all_items;
 							?>
-							<span class="single-tax-key"><?php echo apply_filters( 'beautiful_filters_active_taxonomy', $label, $taxonomy->query_var ); ?></span>
-							<span class="single-tax-value"><?php echo apply_filters( 'beautiful_filters_active_terms', $value, $taxonomy->query_var ); ?></span>
+							<span class="single-tax-key"><?php echo esc_html( apply_filters( 'beautiful_filters_active_taxonomy', $label, $taxonomy->query_var ) ); ?></span>
+							<span class="single-tax-value"><?php echo esc_html( apply_filters( 'beautiful_filters_active_terms', $value, $taxonomy->query_var ) ); ?></span>
 						</div>
 					<?php endforeach; ?>
 
@@ -218,7 +224,7 @@ endif;
 
 		<?php
 
-		echo $after_widget;
+		echo $after_widget; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
 ?>

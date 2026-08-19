@@ -37,10 +37,10 @@ $show_count = apply_filters( 'beautiful_filters_show_count', get_option( 'beauti
 $dropdown_behaviour = apply_filters( 'beautiful_filters_dropdown_behaviour', get_option( 'beautiful_taxonomy_filters_dropdown_behaviour' ), $current_post_type );
 $disable_select2 = ( get_option( 'beautiful_taxonomy_filters_disable_select2' ) ? get_option( 'beautiful_taxonomy_filters_disable_select2' ) : false );
 ?>
-<div class="beautiful-taxonomy-filters <?php if ( ! $disable_select2 ) { echo 'select2-active'; } ?>" id="beautiful-taxonomy-filters-<?php echo $current_post_type_rewrite; ?>">
+<div class="beautiful-taxonomy-filters <?php if ( ! $disable_select2 ) { echo 'select2-active'; } ?>" id="beautiful-taxonomy-filters-<?php echo esc_attr( $current_post_type_rewrite ); ?>">
 	<?php do_action( 'beautiful_actions_before_form', $current_post_type ); //Allow custom markup before form ?>
 	<form method="POST" class="clearfix" id="beautiful-taxonomy-filters-form">
-		<input type="hidden" name="site-url" value="<?php echo get_bloginfo( 'url' ); ?>" />
+		<input type="hidden" name="site-url" value="<?php echo esc_url( get_bloginfo( 'url' ) ); ?>" />
 		<input type="hidden" name="post_type_rewrite" value="<?php echo esc_attr( $current_post_type_rewrite ); ?>" />
 		<input type="hidden" name="post_type" value="<?php echo esc_attr( $current_post_type ); ?>" />
 		<?php wp_nonce_field( 'Beutiful-taxonomy-filters-do-filter', 'btf_do_filtering_nonce' ); ?>
@@ -59,8 +59,8 @@ $disable_select2 = ( get_option( 'beautiful_taxonomy_filters_disable_select2' ) 
 				?>
 				<?php if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) : ?>
 					<?php do_action( 'beautiful_actions_before_select', $key, $current_post_type ); //Allow custom markup before each select ?>
-					<div class="beautiful-taxonomy-filters-tax filter-count-<?php echo $count; if ( $count > 5 ) { echo ' filter-count-many'; } ?>" id="beautiful-taxonomy-filters-tax-<?php echo $key; ?>">
-						<label for="select-<?php echo $key; ?>" class="beautiful-taxonomy-filters-label"><?php echo apply_filters( 'beautiful_filters_taxonomy_label', $taxonomy->labels->name, $taxonomy->name ); ?></label>
+					<div class="beautiful-taxonomy-filters-tax filter-count-<?php echo esc_attr( $count ); if ( $count > 5 ) { echo ' filter-count-many'; } ?>" id="beautiful-taxonomy-filters-tax-<?php echo esc_attr( $key ); ?>">
+						<label for="select-<?php echo esc_attr( $key ); ?>" class="beautiful-taxonomy-filters-label"><?php echo esc_html( apply_filters( 'beautiful_filters_taxonomy_label', $taxonomy->labels->name, $taxonomy->name ) ); ?></label>
 						<?php
 						/**
 						* Output the dropdown with the terms of the taxonomy.
@@ -73,10 +73,10 @@ $disable_select2 = ( get_option( 'beautiful_taxonomy_filters_disable_select2' ) 
 							'show_count'    => $show_count,
 							'hide_empty'    => $hide_empty,
 							'orderby'       => apply_filters( 'beautiful_filters_dropdown_orderby', 'name', $key ),
-							'order' 		=> apply_filters( 'beautiful_filters_dropdown_order', 'ASC', $key ),
+							'order' 		    => apply_filters( 'beautiful_filters_dropdown_order', 'ASC', $key ),
 							'hierarchical'  => true,
 							'echo'          => false,
-							'class'			=> 'beautiful-taxonomy-filters-select',
+							'class'			    => 'beautiful-taxonomy-filters-select',
 							'walker'        => new Walker_Slug_Value_Category_Dropdown( '', false, $current_post_type ),
 						);
 						//Apply filter on the arguments to let users modify them first!
@@ -93,19 +93,24 @@ $disable_select2 = ( get_option( 'beautiful_taxonomy_filters_disable_select2' ) 
 						//If they didnt select placeholder just output the dropdown now (or if they've disabled select2)
 						if ( $disable_select2 || ! $dropdown_behaviour || 'show_all_option' == $dropdown_behaviour ) {
 
-							echo $filterdropdown;
+							echo $filterdropdown; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 						} else {
 
 							//They selected placeholder so now we need to choose what to display and then alter the dropdown before output.
 							$new_label = apply_filters( 'beautiful_filters_dropdown_placeholder', $taxonomy->labels->all_items, $taxonomy->name );
 							$filterdropdown = str_replace( "value='0' selected='selected'", '', $filterdropdown );
-							echo str_replace( '<select ', '<select data-placeholder="' . $new_label . '"', $filterdropdown );
+							echo str_replace( '<select ', '<select data-placeholder="' . $new_label . '"', $filterdropdown ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 						}
 						?>
 						<?php if ( $conditional_dropdowns ) : ?>
-							<span class="beautiful-taxonomy-filters-loader"><?php echo apply_filters( 'beautiful_filters_loader', sprintf( '<img src="%s" alt="" />', admin_url( 'images/spinner.gif' ) ), $key, $current_post_type ); ?></span>
+							<span class="beautiful-taxonomy-filters-loader">
+								<?php
+								//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								echo apply_filters( 'beautiful_filters_loader', sprintf( '<img src="%s" alt="" />', esc_url( admin_url( 'images/spinner.gif' ) ) ), $key, $current_post_type );
+								?>
+							</span>
 						<?php endif; ?>
 					</div>
 					<?php do_action( 'beautiful_actions_after_select', $key, $current_post_type ); //Allow custom markup before each select ?>
@@ -114,10 +119,12 @@ $disable_select2 = ( get_option( 'beautiful_taxonomy_filters_disable_select2' ) 
 			<?php do_action( 'beautiful_actions_ending_form_inner', $current_post_type ); //allow custom markup at end of inner form ?>
 		</div>
 		<?php do_action( 'beautiful_actions_before_submit_button', $current_post_type ); //allow custom markup before submit button ?>
-		<button type="submit" class="beautiful-taxonomy-filters-button"><?php echo apply_filters( 'beautiful_filters_apply_button', __( 'Apply filter', 'beautiful-taxonomy-filters' ) ); ?></button>
+		<button type="submit" class="beautiful-taxonomy-filters-button"><?php
+		echo apply_filters( 'beautiful_filters_apply_button', esc_html__( 'Apply filter', 'beautiful-taxonomy-filters' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		?></button>
 		<?php do_action( 'beautiful_actions_after_submit_button', $current_post_type ); //allow custom markup before submit button ?>
 		<?php if ( $show_clear_all && is_btf_filtered() ) : ?>
-			<a href="<?php echo apply_filters( 'beautiful_filters_clear_all_link', get_post_type_archive_link( $current_post_type ), $current_post_type ); ?>" class="beautiful-taxonomy-filters-clear-all" title="<?php _e( 'Click to clear all active filters', 'beautiful-taxonomy-filters' ); ?>"><?php echo apply_filters( 'beautiful_filters_clear_button', __( 'Clear all', 'beautiful-taxonomy-filters' ) ); ?></a>
+			<a href="<?php echo esc_url( apply_filters( 'beautiful_filters_clear_all_link', get_post_type_archive_link( $current_post_type ), $current_post_type ) ); ?>" class="beautiful-taxonomy-filters-clear-all" title="<?php esc_html_e( 'Click to clear all active filters', 'beautiful-taxonomy-filters' ); ?>"><?php echo esc_html( apply_filters( 'beautiful_filters_clear_button', esc_html__( 'Clear all', 'beautiful-taxonomy-filters' ) ) ); ?></a>
 		<?php endif; ?>
 		<?php do_action( 'beautiful_actions_ending_form', $current_post_type ); //allow custom markup at beginning of form ?>
 	</form>

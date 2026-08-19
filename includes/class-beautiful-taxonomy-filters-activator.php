@@ -40,6 +40,7 @@ class Beautiful_Taxonomy_Filters_Activator {
 			$btf = new Beautiful_Taxonomy_Filters();
 			$btf_admin = new Beautiful_Taxonomy_Filters_Admin($btf->get_Beautiful_Taxonomy_Filters(), $btf->get_version());
 
+			// Translators: %s is the link to the basic setup page
 			$message = sprintf( wp_kses( __( 'Beautiful Taxonomy Filters needs some <a href="%s">basic setup</a>.', 'beautiful-taxonomy-filters' ), array(  'a' => array( 'href' => array() ) ) ), esc_url( admin_url() . 'options-general.php?page=taxonomy-filters&tab=basic' ) );
 
 			$btf_admin->add_admin_notice( $message );

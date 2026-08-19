@@ -2,7 +2,7 @@
 /**
  * The Custom Walker class being used by our wp_dropdown_categories to render the filter dropdowns
  *
- * @link       http://tigerton.se
+ *
  * @since      1.0.0
  *
  * @package    Beautiful_Taxonomy_Filters
@@ -16,7 +16,7 @@
  *
  * @package    Beautiful_Taxonomy_Filters
  * @subpackage Beautiful_Taxonomy_Filters/admin
- * @author     Jonathan de Jong <jonathan@tigerton.se>
+ * @author     Jonathan de Jong <me@jonte.dev>
  */
 class Walker_Slug_Value_Category_Dropdown extends Walker_CategoryDropdown {
 
@@ -54,7 +54,7 @@ class Walker_Slug_Value_Category_Dropdown extends Walker_CategoryDropdown {
 			$this->post_type = ( $this->instance['post_type'] != 'automatic' ? $this->instance['post_type'] : Beautiful_Taxonomy_Filters_Public::get_current_posttype( false ) );
 
 			if ( isset( $this->instance['show_description'] ) ) {
-				$this->show_description = strip_tags( $this->instance['show_description'] );
+				$this->show_description = wp_strip_all_tags( $this->instance['show_description'] );
 				if ( $this->show_description == 'inherit' ) {
 					$this->show_description = apply_filters( 'beautiful_filters_show_description', get_option( 'beautiful_taxonomy_filters_show_description' ), $this->post_type );
 				} else {
@@ -95,38 +95,41 @@ class Walker_Slug_Value_Category_Dropdown extends Walker_CategoryDropdown {
 		global $wp_query;
 		$queryvars = $wp_query->query_vars;
 		$cat_name = apply_filters( 'list_cats', $category->name, $category );
-		$output .= "\t" . '<option class="level-' . $depth . ' ' . $category->slug . '" value="' . $category->term_id . '"';
-		if ( isset( $_GET ) ) {
-			foreach ( $_GET as $get_variable ) {
-				if ( strpos( $get_variable, ',' ) !== false ) {
-					$get_array = explode( ',', $get_variable );
-				} else {
-					$get_array[] = $get_variable;
+		$output .= "\t" . '<option class="level-' . $depth . ' ' . $category->slug . '" value="' . $category->term_id . '" data-label=""';
+		$get_parameters = $_GET; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! empty( $get_parameters ) ) {
+			foreach ( $get_parameters as $get_variable ) {
+				// $_GET values can be arrays (e.g. ?foo[]=bar). Skip anything non-scalar so we
+				// never hand an array to strpos(), which is a fatal TypeError on PHP 8+.
+				if ( ! is_scalar( $get_variable ) ) {
+					continue;
 				}
+				// Reset per iteration so values don't leak across query parameters.
+				$get_array = ( strpos( $get_variable, ',' ) !== false ) ? explode( ',', $get_variable ) : array( $get_variable );
 				foreach ( $get_array as $get_single ) {
-					if ( $category->term_id == $args['selected'] || $get_single == $category->term_id ) {
+					if ( ( isset( $args['selected'] ) && $category->term_id == $args['selected'] ) || $get_single == $category->term_id ) {
 						$output .= ' selected="selected" ';
 					}
 				}
 			}
 		}
 		if ( in_array( $category->slug, $queryvars, true ) ) {
-			$output .= ' selected="selected" ';
+			$output .= ' selected="selected"';
 		}
 		$output .= '>';
 
 		//run our custom filter
 		$output .= apply_filters( 'beautiful_filters_term_name', $cat_name, $category, $depth );
 
-		if ( $args['show_count'] ) {
+		if ( ! empty( $args['show_count'] ) ) {
 			//If they want a post count make sure to only show the count for this specific post type
 			$count = Beautiful_Taxonomy_Filters_Public::get_term_post_count_by_type( $category->slug, $category->taxonomy, $this->post_type );
-			$output .= '&nbsp;&nbsp;(' . $count . ')';
+			$output .= '  (' . $count . ')';
 		}
 
 		if ( isset( $args['show_last_update'] ) ) {
 			$format = 'Y-m-d';
-			$output .= '&nbsp;&nbsp;' . gmdate( $format, $category->last_update_timestamp );
+			$output .= '  ' . gmdate( $format, $category->last_update_timestamp );
 		}
 
 		if ( $this->show_description && $category->description ) {

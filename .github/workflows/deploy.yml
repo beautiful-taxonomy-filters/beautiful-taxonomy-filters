@@ -1,0 +1,35 @@
+name: Deploy to WordPress.org
+
+# Deploys the plugin to the WordPress.org SVN repository when a GitHub release
+# is published. The release tag name is used as the plugin version, so make sure
+# it matches the "Version:" header and the "Stable tag:" in README.txt
+# (e.g. release "2.5.0" -> deploys trunk and creates SVN tag 2.5.0).
+#
+# Use [released] instead of [published] if you want to exclude pre-releases.
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    name: Deploy to WordPress.org
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: WordPress Plugin Deploy
+        id: deploy
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        with:
+          generate-zip: true
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: beautiful-taxonomy-filters
+          ASSETS_DIR: subversion
+
+      - name: Attach release zip
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.deploy.outputs.zip-path }}
