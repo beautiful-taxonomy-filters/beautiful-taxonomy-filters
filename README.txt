@@ -4,7 +4,7 @@ Donate link: http://fancy.to/k9qxt
 Tags: Taxonomy, filter, pretty permalinks, terms, widget
 Requires at least: 4.3.0
 Tested up to: 7.1
-Stable tag: 2.4.9
+Stable tag: 2.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,10 @@ Just start tagging up your posts and you’ll see it shows up! Also, make sure t
 **Since v 2.2 this has been fixed. Make sure you keep BTF updated**
 In order for the rewrite rules to work with a taxonomy that has a rewrite slug you also have to add the same slug to the `query_var` parameter of register_taxonomy. It wont have any visible impact for you but it's what's needed for the filtered urls to work!
 
+= My taxonomy rewrite slug is nested under my post type slug =
+
+If you register a taxonomy with a rewrite slug like `horses/locations` on a post type that's archived at `horses`, Beautiful Taxonomy Filters will only use the `locations` part when building the filtered URL, since the `horses` part is already in the post type archive URL. Before 2.5.0 the slug ended up in the URL twice (`/horses/horses/locations/spain/`). Those old URLs still resolve, but new ones won't have the duplicate. If you want the old behaviour back, return the untouched slug from the `beautiful_filters_taxonomy_rewrite_slug` filter.
+
 = Is it compatible with Polylang/WPML? =
 It is 100% compatible with Polylang. WPML is a bit wonky but might work depending on your setup. In order for this to work properly you should set the post types and all connected taxonomies to be translatable. The filtered urls will still work even if you don't set the post type to be translatable but when switching language Polylang still think it should add the new language to the URL which means it'll throw a 404 error. This is to be expected and NOT due to this plugin. If you experience 404 errors make sure you flush your rewrite rules by going to settings > permalinks in the admin dashboard.
 
@@ -146,6 +150,13 @@ Why thank you! We don't have proper donate link but if you want to you can send 
 
 
 == Changelog ==
+= 2.5.0 =
+* BUGFIX: The post type slug is no longer duplicated in the filtered URL when a taxonomy is registered with a rewrite slug nested underneath the post type archive (for example a taxonomy with the rewrite slug `horses/locations` on a post type archived at `horses`). Those filters now produce `/horses/locations/spain/` instead of `/horses/horses/locations/spain/`. The old URLs keep working, they're still registered as rewrite rules, so nothing that's already been linked to or indexed breaks.
+* **If you've been working around this yourself, remove your workaround now.** A `beautiful_filters_new_url` filter that strips repeated segments is harmless, but anything doing a plain `str_replace( '/your-slug/', '/', $new_url )` will now eat the real archive segment and break the URL. If you've edited the plugin files directly your changes are already gone with this update.
+* BUGFIX: Taxonomies registered without a rewrite slug but with a `query_var` different from the taxonomy name produced a URL that didn't match the rewrite rules and 404'd. The URL and the rewrite rules are now always built from the same value.
+* BUGFIX: Polylang's language prefixed rewrite rules haven't actually been generated since 2.4.0, so filtered URLs like `/en/horses/locations/spain/` 404'd. They're back.
+* NEW FILTER: `beautiful_filters_taxonomy_rewrite_slug` lets you control the URL segment used for a taxonomy. See the API section below.
+
 = 2.4.9 =
 * BUGFIX: The `[show_beautiful_filters]` and `[show_beautiful_filters_info]` shortcodes now render at the position of the shortcode instead of above the content. If you previously relied on the old placement you may need to move the shortcode or adjust your styling.
 * IMPROVEMENT: Hardened the filter modules against a rare PHP 8 fatal error when a custom `beautiful_filters_post_types` filter returns a non-array value.
@@ -478,6 +489,22 @@ function modify_categories_dropdown( $taxonomies ) {
     return $taxonomies;
 }
 add_filter( 'beautiful_filters_taxonomies', 'modify_categories_dropdown', 10, 1 );
+`
+
+= beautiful_filters_taxonomy_rewrite_slug =
+
+$rewrite_slug is the url segment used for a taxonomy, both when building the filtered url and when creating the rewrite rules.
+$taxonomy is the name of the taxonomy.
+$post_type_slug is the archive slug of the post type being filtered.
+
+Note that this filter has to return the same value in both places or the filtered url won't resolve. It's mainly here as an escape hatch if you need full control over the url structure.
+
+`
+function modify_taxonomy_rewrite_slug( $rewrite_slug, $taxonomy, $post_type_slug ) {
+
+    return $rewrite_slug;
+}
+add_filter( 'beautiful_filters_taxonomy_rewrite_slug', 'modify_taxonomy_rewrite_slug', 10, 3 );
 `
 
 = beautiful_filters_taxonomy_order =
