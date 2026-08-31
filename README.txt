@@ -151,11 +151,11 @@ Why thank you! We don't have proper donate link but if you want to you can send 
 
 == Changelog ==
 = 2.5.0 =
-* BUGFIX: The post type slug is no longer duplicated in the filtered URL when a taxonomy is registered with a rewrite slug nested underneath the post type archive (for example a taxonomy with the rewrite slug `horses/locations` on a post type archived at `horses`). Those filters now produce `/horses/locations/spain/` instead of `/horses/horses/locations/spain/`. The old URLs keep working, they're still registered as rewrite rules, so nothing that's already been linked to or indexed breaks.
-* **If you've been working around this yourself, remove your workaround now.** A `beautiful_filters_new_url` filter that strips repeated segments is harmless, but anything doing a plain `str_replace( '/your-slug/', '/', $new_url )` will now eat the real archive segment and break the URL. If you've edited the plugin files directly your changes are already gone with this update.
-* BUGFIX: Taxonomies registered without a rewrite slug but with a `query_var` different from the taxonomy name produced a URL that didn't match the rewrite rules and 404'd. The URL and the rewrite rules are now always built from the same value.
-* BUGFIX: Polylang's language prefixed rewrite rules haven't actually been generated since 2.4.0, so filtered URLs like `/en/horses/locations/spain/` 404'd. They're back.
-* NEW FILTER: `beautiful_filters_taxonomy_rewrite_slug` lets you control the URL segment used for a taxonomy. See the API section below.
+* BUGFIX: The post type slug is no longer added twice to the filtered URL when a taxonomy is registered with a rewrite slug nested under the post type archive, like the rewrite slug `horses/locations` on a post type archived at `horses`. You'll get /horses/locations/spain/ instead of /horses/horses/locations/spain/ from now on. The old URLs are still registered as rewrite rules so anything you've already linked to keeps working.
+* NOTE: If you've been working around this with your own code you can remove it now. A `beautiful_filters_new_url` filter that strips the repeated slug does no harm but isn't needed anymore. Anything doing a plain str_replace on the post type slug will break the URL instead of fixing it, so do get rid of that one.
+* BUGFIX: A taxonomy registered without a rewrite slug, but with a query_var different from the taxonomy name, produced a URL that didn't match the rewrite rules and gave a 404. Both are built from the same value now.
+* BUGFIX: Polylangs language prefixed rewrite rules haven't actually been generated since 2.4.0, so filtered URLs like /en/horses/locations/spain/ gave a 404. They're back.
+* NEW FILTER: `beautiful_filters_taxonomy_rewrite_slug` lets you decide what URL segment a taxonomy gets. See the API section further down.
 
 = 2.4.9 =
 * BUGFIX: The `[show_beautiful_filters]` and `[show_beautiful_filters_info]` shortcodes now render at the position of the shortcode instead of above the content. If you previously relied on the old placement you may need to move the shortcode or adjust your styling.
@@ -497,7 +497,7 @@ $rewrite_slug is the url segment used for a taxonomy, both when building the fil
 $taxonomy is the name of the taxonomy.
 $post_type_slug is the archive slug of the post type being filtered.
 
-Note that this filter has to return the same value in both places or the filtered url won't resolve. It's mainly here as an escape hatch if you need full control over the url structure.
+The value you return is used both when the filtered url is built and when the rewrite rules are created, so it has to be the same in both places or the url won't resolve. It's here for those of you who want full control over the url structure.
 
 `
 function modify_taxonomy_rewrite_slug( $rewrite_slug, $taxonomy, $post_type_slug ) {
