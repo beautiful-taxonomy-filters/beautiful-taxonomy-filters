@@ -8,6 +8,9 @@
 /.gitignore
 /.distignore
 
+# Local tooling config
+/.claude
+
 # GitHub-only docs (WordPress.org uses README.txt / LICENSE.txt)
 /README.md
 /LICENSE
