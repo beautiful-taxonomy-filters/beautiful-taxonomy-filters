@@ -5,7 +5,7 @@
  *
  * This file is used to setup the main settings area
  *
- * @link       http://tigerton.se
+ *
  * @since      1.0.0
  *
  * @package    Beautiful_Taxonomy_Filters
@@ -13,8 +13,8 @@
  */
 ?>
 <div class="wrap">
-	<h2><?php _e('Beautiful Taxonomy Filters', 'beautiful-taxonomy-filters'); ?></h2>
-	<p><a href="<?php echo admin_url() ?>/options-general.php?page=taxonomy-filters&tab=help" class"margin"><?php _e('How to use Beautiful Taxonomy Filters', 'beautiful-taxonomy-filters'); ?></a></p>
+	<h2><?php esc_html_e('Beautiful Taxonomy Filters', 'beautiful-taxonomy-filters'); ?></h2>
+	<p><a href="<?php echo esc_url( admin_url() ) ?>/options-general.php?page=taxonomy-filters&tab=help" class"margin"><?php esc_html_e('How to use Beautiful Taxonomy Filters', 'beautiful-taxonomy-filters'); ?></a></p>
 	<h2 class="nav-tab-wrapper">
 		<?php
 	    $tabs = array(
@@ -24,10 +24,10 @@
 		    'about' => __('About', 'beautiful-taxonomy-filters')
 	    );
 	    //set current tab
-	    $tab = ( isset($_GET['tab']) ? $_GET['tab'] : 'basic' );
+	    $tab = ( isset($_GET['tab']) ? $_GET['tab'] : 'basic' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	    ?>
 	    <?php foreach( $tabs as $key => $value ): ?>
-	    	<a class="nav-tab <?php if( $tab == $key ){ echo 'nav-tab-active'; } ?>" href="<?php echo admin_url() ?>/options-general.php?page=taxonomy-filters&tab=<?php echo $key; ?>"><?php echo $value; ?></a>
+	    	<a class="nav-tab <?php if( $tab == $key ){ echo esc_attr( 'nav-tab-active' ); } ?>" href="<?php echo esc_url( admin_url() ); ?>/options-general.php?page=taxonomy-filters&tab=<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $value ); ?></a>
 	    <?php endforeach; ?>
 	</h2>
 

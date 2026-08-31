@@ -8,15 +8,15 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              http://tigerton.se
+ * @link              https://jonte.dev
  * @since             1.0.0
  * @package           Beautiful_Taxonomy_Filters
  *
  * @wordpress-plugin
- * Plugin Name:       Beautiful taxonomy filter
- * Plugin URI:        http://tigerton.se
+ * Plugin Name:       Beautiful taxonomy filters
+ * Plugin URI:        https://jonte.dev
  * Description:       Supercharges your custom post type archives by letting visitors filter the posts by their terms/categories.
- * Version:           2.4.3
+ * Version:           2.4.9
  * Author:            Jonathan de Jong
  * Author URI:        https://github.com/jonathan-dejong
  * License:           GPL-2.0+

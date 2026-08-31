@@ -3,7 +3,7 @@
 /**
  * Fired during plugin deactivation
  *
- * @link       http://tigerton.se
+ *
  * @since      1.0.0
  *
  * @package    Beautiful_Taxonomy_Filters
@@ -18,7 +18,7 @@
  * @since      1.0.0
  * @package    Beautiful_Taxonomy_Filters
  * @subpackage Beautiful_Taxonomy_Filters/includes
- * @author     Your Name <email@example.com>
+ * @author     Jonathan <me@jonte.dev>
  */
 class Beautiful_Taxonomy_Filters_Deactivator {
 
@@ -32,8 +32,6 @@ class Beautiful_Taxonomy_Filters_Deactivator {
 		flush_rewrite_rules();
 		//would want to use flush_rewrite_rules only but that does not work for some reason??
 		delete_option('rewrite_rules');
-		//Delete plugin version
-		//delete_option('beautiful_taxonomy_filters_version');
 	}
 
 }

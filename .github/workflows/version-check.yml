@@ -1,0 +1,23 @@
+name: Version consistency
+
+# Fails if the plugin version is not declared identically in all three places:
+#   - beautiful-taxonomy-filters.php  (Version: header)
+#   - README.txt                      (Stable tag:)
+#   - includes/class-beautiful-taxonomy-filters.php  ($this->version)
+# This catches the easy-to-miss drift before a release is cut.
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+
+jobs:
+  versions:
+    name: Check version consistency
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check versions agree
+        run: bash .github/scripts/check-versions.sh

@@ -28,8 +28,8 @@ msgid "Beautiful taxonomy filter"
 msgstr "Beautiful taxonomy filter"
 
 #. URI of the plugin
-msgid "http://tigerton.se"
-msgstr "http://tigerton.se"
+msgid "http://jonte.dev"
+msgstr "http://jonte.dev"
 
 #. Description of the plugin
 msgid ""
@@ -271,24 +271,24 @@ msgid ""
 "I recommend using <a href=\"%1$s\">POEdit</a> or if you prefer to do it "
 "straight from the WordPress admin interface use <a href=\"%2$s\">Loco "
 "Translate</a>. When you’re done, send us the file(s) to <a href=\"%3$s"
-"\">jonathan@tigerton.se</a> and we’ll add it to the official plugin!"
+"\">me@jonte.dev</a> and we’ll add it to the official plugin!"
 msgstr ""
 "Препоръчваме ви да използвате <a href=\"%1$s\">POEdit</a> или ако "
 "предпочитате може да го направите директно от административния панел на "
 "Wordpress <a href=\"%2$s\">Loco Translate</a>. Когато сте готови, изпратете "
-"ни файловете на адрес <a href=\"%3$s\">jonathan@tigerton.se</a> и ние ще го "
+"ни файловете на адрес <a href=\"%3$s\">me@jonte.dev</a> и ние ще го "
 "добавим към ядрото на плъг-ина!"
 
 #: ../admin/partials/about/about.php:12
 #, php-format
 msgid ""
 "Beautiful Taxonomy Filters is maintained by <a href=\"%1$s\" target=\"_blank"
-"\">Jonathan</a> at the agency <a href=\"%2$s\" target=\"_blank\">Tigerton</"
+"\">Jonathan</a> at the agency <a href=\"%2$s\" target=\"_blank\">Jonathan de Jong</"
 "a>."
 msgstr ""
 "Beautiful Taxonomy Filters плъг-ина се поддържа от <a href=\"%1$s\" target="
 "\"_blank\">Jonathan</a> в агенцията <a href=\"%2$s\" target=\"_blank"
-"\">Tigerton</a>."
+"\">Jonathan de Jong</a>."
 
 #: ../admin/partials/about/about.php:13
 msgid "Beautiful Taxonomy Filters on Github"

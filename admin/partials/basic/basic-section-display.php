@@ -5,7 +5,7 @@
  *
  * This file is used to setup a settings section
  *
- * @link       http://tigerton.se
+ *
  * @since      1.0.0
  *
  * @package    Beautiful_Taxonomy_Filters

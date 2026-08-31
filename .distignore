@@ -1,0 +1,24 @@
+# Files and folders that should NOT be deployed to the WordPress.org SVN
+# repository (trunk/tags) or included in the distributed plugin zip.
+# Used by 10up/action-wordpress-plugin-deploy.
+
+# Version control / CI
+/.git
+/.github
+/.gitignore
+/.distignore
+
+# Local tooling config
+/.claude
+
+# GitHub-only docs (WordPress.org uses README.txt / LICENSE.txt)
+/README.md
+/LICENSE
+/CLAUDE.md
+
+# WordPress.org page assets live here and are deployed separately via ASSETS_DIR
+/subversion
+
+# OS / editor cruft
+.DS_Store
+*~

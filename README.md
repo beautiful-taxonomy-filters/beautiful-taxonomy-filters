@@ -44,3 +44,30 @@ The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide
 * Swiss (Thanks to [Raphael Hüni](http://werbelinie.ch/))
 * Bulgarian (Thanks to [Georgi Marokov](https://github.com/Georgi-Marokov))
 * Romanian (Thanks to [Roberto Tamas](www.novace.ro))
+
+## Development & releases
+
+This plugin is developed here on GitHub and deployed to the [WordPress.org plugin repository](https://wordpress.org/plugins/beautiful-taxonomy-filters/) automatically via GitHub Actions using the [10up WordPress plugin deploy action](https://github.com/10up/action-wordpress-plugin-deploy). There is no need to commit to Subversion by hand.
+
+### Repository layout
+- The plugin source lives at the repository **root** — this is what ships to users.
+- `subversion/` holds the WordPress.org plugin page assets (banner, icon, screenshots).
+- `.distignore` lists files excluded from what gets deployed to WordPress.org (e.g. `README.md`, `.github/`, `subversion/`).
+
+### Cutting a release
+1. Bump the version in **all three** places and add a changelog entry:
+   - `beautiful-taxonomy-filters.php` — the `Version:` header.
+   - `README.txt` — the `Stable tag:` line, plus a new entry under `== Changelog ==`.
+   - `includes/class-beautiful-taxonomy-filters.php` — the `$this->version` value.
+2. Merge the change into `master`.
+3. Publish a **GitHub release** whose tag name is exactly the version number (e.g. `2.5.0`).
+
+Publishing the release triggers [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), which pushes the code to WordPress.org SVN `trunk` and creates the matching SVN tag. The version delivered to users comes from the release/tag name, so it must match the headers above.
+
+### Updating the plugin page without a release
+Pushing changes to `README.txt` or `subversion/**` on `master` triggers [`.github/workflows/assets.yml`](.github/workflows/assets.yml), which syncs the readme and plugin-page assets to WordPress.org without publishing a new version.
+
+### Required repository secrets
+Both workflows need these secrets (Settings → Secrets and variables → Actions):
+- `SVN_USERNAME` — your WordPress.org username.
+- `SVN_PASSWORD` — your WordPress.org password.

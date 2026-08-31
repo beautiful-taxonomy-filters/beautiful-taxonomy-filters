@@ -25,7 +25,7 @@
  * @since      1.0.0
  * @package    Beautiful_Taxonomy_Filters
  * @subpackage Beautiful_Taxonomy_Filters/includes
- * @author     Jonathan de Jong <jonathan@tigerton.se>
+ * @author     Jonathan de Jong <me@jonte.dev>
  */
 class Beautiful_Taxonomy_Filters {
 
@@ -69,7 +69,7 @@ class Beautiful_Taxonomy_Filters {
 	public function __construct() {
 
 		$this->Beautiful_Taxonomy_Filters = 'beautiful-taxonomy-filters';
-		$this->version                    = '2.4.3';
+		$this->version                    = '2.4.9';
 
 		$this->load_dependencies();
 		$this->set_locale();

@@ -5,7 +5,7 @@
  *
  * This file is used to setup a settings field
  *
- * @link       http://tigerton.se
+ *
  * @since      1.0.0
  *
  * @package    Beautiful_Taxonomy_Filters
@@ -20,14 +20,16 @@ $styles = array(
 	'light-material' => __('Light Material Design', 'beautiful-taxonomy-filters'),
 	'dark-material' => __('Dark Material Design', 'beautiful-taxonomy-filters')
 );
-echo '<select name="beautiful_taxonomy_filters_styles">';
-foreach($styles as $key => $value){
-	echo '<option value="' . $key . '"';
-	if($key == $selected_style){
-		echo ' selected="selected"';
-	}
-	echo '>' . $value . '</option>';
-}
-echo '</select>';
 ?>
-
+<select name="beautiful_taxonomy_filters_styles">
+<?php
+foreach($styles as $key => $value){
+	printf(
+		'<option value="%1$s" %2$s>%3$s</option>',
+		esc_attr( $key ),
+		selected( $key, $selected_style, false ),
+		esc_html( $value )
+	);
+}
+?>
+</select>
