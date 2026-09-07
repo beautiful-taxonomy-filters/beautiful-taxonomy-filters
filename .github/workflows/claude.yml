@@ -38,6 +38,17 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
+          # Check out the SHA rather than letting the action resolve the
+          # default branch by name, so the workspace is left on a detached
+          # HEAD with no local "master" branch.
+          #
+          # For a pull request from a fork the action runs
+          #   git fetch origin pull/N/head:<the fork's head ref name>
+          # and contributors commonly work on their fork's own "master", which
+          # collides with the branch checkout would otherwise have left us on:
+          #   fatal: refusing to fetch into branch 'refs/heads/master'
+          #          checked out at '/home/runner/work/...'
+          ref: ${{ github.sha }}
 
       - name: Claude
         uses: anthropics/claude-code-action@v1
