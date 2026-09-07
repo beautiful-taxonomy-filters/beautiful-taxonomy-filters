@@ -423,6 +423,10 @@ class Beautiful_Taxonomy_Filters_Public {
 
 		$new_url = trailingslashit( get_post_type_archive_link( $current_post_type ) );
 
+		//The url above already contains the post type archive slug. We need it here as well
+		//so we don't add it to the url a second time for taxonomies nested underneath it.
+		$post_type_slug = btf_get_post_type_archive_slug( $current_post_type );
+
 		//Get the taxonomies of the current post type
 		$current_taxonomies = btf_get_current_taxonomies( $current_post_type );
 		if ( $current_taxonomies ) {
@@ -433,12 +437,10 @@ class Beautiful_Taxonomy_Filters_Public {
 				$term = ( isset( $_POST[ 'select-' . $key ] ) ? wp_unslash( $_POST[ 'select-' . $key ] ) : false ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				if ( $term ) {
 					$term_object = get_term( $term, $key );
-					//If the taxonomy has a rewrite slug we need to use that instead!
-					if ( is_array( $value->rewrite ) && array_key_exists( 'slug', $value->rewrite ) ) {
-						$new_url .= trailingslashit( $value->rewrite['slug'] . '/' . $term_object->slug );
-					} else {
-						$new_url .= trailingslashit( $key . '/' . $term_object->slug );
-					}
+					//Resolve the url segment for the taxonomy. Must be identical to the one used
+					//for the rewrite rules or the url we redirect to won't resolve!
+					$rewrite_slug = btf_get_taxonomy_rewrite_slug( $value, $post_type_slug );
+					$new_url .= trailingslashit( $rewrite_slug . '/' . $term_object->slug );
 				}
 			}
 		}

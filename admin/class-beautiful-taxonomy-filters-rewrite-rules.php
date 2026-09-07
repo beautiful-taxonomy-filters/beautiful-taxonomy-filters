@@ -43,26 +43,44 @@ class Beautiful_Taxonomy_Filters_Rewrite_Rules {
 		}
 
 		// Get the post type permalink slug. The has_archive value takes precedence if it's been set to a string.
-		$post_type_slug = ( is_string( $post_type->has_archive ) ) ? $post_type->has_archive : $post_type->rewrite['slug'];
+		$post_type_slug = btf_get_post_type_archive_slug( $post_type );
 		$new_rewrite_rules = array();
 		$taxonomies        = btf_get_current_taxonomies( $post_type->name );
 
 		// dont do anything if there are no taxonomies!
-		if ( empty( $taxonomies ) ) {
+		if ( empty( $taxonomies ) || empty( $post_type_slug ) ) {
 			return;
 		}
 
-		// Setup rewrite rules!
-		$new_rewrite_rule = $post_type_slug;
-		$new_query_string = 'index.php?post_type=' . $post_type->name;
+		// Polylang support. Prefix the rules with the language slug and pick the language up
+		// from the first capture group, which pushes all the taxonomy matches one step ahead.
+		$language_prefix = '';
+		$language_query  = '';
+		$offset          = 0;
+		if ( ! empty( $args['polylang_languages'] ) ) {
+			$language_prefix = sprintf( '(%s)/', implode( '|', $args['polylang_languages'] ) );
+			$language_query  = 'lang=' . $wp_rewrite->preg_index( 1 ) . '&';
+			$offset          = 1;
+		}
 
-		$n = 1;
+		// Setup rewrite rules!
+		$new_rewrite_rule = $language_prefix . $post_type_slug;
+		$new_query_string = 'index.php?' . $language_query . 'post_type=' . $post_type->name;
+
+		// Before 2.5.0 the post type archive slug ended up in the url twice for taxonomies
+		// registered with a rewrite slug nested underneath it. We keep building those rules
+		// as well so already existing (and indexed) urls don't suddenly 404 on people.
+		$legacy_rewrite_rule = $new_rewrite_rule;
+
+		$n = 1 + $offset;
 		foreach ( $taxonomies as $taxonomy ) {
 			// Loop through each taxonomy and add it to our rewrite.
 			$query_var = $taxonomy->query_var;
-			$rewrite_slug = ( ! empty( $taxonomy->rewrite['slug'] ) ) ? $taxonomy->rewrite['slug'] : $query_var;
+			$rewrite_slug = btf_get_taxonomy_rewrite_slug( $taxonomy, $post_type_slug );
+			$legacy_slug = ( ! empty( $taxonomy->rewrite['slug'] ) ) ? $taxonomy->rewrite['slug'] : $query_var;
 
 			$new_rewrite_rule .= sprintf( '(?:/%s/([^/]+))?', $rewrite_slug );
+			$legacy_rewrite_rule .= sprintf( '(?:/%s/([^/]+))?', $legacy_slug );
 			$new_query_string .= sprintf( '&%s=%s', $query_var, $wp_rewrite->preg_index( $n ) );
 
 			$n++;
@@ -80,6 +98,13 @@ class Beautiful_Taxonomy_Filters_Rewrite_Rules {
 			$new_paged_rewrite_rule => $new_paged_query_string,
 			$new_rewrite_rule => $new_query_string,
 		);
+
+		// Both rules capture the exact same groups in the same order so the legacy rules can
+		// reuse the query strings above. Only add them if they actually differ.
+		if ( $legacy_rewrite_rule . '/?$' !== $new_rewrite_rule ) {
+			$new_rewrite_rules[ $legacy_rewrite_rule . '/page/([0-9]{1,})/?$' ] = $new_paged_query_string;
+			$new_rewrite_rules[ $legacy_rewrite_rule . '/?$' ] = $new_query_string;
+		}
 
 		return $new_rewrite_rules;
 	}

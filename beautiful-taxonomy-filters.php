@@ -16,7 +16,7 @@
  * Plugin Name:       Beautiful taxonomy filters
  * Plugin URI:        https://jonte.dev
  * Description:       Supercharges your custom post type archives by letting visitors filter the posts by their terms/categories.
- * Version:           2.4.9
+ * Version:           2.5.0
  * Author:            Jonathan de Jong
  * Author URI:        https://github.com/jonathan-dejong
  * License:           GPL-2.0+
