@@ -14,8 +14,8 @@ name: Update WordPress.org assets & readme
 # A release merge into master also touches README.txt while carrying the code
 # for that release, so it matches the paths filter below but is exactly the
 # case the action rejects. The guard job checks what the push actually changed
-# and skips the sync when any plugin file is in it — deploy.yml handles those,
-# a minute later, off the published release.
+# and skips the sync when any file that actually ships is in it — deploy.yml
+# handles those, a minute later, off the published release.
 on:
   push:
     branches:
@@ -67,15 +67,38 @@ jobs:
 
           changed=$(git diff --name-only "$BEFORE" "$AFTER")
           echo "Changed in this push:"
-          echo "$changed" | sed 's/^/  /'
+          printf '%s\n' "$changed" | sed 's/^/  /'
 
-          # Everything the plugin page is built from, plus .github, which is in
-          # .distignore and so never reaches SVN either way.
-          other=$(printf '%s\n' "$changed" \
-            | grep -Ev '^(README\.txt|subversion/|\.github/)' || true)
+          # A file matters here only if it can actually reach SVN, so ask
+          # .distignore rather than keeping a second copy of its list in sync
+          # by hand. That covers README.md, CLAUDE.md, LICENSE and .github/,
+          # which are all stripped from the deploy. README.txt is the one file
+          # that does ship and that this workflow is meant to update.
+          is_stripped_by_distignore() {
+            local file="$1" pat p
+            while IFS= read -r pat || [ -n "$pat" ]; do
+              pat="${pat%%#*}"
+              pat="$(printf '%s' "$pat" | tr -d '[:space:]')"
+              [ -z "$pat" ] && continue
+              case "$pat" in
+                /*) p="${pat#/}"; case "$file" in "$p"|"$p"/*) return 0 ;; esac ;;
+                *)  case "${file##*/}" in $pat) return 0 ;; esac ;;
+              esac
+            done < .distignore
+            return 1
+          }
+
+          other=""
+          while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            [ "$file" = "README.txt" ] && continue
+            is_stripped_by_distignore "$file" && continue
+            other="${other}${file}"$'\n'
+          done <<< "$changed"
+          other="${other%$'\n'}"
 
           if [ -n "$other" ]; then
-            echo "::notice::Plugin files changed in this push, so trunk is behind until the release deploys. Skipping the asset sync:"
+            echo "::notice::Files that ship changed in this push, so trunk is behind until the release deploys. Skipping the asset sync:"
             printf '%s\n' "$other" | sed 's/^/  /'
             echo "assets_only=false" >> "$GITHUB_OUTPUT"
           else
