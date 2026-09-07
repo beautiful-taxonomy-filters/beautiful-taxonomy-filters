@@ -129,6 +129,14 @@ class Beautiful_Taxonomy_Filters_Admin {
 
 			}
 
+			//Older than 2.5.0
+			if ( version_compare( $current_version, '2.5.0', '<' ) ) {
+				// The rewrite rules changed for taxonomies with a rewrite slug nested under
+				// the post type archive, so they need to be flushed.
+				flush_rewrite_rules();
+
+			}
+
 			//Finally update the current version
 			update_option( 'beautiful_taxonomy_filters_version', $this->version );
 

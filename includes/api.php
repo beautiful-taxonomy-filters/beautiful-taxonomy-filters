@@ -137,3 +137,80 @@ function btf_get_current_taxonomies( $current_post_type = false ) {
 	return false;
 
 }
+
+
+/**
+ * Returns the slug a post type uses for its archive URL.
+ *
+ * This is the same value WordPress puts into get_post_type_archive_link(): the
+ * has_archive value takes precedence when it's been set to a string, otherwise
+ * the rewrite slug is used.
+ *
+ * @since  2.5.0
+ * @param  string|object $post_type Post type name or post type object.
+ * @return string/false The archive slug or false if it couldn't be resolved.
+ */
+function btf_get_post_type_archive_slug( $post_type ) {
+
+	if ( ! is_object( $post_type ) ) {
+		$post_type = get_post_type_object( $post_type );
+	}
+
+	if ( ! is_object( $post_type ) ) {
+		return false;
+	}
+
+	if ( is_string( $post_type->has_archive ) && '' !== $post_type->has_archive ) {
+		$post_type_slug = $post_type->has_archive;
+	} elseif ( is_array( $post_type->rewrite ) && ! empty( $post_type->rewrite['slug'] ) ) {
+		$post_type_slug = $post_type->rewrite['slug'];
+	} else {
+		$post_type_slug = $post_type->name;
+	}
+
+	return trim( $post_type_slug, '/' );
+
+}
+
+
+/**
+ * Returns the url segment to use for a taxonomy when building filtered urls.
+ *
+ * Both the filtered url (public) and the rewrite rules (admin) are built from this
+ * so they always stay in sync. If they don't, the pretty url won't resolve!
+ *
+ * Taxonomies are often registered with their rewrite slug nested underneath the post
+ * type archive, for example 'horses/locations' on a post type archived at 'horses'.
+ * Since we always start the url at the post type archive that prefix would end up in
+ * the url twice, so we strip it here.
+ *
+ * @since  2.5.0
+ * @param  object $taxonomy       A taxonomy object.
+ * @param  string $post_type_slug The archive slug of the post type being filtered.
+ * @return string The url segment for the taxonomy.
+ */
+function btf_get_taxonomy_rewrite_slug( $taxonomy, $post_type_slug = '' ) {
+
+	if ( is_array( $taxonomy->rewrite ) && ! empty( $taxonomy->rewrite['slug'] ) ) {
+		$rewrite_slug = $taxonomy->rewrite['slug'];
+	} elseif ( ! empty( $taxonomy->query_var ) ) {
+		$rewrite_slug = $taxonomy->query_var;
+	} else {
+		$rewrite_slug = $taxonomy->name;
+	}
+
+	$rewrite_slug = trim( $rewrite_slug, '/' );
+
+	// Remove the post type archive slug if the taxonomy is nested underneath it.
+	// Note the trailing slash, we only want to remove it when there's an actual
+	// taxonomy segment left afterwards.
+	if ( $post_type_slug ) {
+		$prefix = trailingslashit( $post_type_slug );
+		if ( 0 === strpos( $rewrite_slug, $prefix ) ) {
+			$rewrite_slug = substr( $rewrite_slug, strlen( $prefix ) );
+		}
+	}
+
+	return apply_filters( 'beautiful_filters_taxonomy_rewrite_slug', $rewrite_slug, $taxonomy->name, $post_type_slug );
+
+}
