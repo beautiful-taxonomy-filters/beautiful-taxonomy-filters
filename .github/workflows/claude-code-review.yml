@@ -1,0 +1,55 @@
+name: Claude code review
+
+# Runs a Claude code review on every pull request. Findings are posted as
+# inline comments on the diff; when Claude finds nothing worth flagging it
+# posts a single summary comment instead. It reads CLAUDE.md, so the
+# BTF-specific rules (rewrite-rule symmetry between the redirect and the
+# rewrite rules, the duplicated widget markup) inform what it flags.
+#
+# Authentication uses CLAUDE_CODE_OAUTH_TOKEN, a Claude subscription token
+# generated locally with `claude setup-token`. If reviews start failing to
+# authenticate, generate a new one and update the repository secret.
+#
+# GitHub withholds secrets from runs triggered by pull requests from forks, so
+# this job cannot run on outside contributions and is skipped there. To review
+# one, comment "@claude review this" on the pull request instead — see
+# claude.yml.
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+    paths-ignore:
+      - 'languages/**'
+      - 'subversion/**'
+
+# A new push supersedes the review still running on the previous one.
+concurrency:
+  group: claude-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Review pull request
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Claude code review
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          plugin_marketplaces: "https://github.com/anthropics/claude-code.git"
+          plugins: "code-review@claude-code-plugins"
+          prompt: "/code-review:code-review --comment ${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
+          # The action only starts the MCP server that posts inline comments
+          # when --allowedTools names it, even though the skill also declares it.
+          claude_args: '--allowedTools "mcp__github_inline_comment__create_inline_comment"'

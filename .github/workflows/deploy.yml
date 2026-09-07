@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Verify version matches the release tag
         run: bash .github/scripts/check-versions.sh "${{ github.event.release.tag_name }}"
