@@ -1,9 +1,21 @@
 name: Update WordPress.org assets & readme
 
 # Syncs the WordPress.org plugin page assets (banners, screenshots) and the
-# readme to the SVN repo WITHOUT cutting a new plugin release. Runs whenever the
-# relevant files change on the default branch, so you can fix a typo in
-# README.txt or swap a banner without publishing a version.
+# readme to the SVN repo WITHOUT cutting a new plugin release. Use this path
+# for a changelog typo, an FAQ fix, a "Tested up to" bump, or a new banner —
+# anything that should change the plugin page without pushing a version update
+# to every install.
+#
+# Only readme/asset changes can go this way: 10up's action refuses to deploy
+# when anything else in trunk differs from the repo ("Other files have been
+# modified; changes not deployed"), which is what keeps this from quietly
+# shipping code outside a release.
+#
+# A release merge into master also touches README.txt while carrying the code
+# for that release, so it matches the paths filter below but is exactly the
+# case the action rejects. The guard job checks what the push actually changed
+# and skips the sync when any file that actually ships is in it — deploy.yml
+# handles those, a minute later, off the published release.
 on:
   push:
     branches:
@@ -12,10 +24,92 @@ on:
       - 'README.txt'
       - 'subversion/**'
       - '.github/workflows/assets.yml'
+  # Escape hatch: sync on demand regardless of what the last push contained.
+  workflow_dispatch:
 
 jobs:
+  guard:
+    name: Check the push touched only readme and assets
+    runs-on: ubuntu-latest
+    outputs:
+      assets_only: ${{ steps.check.outputs.assets_only }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          # Need both ends of the push range to diff them.
+          fetch-depth: 0
+
+      - name: Classify the changed files
+        id: check
+        env:
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Run was requested manually; syncing without inspecting the diff."
+            echo "assets_only=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # A brand new branch, a force push, or a rewritten history leaves
+          # nothing to diff against. Skip rather than risk a partial sync;
+          # workflow_dispatch is there to run it deliberately.
+          if [ -z "${BEFORE:-}" ] \
+            || [ "$BEFORE" = "0000000000000000000000000000000000000000" ] \
+            || ! git cat-file -e "${BEFORE}^{commit}" 2>/dev/null; then
+            echo "::notice::No usable base commit (${BEFORE:-<empty>}); skipping. Re-run manually to sync."
+            echo "assets_only=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          changed=$(git diff --name-only "$BEFORE" "$AFTER")
+          echo "Changed in this push:"
+          printf '%s\n' "$changed" | sed 's/^/  /'
+
+          # A file matters here only if it can actually reach SVN, so ask
+          # .distignore rather than keeping a second copy of its list in sync
+          # by hand. That covers README.md, CLAUDE.md, LICENSE and .github/,
+          # which are all stripped from the deploy. README.txt is the one file
+          # that does ship and that this workflow is meant to update.
+          is_stripped_by_distignore() {
+            local file="$1" pat p
+            while IFS= read -r pat || [ -n "$pat" ]; do
+              pat="${pat%%#*}"
+              pat="$(printf '%s' "$pat" | tr -d '[:space:]')"
+              [ -z "$pat" ] && continue
+              case "$pat" in
+                /*) p="${pat#/}"; case "$file" in "$p"|"$p"/*) return 0 ;; esac ;;
+                *)  case "${file##*/}" in $pat) return 0 ;; esac ;;
+              esac
+            done < .distignore
+            return 1
+          }
+
+          other=""
+          while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            [ "$file" = "README.txt" ] && continue
+            is_stripped_by_distignore "$file" && continue
+            other="${other}${file}"$'\n'
+          done <<< "$changed"
+          other="${other%$'\n'}"
+
+          if [ -n "$other" ]; then
+            echo "::notice::Files that ship changed in this push, so trunk is behind until the release deploys. Skipping the asset sync:"
+            printf '%s\n' "$other" | sed 's/^/  /'
+            echo "assets_only=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Only readme and assets changed; syncing."
+            echo "assets_only=true" >> "$GITHUB_OUTPUT"
+          fi
+
   assets:
     name: Update assets & readme
+    needs: guard
+    if: needs.guard.outputs.assets_only == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
