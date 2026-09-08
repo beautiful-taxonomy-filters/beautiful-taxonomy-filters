@@ -82,6 +82,12 @@ Do you want to translate this plugin to another language? I recommend using POEd
 
 == Frequently Asked Questions ==
 
+= Why doesn't the URL change in the live preview? =
+
+It does change - you just can't see it. The live preview runs a whole WordPress inside your browser using WordPress Playground, and the address bar drawn above it is a mockup that doesn't follow where you are inside the site. So when you pick a couple of filters, the preview shows you the filtered results, but not the pretty URL that produced them.
+
+Behind that mockup the URL really has become something like `/recipes/cuisine/thai/diet/vegan/` rather than `/recipes/?cuisine=thai&diet=vegan`. Since those clean, linkable, bookmarkable URLs are the main thing this plugin does, it's worth installing it on a real site to see that part properly.
+
 = Can I show the filter module on a static page / in my header / in my footer? =
 
 Yes. Either use the widget and set a specific post type in it's settings or add a parameter of your custom post type slug to the `show_beautiful_filters` action. This "hardcodes" the filter module to that post type and lets you use it pretty much anywhere in your theme. Hardcore right..
