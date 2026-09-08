@@ -218,23 +218,21 @@ class Beautiful_Taxonomy_Filters_Public {
 	public static function get_current_posttype( $rewrite = true ) {
 		$current_post_type = get_post_type();
 		if ( ! $current_post_type || $current_post_type == 'page' ) {
-			global $template;
-			$template_name = explode( '-', basename( $template, '.php' ) );
-			if ( in_array( 'archive', $template_name ) && count( $template_name ) > 1 ) {
-				$current_post_type = $template_name[1];
+			$post_type_from_template = btf_get_post_type_from_template();
+			if ( $post_type_from_template ) {
+				$current_post_type = $post_type_from_template;
 			} else {
 				//didnt find the post type in the template, fall back to the wp_query!
 				global $wp_query;
-				if ( array_key_exists( 'post_type', $wp_query->query ) && $wp_query->query['post_type'] != '' ) {
+				if ( isset( $wp_query->query ) && array_key_exists( 'post_type', $wp_query->query ) && $wp_query->query['post_type'] != '' ) {
 					$current_post_type = $wp_query->query['post_type'];
 				}
 			}
 		}
 		if ( $rewrite ) {
-			//Get the post type object
-			$post_type_object = get_post_type_object( $current_post_type );
-			//Return the rewrite slug which is the one we actually want!
-			return $post_type_object->rewrite['slug'];
+			//Return the slug the post type uses for its archive url, which is the one we actually want!
+			//Resolved the same way as the rewrite rules and the filtered url, and false when it can't be resolved.
+			return btf_get_post_type_archive_slug( $current_post_type );
 		} else {
 			return $current_post_type;
 		}
@@ -278,15 +276,54 @@ class Beautiful_Taxonomy_Filters_Public {
 	public function update_filters_callback() {
 
 		// Security check
-		$nonce = sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		$nonce = isset( $_REQUEST['nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 		if ( ! wp_verify_nonce( $nonce, 'update_btf_selects_security' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'beautiful-taxonomy-filters' ) ), 403 );
 		}
 
+		$selects    = isset( $_REQUEST['selects'] ) ? map_deep( wp_unslash( (array) $_REQUEST['selects'] ), 'sanitize_text_field' ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		$post_type  = isset( $_REQUEST['posttype'] ) ? sanitize_text_field( $_REQUEST['posttype'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		$taxonomies = isset( $_REQUEST['taxonomies'] ) ? array_map( 'sanitize_text_field', wp_unslash( (array) $_REQUEST['taxonomies'] ) ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+
+		// Short circuit the database query entirely.
+		// Return anything but null and that value is used instead of querying the database.
+		// It has to be shaped exactly like the result of the query it replaces: an array of
+		// objects with the properties term_count, term_id, term_name, term_slug and taxonomy.
+		$related_terms = apply_filters( 'beautiful_filters_pre_related_terms', null, $post_type, $selects, $taxonomies );
+
+		if ( null === $related_terms ) {
+			$related_terms = $this->get_related_terms( $post_type, $selects, $taxonomies );
+		}
+
+		$sorted = [];
+
+		if ( $related_terms ) {
+			foreach ( $related_terms as $term ) {
+				$term->term_name = html_entity_decode( apply_filters( 'list_cats', $term->term_name, $term->taxonomy ) );
+				$sorted[ $term->taxonomy ][] = $term;
+			}
+		}
+
+		echo wp_json_encode( $sorted );
+		exit();
+	}
+
+	/**
+	 * Queries the database for the terms that still return results for the current selection.
+	 *
+	 * Split out of update_filters_callback() so the response is shaped and sent in a single
+	 * place whether the query ran or was short circuited.
+	 *
+	 * @since   2.6.0
+	 * @param   string $post_type  The post type being filtered.
+	 * @param   array  $selects    The currently selected taxonomies and terms.
+	 * @param   array  $taxonomies The taxonomies of the post type being filtered.
+	 * @return  array  An array of term objects with the properties term_count, term_id,
+	 *                 term_name, term_slug and taxonomy. Empty if there's nothing to match.
+	 */
+	private function get_related_terms( $post_type, $selects, $taxonomies ) {
+
 		global $wpdb;
-		$selects    = map_deep( wp_unslash( (array) $_REQUEST['selects'] ), 'sanitize_text_field' ); // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-		$post_type  = sanitize_text_field( $_REQUEST['posttype'] ); // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-		$taxonomies = array_map( 'sanitize_text_field', wp_unslash( (array) $_REQUEST['taxonomies'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
 		$all_other_terms_query = new WP_Term_Query(
 			[
@@ -294,7 +331,16 @@ class Beautiful_Taxonomy_Filters_Public {
 				'fields'   => 'ids',
 			]
 		);
-		$all_other_terms = implode( ',', array_map( 'absint', $all_other_terms_query->terms ) );
+		$all_other_term_ids = array_map( 'absint', (array) $all_other_terms_query->terms );
+
+		// Without any terms to match against, the final AND condition of the query below
+		// would end up as an empty IN() list, which is a syntax error. Nothing could match
+		// anyway, so hand back an empty result set instead of running a broken query.
+		if ( empty( $all_other_term_ids ) ) {
+			return array();
+		}
+
+		$all_other_terms = implode( ',', $all_other_term_ids );
 		$sql_joins       = [];
 		$sql_ands        = [];
 
@@ -378,18 +424,13 @@ class Beautiful_Taxonomy_Filters_Public {
 		);
 		// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
 
-		$related_terms = $wpdb->get_results( $sql ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
-		$sorted = [];
+		// Filter the finished query.
+		// Note that the string handed to you has already been through $wpdb->prepare(),
+		// so anything you splice into it is your own responsibility, and any % characters
+		// in the string you return will not be processed again.
+		$sql = apply_filters( 'beautiful_filters_related_terms_sql', $sql, $post_type, $selects, $taxonomies );
 
-		if ( $related_terms ) {
-			foreach ( $related_terms as $term ) {
-				$term->term_name = html_entity_decode( apply_filters( 'list_cats', $term->term_name, $term->taxonomy ) );
-				$sorted[ $term->taxonomy ][] = $term;
-			}
-		}
-
-		echo wp_json_encode( $sorted );
-		exit();
+		return $wpdb->get_results( $sql ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 	}
 
 
@@ -553,18 +594,14 @@ class Beautiful_Taxonomy_Filters_Public {
 		if ( $post_type ) {
 
 			$current_post_type = $post_type;
-			//Get the post type object
-			$post_type_object = get_post_type_object( $current_post_type );
-			//Take the rewrite slug which is the one we actually want!
-			$current_post_type_rewrite = $post_type_object->rewrite['slug'];
+			//Take the slug the post type uses for its archive url, which is the one we actually want!
+			$current_post_type_rewrite = btf_get_post_type_archive_slug( $current_post_type );
 
 		} elseif ( isset( $_POST['post_type'] ) && $_POST['post_type'] != '' ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.NonceVerification.Missing
 
 			$current_post_type = sanitize_text_field( $_POST['post_type'] ); //phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-			//Get the post type object
-			$post_type_object = get_post_type_object( $current_post_type );
-			//Take the rewrite slug which is the one we actually want!
-			$current_post_type_rewrite = $post_type_object->rewrite['slug'];
+			//Take the slug the post type uses for its archive url, which is the one we actually want!
+			$current_post_type_rewrite = btf_get_post_type_archive_slug( $current_post_type );
 
 		} else { //If there was no post type from the form (for some reason) and there is no post type supplied by the public function, try to get it anyway!
 
