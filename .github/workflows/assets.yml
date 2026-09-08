@@ -122,3 +122,14 @@ jobs:
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
           SLUG: beautiful-taxonomy-filters
           ASSETS_DIR: subversion
+          # The action defaults this to lowercase "readme.txt". Our file is
+          # README.txt, and the runner is case sensitive, so the default makes
+          # the action fail to read the stable tag out of it ("Could not get
+          # stable tag from readme.txt") and silently skip copying the readme
+          # into tags/<stable tag>/. Trunk still gets updated, so the sync
+          # looks like it worked -- but wordpress.org builds the plugin page
+          # from the readme in the STABLE TAG directory, not from trunk, so
+          # every readme fix made through this workflow was invisible on the
+          # plugin page. Only the deploy path was unaffected: that action
+          # copies trunk into the new tag wholesale and never reads this.
+          README_NAME: README.txt
