@@ -112,7 +112,7 @@ if(!$current_post_type || !in_array($current_post_type, $activated_post_types)){
 			<div class="beautiful-taxonomy-filters-single-tax">
 				<?php
 				$label = $taxonomy->labels->name . ':';
-				$value = $taxonomy->labels->all_items;
+				$value = btf_get_taxonomy_all_items_label($taxonomy);
 				?>
 				<span class="single-tax-key"><?php echo esc_html( apply_filters('beautiful_filters_active_taxonomy', $label, $taxonomy->query_var) ); ?></span>
 				<span class="single-tax-value"><?php echo esc_html( apply_filters('beautiful_filters_active_terms', $value, $taxonomy->query_var) ); ?></span>
@@ -152,7 +152,7 @@ if(!$current_post_type || !in_array($current_post_type, $activated_post_types)){
 				<div class="beautiful-taxonomy-filters-single-tax">
 					<?php
 					$label = $taxonomy->labels->name . ':';
-					$value = $taxonomy->labels->all_items;
+					$value = btf_get_taxonomy_all_items_label($taxonomy);
 					?>
 					<span class="single-tax-key"><?php echo esc_html( apply_filters('beautiful_filters_active_taxonomy', $label, $taxonomy->query_var) ); ?></span>
 					<span class="single-tax-value"><?php echo esc_html( apply_filters('beautiful_filters_active_terms', $value, $taxonomy->query_var) ); ?></span>
