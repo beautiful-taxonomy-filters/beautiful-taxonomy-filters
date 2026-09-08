@@ -495,8 +495,21 @@ class Beautiful_Taxonomy_Filters_Public {
 		//sanitize URL
 		$new_url = esc_url_raw( $new_url );
 
+		$redirect_url = apply_filters( 'beautiful_filters_new_url', $new_url, $current_post_type );
+
+		//The url we build ourselves always points at this site, so the filter above is the only
+		//thing that can send a visitor somewhere else. Refuse to follow it off site.
+		//We check the location ourselves rather than leaning on wp_safe_redirect()'s own fallback,
+		//which is the admin url and would drop a logged out visitor on the login screen. Falling
+		//back to the url we built keeps them on the archive they were filtering.
+		//Hosts that should be allowed, language domains for example, belong in WordPress' own
+		//allowed_redirect_hosts filter. Polylang already registers its domains there.
+		if ( ! wp_validate_redirect( $redirect_url, false ) ) {
+			$redirect_url = $new_url;
+		}
+
 		//perform a redirect to the new filtered url
-		wp_redirect( apply_filters( 'beautiful_filters_new_url', $new_url, $current_post_type ) );
+		wp_safe_redirect( $redirect_url );
 		exit;
 	}
 

@@ -163,6 +163,7 @@ Why thank you! We don't have proper donate link but if you want to you can send 
 * BUGFIX: The filter module now resolves the post type archive slug the same way the rewrite rules and the filtered URL do. This fixes a PHP warning on post types registered with `'rewrite' => false` and a mismatched URL on post types whose `has_archive` differs from their rewrite slug.
 * BUGFIX: A taxonomy registered without an explicit all_items label no longer shows its own name as the "all" value. WordPress silently falls all_items back to the taxonomy name, so the filter info module printed things like "Meal Types: Meal Types" and the dropdowns had an "all" option reading just "Meal Types". You'll now get "All Meal Types" unless you've set the label yourself, in which case nothing changes.
 * BUGFIX: The select2 placeholder attribute is now properly escaped. A placeholder containing a quote, whether it came from a taxonomy label or from your own `beautiful_filters_dropdown_placeholder` callback, could break the markup of the dropdown.
+* IMPROVEMENT: The redirect to the filtered URL now goes through `wp_safe_redirect()`. The URL the plugin builds always points at your own site, so nothing changes for anyone, but if you use the `beautiful_filters_new_url` filter to send visitors to another domain you'll need to add that host to WordPress' `allowed_redirect_hosts` filter. Polylang already registers its language domains there, so a domain per language setup is unaffected.
 * BUGFIX: The conditional dropdowns AJAX endpoint no longer builds a malformed query when none of the post type's taxonomies have any terms, and no longer emits PHP warnings when called without parameters.
 * NEW FILTER: `beautiful_filters_post_type_archive_slug` lets you change the post type archive segment of a filtered URL, the counterpart to `beautiful_filters_taxonomy_rewrite_slug`. Thanks to AsfalothDE who first asked for this back in 2017.
 * NEW FILTER: `beautiful_filters_taxonomy_all_items_label` lets you set the "all terms" string yourself, and is the way to get the old behaviour back if you preferred it. See the API section further down.
@@ -890,6 +891,8 @@ add_filter('beautiful_filters_info_postcount', 'modify_filterinfo_postcount');
 = beautiful_filters_new_url =
 
 Use this filter to manipulate the URL string of the filtered archive page that the visitor will be directed to.
+
+Since 2.6.0 the redirect goes through `wp_safe_redirect()`, so a URL you return that points at another domain won't be followed and the visitor lands on the unfiltered archive instead. If you need to send people to another domain, add its host to WordPress' own `allowed_redirect_hosts` filter. Polylang registers its language domains there already, so a domain per language setup keeps working without you doing anything.
 
 `
 function modify_new_url($url){
