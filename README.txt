@@ -4,7 +4,7 @@ Donate link: http://fancy.to/k9qxt
 Tags: Taxonomy, filter, pretty permalinks, terms, widget
 Requires at least: 4.3.0
 Tested up to: 7.1
-Stable tag: 2.5.0
+Stable tag: 2.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,6 +158,17 @@ Why thank you! We don't have proper donate link but if you want to you can send 
 
 
 == Changelog ==
+= 2.6.0 =
+* BUGFIX: A post type whose name contains a hyphen, like wp-book, is now resolved correctly from its archive template. Previously only the part before the first hyphen was used, which meant the filter module silently didn't appear and PHP threw a notice.
+* BUGFIX: The filter module now resolves the post type archive slug the same way the rewrite rules and the filtered URL do. This fixes a PHP warning on post types registered with `'rewrite' => false` and a mismatched URL on post types whose `has_archive` differs from their rewrite slug.
+* BUGFIX: A taxonomy registered without an explicit all_items label no longer shows its own name as the "all" value. WordPress silently falls all_items back to the taxonomy name, so the filter info module printed things like "Meal Types: Meal Types" and the dropdowns had an "all" option reading just "Meal Types". You'll now get "All Meal Types" unless you've set the label yourself, in which case nothing changes.
+* BUGFIX: The select2 placeholder attribute is now properly escaped. A placeholder containing a quote, whether it came from a taxonomy label or from your own `beautiful_filters_dropdown_placeholder` callback, could break the markup of the dropdown.
+* IMPROVEMENT: The redirect to the filtered URL now goes through `wp_safe_redirect()`. The URL the plugin builds always points at your own site, so nothing changes for anyone, but if you use the `beautiful_filters_new_url` filter to send visitors to another domain you'll need to add that host to WordPress' `allowed_redirect_hosts` filter. Polylang already registers its language domains there, so a domain per language setup is unaffected.
+* BUGFIX: The conditional dropdowns AJAX endpoint no longer builds a malformed query when none of the post type's taxonomies have any terms, and no longer emits PHP warnings when called without parameters.
+* NEW FILTER: `beautiful_filters_post_type_archive_slug` lets you change the post type archive segment of a filtered URL, the counterpart to `beautiful_filters_taxonomy_rewrite_slug`. Thanks to AsfalothDE who first asked for this back in 2017.
+* NEW FILTER: `beautiful_filters_taxonomy_all_items_label` lets you set the "all terms" string yourself, and is the way to get the old behaviour back if you preferred it. See the API section further down.
+* NEW FILTERS: `beautiful_filters_pre_related_terms` and `beautiful_filters_related_terms_sql` let you replace or modify the conditional dropdowns database query, so you can point it at your own index on a large site.
+
 = 2.5.0 =
 * BUGFIX: The post type slug is no longer added twice to the filtered URL when a taxonomy is registered with a rewrite slug nested under the post type archive, like the rewrite slug `horses/locations` on a post type archived at `horses`. You'll get /horses/locations/spain/ instead of /horses/horses/locations/spain/ from now on. The old URLs are still registered as rewrite rules so anything you've already linked to keeps working.
 * NOTE: If you've been working around this with your own code you can remove it now. A `beautiful_filters_new_url` filter that strips the repeated slug does no harm but isn't needed anymore. Anything doing a plain str_replace on the post type slug will break the URL instead of fixing it, so do get rid of that one.
@@ -499,6 +510,22 @@ function modify_categories_dropdown( $taxonomies ) {
 add_filter( 'beautiful_filters_taxonomies', 'modify_categories_dropdown', 10, 1 );
 `
 
+= beautiful_filters_post_type_archive_slug =
+
+$post_type_slug is the url segment used for the post type archive, both when building the filtered url and when creating the rewrite rules.
+$post_type is the name of the post type.
+
+The counterpart to *beautiful_filters_taxonomy_rewrite_slug*. The value you return is used both when the filtered url is built and when the rewrite rules are created, so it has to be the same in both places or the url won't resolve.
+Watch out for one thing in particular: the rewrite rules are generated once and then cached in the rewrite_rules option, while the filtered url is built on every request. If you return a value that depends on request state, the current language being the obvious example, the cached rules were built under whatever state happened to exist when they were last flushed and the two won't match. Use Polylang if you need the url to vary by language, the plugin generates language prefixed rewrite rules for it.
+
+`
+function modify_post_type_archive_slug( $post_type_slug, $post_type ) {
+
+    return $post_type_slug;
+}
+add_filter( 'beautiful_filters_post_type_archive_slug', 'modify_post_type_archive_slug', 10, 2 );
+`
+
 = beautiful_filters_taxonomy_rewrite_slug =
 
 $rewrite_slug is the url segment used for a taxonomy, both when building the filtered url and when creating the rewrite rules.
@@ -513,6 +540,62 @@ function modify_taxonomy_rewrite_slug( $rewrite_slug, $taxonomy, $post_type_slug
     return $rewrite_slug;
 }
 add_filter( 'beautiful_filters_taxonomy_rewrite_slug', 'modify_taxonomy_rewrite_slug', 10, 3 );
+`
+
+= beautiful_filters_taxonomy_all_items_label =
+
+$label is the string used as the "all terms" value, both for the "all" option in the dropdowns, the select2 placeholder and the value shown in the filter info module.
+$taxonomy is the name of the taxonomy.
+
+WordPress falls an unset all_items label back to the taxonomy name, so we build "All %s" from the taxonomy name whenever we spot that fallback. An all_items label you've actually registered is passed through untouched. Use this filter if you want a different string, or the plain taxonomy name we used before 2.6.0.
+
+`
+function modify_taxonomy_all_items_label( $label, $taxonomy ) {
+
+    return $label;
+}
+add_filter( 'beautiful_filters_taxonomy_all_items_label', 'modify_taxonomy_all_items_label', 10, 2 );
+`
+
+= beautiful_filters_pre_related_terms =
+
+$related_terms is null. Return anything else and the conditional dropdowns database query is skipped entirely and your value is used instead.
+$post_type is the name of the post type being filtered.
+$selects is an array of the currently selected taxonomies and terms, as sent by the browser.
+$taxonomies is an array of the taxonomy names of the post type being filtered.
+
+Use this one to point the conditional dropdowns at something other than the database, an external index for example. What you return has to be shaped exactly like the result of the query it replaces: an array of objects, each one with the properties term_count (the number of matching posts), term_id, term_name, term_slug and taxonomy. Return an empty array for "no matches". Returning null leaves everything as it is.
+
+`
+function replace_related_terms( $related_terms, $post_type, $selects, $taxonomies ) {
+
+    $term = new stdClass();
+    $term->term_count = 3;
+    $term->term_id    = 12;
+    $term->term_name  = 'Spain';
+    $term->term_slug  = 'spain';
+    $term->taxonomy   = 'locations';
+
+    return array( $term );
+}
+add_filter( 'beautiful_filters_pre_related_terms', 'replace_related_terms', 10, 4 );
+`
+
+= beautiful_filters_related_terms_sql =
+
+$sql is the finished SQL query used by the conditional dropdowns.
+$post_type is the name of the post type being filtered.
+$selects is an array of the currently selected taxonomies and terms, as sent by the browser.
+$taxonomies is an array of the taxonomy names of the post type being filtered.
+
+A word of warning: the query you get has already been through $wpdb->prepare(). Anything you splice into it is entirely your own responsibility, and any % characters in the string you return will not be processed again. If you only need to swap the query out for something else, use *beautiful_filters_pre_related_terms* instead.
+
+`
+function modify_related_terms_sql( $sql, $post_type, $selects, $taxonomies ) {
+
+    return $sql;
+}
+add_filter( 'beautiful_filters_related_terms_sql', 'modify_related_terms_sql', 10, 4 );
 `
 
 = beautiful_filters_taxonomy_order =
@@ -808,6 +891,8 @@ add_filter('beautiful_filters_info_postcount', 'modify_filterinfo_postcount');
 = beautiful_filters_new_url =
 
 Use this filter to manipulate the URL string of the filtered archive page that the visitor will be directed to.
+
+Since 2.6.0 the redirect goes through `wp_safe_redirect()`, so a URL you return that points at another domain won't be followed and the visitor lands on the unfiltered archive instead. If you need to send people to another domain, add its host to WordPress' own `allowed_redirect_hosts` filter. Polylang registers its language domains there already, so a domain per language setup keeps working without you doing anything.
 
 `
 function modify_new_url($url){

@@ -161,10 +161,8 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
 
     	}else{
 	    	$current_post_type = $post_type;
-	    	//Get the post type object
-			$post_type_object = get_post_type_object($current_post_type);
-			//Return the rewrite slug which is the one we actually want!
-			$current_post_type_rewrite = $post_type_object->rewrite['slug'];
+			//Return the slug the post type uses for its archive url, which is the one we actually want!
+			$current_post_type_rewrite = btf_get_post_type_archive_slug($current_post_type);
     	}
 
    		//If there is no current post type, bail early!
@@ -266,7 +264,7 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
 								* Uses walker found in: public/class-beautiful-taxonomy-filters-walker.php
 								*/
 								$dropdown_args = array(
-									'show_option_all' => $taxonomy->labels->all_items,
+									'show_option_all' => btf_get_taxonomy_all_items_label( $taxonomy ),
 									'taxonomy'      => $key,
 									'name'          => 'select-'.$key, //BUG?? For some reason we can't use the actual taxonomy slugs. If we do wordpress automatically fetches the correct posts without us even changing the URL HOWEVER it all breaks when the term has a non standard latin character in its name (not even in the slug which is what we actually use) such as åäö
 									'show_count'    => $show_count,
@@ -295,9 +293,9 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
 								}else{
 
 									//They selected placeholder so now we need to choose what to display and then alter the dropdown before output.
-									$new_label = apply_filters( 'beautiful_filters_dropdown_placeholder', esc_html__('All ', 'beautiful-taxonomy-filters') . $taxonomy->labels->name, $taxonomy->name );
+									$new_label = apply_filters( 'beautiful_filters_dropdown_placeholder', btf_get_taxonomy_all_items_label( $taxonomy ), $taxonomy->name );
 									$filterdropdown = str_replace("value='0' selected='selected'", "", $filterdropdown);
-									echo str_replace('<select ', '<select data-placeholder="' . $new_label . '"', $filterdropdown); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+									echo str_replace('<select ', '<select data-placeholder="' . esc_attr( $new_label ) . '"', $filterdropdown); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								}
 								?>
 								<?php if( $conditional_dropdowns ): ?>
