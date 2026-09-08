@@ -1,0 +1,75 @@
+{
+	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"meta": {
+		"title": "Beautiful Taxonomy Filters",
+		"description": "A recipe archive with three taxonomies on it, so you can try filtering and see the pretty URLs the plugin generates.",
+		"author": "jonathandejong",
+		"categories": [
+			"Taxonomies",
+			"Filtering",
+			"Permalinks"
+		]
+	},
+	"landingPage": "/recipes/",
+	"login": true,
+	"preferredVersions": {
+		"php": "8.3",
+		"wp": "latest"
+	},
+	"steps": [
+		{
+			"step": "mkdir",
+			"path": "/wordpress/wp-content/mu-plugins"
+		},
+		{
+			"step": "writeFile",
+			"path": "/wordpress/wp-content/mu-plugins/btf-demo-content.php",
+			"data": "<?php\n/**\n * Beautiful Taxonomy Filters - Playground demo scaffolding.\n *\n * This file is NOT part of the plugin. It is written into wp-content/mu-plugins\n * by the WordPress Playground blueprint at assets/blueprints/blueprint.json so the\n * live preview has something to filter: the plugin only does anything once there\n * is a public custom post type with an archive and a couple of public taxonomies\n * on it, and a stock WordPress install has neither.\n *\n * Note the \"cuisine\" taxonomy is deliberately registered with its rewrite slug\n * nested under the post type archive (\"recipes/cuisine\" on a post type archived\n * at \"recipes\"). That is the case btf_get_taxonomy_rewrite_slug() exists to\n * handle, so the preview exercises it rather than only the simple shape.\n */\n\ndefined( 'ABSPATH' ) || exit;\n\nadd_action( 'init', 'btf_demo_register_content_types' );\n\nfunction btf_demo_register_content_types() {\n\n\tregister_post_type(\n\t\t'recipe',\n\t\tarray(\n\t\t\t'labels'        => array(\n\t\t\t\t'name'          => 'Recipes',\n\t\t\t\t'singular_name' => 'Recipe',\n\t\t\t\t'menu_name'     => 'Recipes',\n\t\t\t\t'add_new_item'  => 'Add New Recipe',\n\t\t\t\t'edit_item'     => 'Edit Recipe',\n\t\t\t\t'search_items'  => 'Search Recipes',\n\t\t\t\t'not_found'     => 'No recipes found',\n\t\t\t),\n\t\t\t'public'        => true,\n\t\t\t'has_archive'   => 'recipes',\n\t\t\t'rewrite'       => array(\n\t\t\t\t'slug'       => 'recipes',\n\t\t\t\t'with_front' => false,\n\t\t\t),\n\t\t\t'menu_icon'     => 'dashicons-food',\n\t\t\t'menu_position' => 5,\n\t\t\t'supports'      => array( 'title', 'editor', 'excerpt' ),\n\t\t\t'show_in_rest'  => true,\n\t\t)\n\t);\n\n\t/*\n\t * Registration order is the order the segments appear in the filtered URL.\n\t *\n\t * Note every one of these sets an explicit \"all_items\" label. The filter info\n\t * module prints that label for any taxonomy that isn't currently being filtered\n\t * on, and WordPress falls all_items back to menu_name and then to name when it\n\t * isn't given one - which would render as \"Meal Types: Meal Types\" rather than\n\t * \"Meal Types: All meal types\".\n\t */\n\t$taxonomies = array(\n\t\t'cuisine'   => array(\n\t\t\t'name'      => 'Cuisines',\n\t\t\t'singular'  => 'Cuisine',\n\t\t\t'all_items' => 'All cuisines',\n\t\t\t// Nested under the post type archive on purpose - see the file header.\n\t\t\t'slug'      => 'recipes/cuisine',\n\t\t\t'query_var' => 'cuisine',\n\t\t),\n\t\t'meal_type' => array(\n\t\t\t'name'      => 'Meal Types',\n\t\t\t'singular'  => 'Meal Type',\n\t\t\t'all_items' => 'All meal types',\n\t\t\t// The taxonomy name has an underscore but the URL should read nicely,\n\t\t\t// so query_var and rewrite slug both get the hyphenated form.\n\t\t\t'slug'      => 'meal-type',\n\t\t\t'query_var' => 'meal-type',\n\t\t),\n\t\t'diet'      => array(\n\t\t\t'name'      => 'Diets',\n\t\t\t'singular'  => 'Diet',\n\t\t\t'all_items' => 'Any diet',\n\t\t\t'slug'      => 'diet',\n\t\t\t'query_var' => 'diet',\n\t\t),\n\t);\n\n\tforeach ( $taxonomies as $taxonomy => $args ) {\n\t\tregister_taxonomy(\n\t\t\t$taxonomy,\n\t\t\t'recipe',\n\t\t\tarray(\n\t\t\t\t'labels'            => array(\n\t\t\t\t\t'name'          => $args['name'],\n\t\t\t\t\t'singular_name' => $args['singular'],\n\t\t\t\t\t'all_items'     => $args['all_items'],\n\t\t\t\t),\n\t\t\t\t'public'            => true,\n\t\t\t\t'hierarchical'      => true,\n\t\t\t\t'show_admin_column' => true,\n\t\t\t\t'show_in_rest'      => true,\n\t\t\t\t'query_var'         => $args['query_var'],\n\t\t\t\t'rewrite'           => array(\n\t\t\t\t\t'slug'       => $args['slug'],\n\t\t\t\t\t'with_front' => false,\n\t\t\t\t),\n\t\t\t)\n\t\t);\n\t}\n}\n\n/**\n * Suppress the plugin's first-run admin notice.\n *\n * check_update_version() queues a \"the settings structure has changed, please\n * check the advanced tab\" nag whenever it finds no stored version, which is\n * always true on a fresh Playground boot. Everything it asks the user to check\n * has already been set up by the blueprint, so it is pure noise here. Priority\n * 999 puts this after that method has queued the transient and before\n * admin_notices renders it.\n */\nadd_action(\n\t'admin_init',\n\tfunction () {\n\t\tdelete_transient( 'btf_notice' );\n\t},\n\t999\n);\n",
+			"progress": {
+				"caption": "Registering the demo post type and taxonomies"
+			}
+		},
+		{
+			"step": "installTheme",
+			"themeData": {
+				"resource": "wordpress.org/themes",
+				"slug": "twentytwentyone"
+			},
+			"options": {
+				"activate": true
+			}
+		},
+		{
+			"step": "installPlugin",
+			"pluginData": {
+				"resource": "wordpress.org/plugins",
+				"slug": "beautiful-taxonomy-filters"
+			},
+			"options": {
+				"activate": true
+			}
+		},
+		{
+			"step": "setSiteOptions",
+			"options": {
+				"permalink_structure": "/%postname%/",
+				"blogname": "Beautiful Taxonomy Filters",
+				"blogdescription": "A demo archive to try the filters on"
+			}
+		},
+		{
+			"step": "runPHP",
+			"code": "<?php\n/**\n * Seeds the Beautiful Taxonomy Filters live preview with demo content.\n * Run by the Playground blueprint; not part of the plugin.\n */\n\nrequire_once '/wordpress/wp-load.php';\n\n/*\n * Terms. Every term gets a description because the preview switches on the\n * plugin's \"show term description\" setting, and terms without one would make\n * that setting look broken.\n */\n$terms = array(\n\t'cuisine'   => array(\n\t\t'Thai'     => 'Hot, sour, salty and sweet, usually all at once.',\n\t\t'Italian'  => 'A short list of very good ingredients, treated with respect.',\n\t\t'Mexican'  => 'Corn, chillies and slow-built layers of flavour.',\n\t\t'Japanese' => 'Precision, restraint and a lot of umami.',\n\t),\n\t'meal_type' => array(\n\t\t'Breakfast'   => 'Worth getting up for.',\n\t\t'Main Course' => 'The one everybody sits down for.',\n\t\t'Dessert'     => 'Non-negotiable.',\n\t\t'Snack'       => 'Small things to stand around eating.',\n\t),\n\t'diet'      => array(\n\t\t'Vegan'       => 'No animal products at all.',\n\t\t'Vegetarian'  => 'No meat or fish, dairy and eggs are fine.',\n\t\t'Gluten-free' => 'Nothing containing wheat, barley or rye.',\n\t),\n);\n\n$term_ids = array();\nforeach ( $terms as $taxonomy => $names ) {\n\tforeach ( $names as $name => $description ) {\n\t\t$existing = term_exists( $name, $taxonomy );\n\t\tif ( $existing ) {\n\t\t\t$term_ids[ $taxonomy ][ $name ] = (int) $existing['term_id'];\n\t\t\tcontinue;\n\t\t}\n\t\t$new = wp_insert_term( $name, $taxonomy, array( 'description' => $description ) );\n\t\tif ( ! is_wp_error( $new ) ) {\n\t\t\t$term_ids[ $taxonomy ][ $name ] = (int) $new['term_id'];\n\t\t}\n\t}\n}\n\n/*\n * Recipes. Spread across the terms so that filtering keeps returning results\n * rather than bottoming out at \"no posts found\" after two selections - sparse\n * data makes the conditional dropdowns look like a bug instead of a feature.\n * Thai has deliberately been left with no snack, so there is one genuinely\n * empty combination for the conditional dropdowns to grey out.\n */\n$recipes = array(\n\tarray( 'Green Curry with Jasmine Rice', 'Thai', 'Main Course', 'Vegan', 'Aubergine, bamboo shoots and Thai basil simmered in coconut milk.' ),\n\tarray( 'Mango Sticky Rice', 'Thai', 'Dessert', 'Vegetarian', 'Warm coconut rice, cold ripe mango, toasted mung beans on top.' ),\n\tarray( 'Tom Yum Soup', 'Thai', 'Main Course', 'Gluten-free', 'Lemongrass, galangal and lime leaf, sharpened with lime and chilli.' ),\n\tarray( 'Coffee and Pandan Buns', 'Thai', 'Breakfast', 'Vegetarian', 'Soft rolls swirled with pandan custard, served with iced coffee.' ),\n\tarray( 'Cacio e Pepe', 'Italian', 'Main Course', 'Vegetarian', 'Pecorino, black pepper and pasta water. That is the entire recipe.' ),\n\tarray( 'Tiramisu', 'Italian', 'Dessert', 'Vegetarian', 'Savoiardi soaked in espresso under a thick layer of mascarpone.' ),\n\tarray( 'Ricotta Pancakes', 'Italian', 'Breakfast', 'Vegetarian', 'Lighter than they have any right to be, with lemon zest and honey.' ),\n\tarray( 'Arancini', 'Italian', 'Snack', '', 'Leftover risotto, rolled around ragu, breadcrumbed and fried.' ),\n\tarray( 'Chilaquiles Verdes', 'Mexican', 'Breakfast', 'Vegetarian', 'Tortilla chips simmered in salsa verde until just softened.' ),\n\tarray( 'Tacos al Pastor', 'Mexican', 'Main Course', 'Gluten-free', 'Marinated pork off the trompo, with pineapple, onion and coriander.' ),\n\tarray( 'Churros con Chocolate', 'Mexican', 'Dessert', 'Vegetarian', 'Ridged, cinnamon-sugared, and a cup of chocolate thick enough to stand a spoon in.' ),\n\tarray( 'Guacamole and Totopos', 'Mexican', 'Snack', 'Vegan', 'Avocado, lime, salt, and restraint with everything else.' ),\n\tarray( 'Tamago Kake Gohan', 'Japanese', 'Breakfast', 'Gluten-free', 'A raw egg stirred through hot rice with a little tamari.' ),\n\tarray( 'Miso Ramen', 'Japanese', 'Main Course', '', 'Rich miso broth, corn, butter and a soft-boiled egg.' ),\n\tarray( 'Matcha Basque Cheesecake', 'Japanese', 'Dessert', 'Vegetarian', 'Burnt on top, barely set in the middle, faintly bitter.' ),\n\tarray( 'Edamame with Sea Salt', 'Japanese', 'Snack', 'Vegan', 'Steamed in the pod, salted hard, eaten too fast.' ),\n);\n\nforeach ( $recipes as $recipe ) {\n\tlist( $title, $cuisine, $meal_type, $diet, $excerpt ) = $recipe;\n\n\tif ( get_page_by_path( sanitize_title( $title ), OBJECT, 'recipe' ) ) {\n\t\tcontinue;\n\t}\n\n\t$post_id = wp_insert_post(\n\t\tarray(\n\t\t\t'post_type'    => 'recipe',\n\t\t\t'post_title'   => $title,\n\t\t\t'post_status'  => 'publish',\n\t\t\t'post_excerpt' => $excerpt,\n\t\t\t'post_content' => $excerpt . \"\\n\\nThis is demo content for the Beautiful Taxonomy Filters preview. Use the filters above the archive to narrow the list down by cuisine, meal type and diet - and watch what happens to the URL.\",\n\t\t)\n\t);\n\n\tif ( is_wp_error( $post_id ) || ! $post_id ) {\n\t\tcontinue;\n\t}\n\n\twp_set_object_terms( $post_id, array( $term_ids['cuisine'][ $cuisine ] ), 'cuisine' );\n\twp_set_object_terms( $post_id, array( $term_ids['meal_type'][ $meal_type ] ), 'meal_type' );\n\tif ( $diet ) {\n\t\twp_set_object_terms( $post_id, array( $term_ids['diet'][ $diet ] ), 'diet' );\n\t}\n}\n\n/*\n * Plugin settings. Written with update_option() rather than the blueprint's\n * setSiteOptions step because three of them are arrays and the exact shape\n * matters - see the settings partials in admin/partials/.\n */\nupdate_option( 'beautiful_taxonomy_filters_post_types', array( 'recipe' ) );\n// This one is the EXCLUSION list, so empty means \"offer all three taxonomies\".\nupdate_option( 'beautiful_taxonomy_filters_taxonomies', array() );\nupdate_option( 'beautiful_taxonomy_filters_automagic', array( 'filter_module', 'filter_info_module', 'above' ) );\nupdate_option( 'beautiful_taxonomy_filters_styles', 'light-material' );\nupdate_option( 'beautiful_taxonomy_filters_clear_all', 1 );\nupdate_option( 'beautiful_taxonomy_filters_show_count', 1 );\nupdate_option( 'beautiful_taxonomy_filters_show_description', 1 );\nupdate_option( 'beautiful_taxonomy_filters_dropdown_behaviour', 'show_placeholder_option' );\nupdate_option( 'beautiful_taxonomy_filters_settings', array( 'conditional_dropdowns' => 1 ) );\n\n/*\n * Tidy the stock install. The preview lands straight on /recipes/, but the site\n * title links home, so give the front page something to say.\n */\n$hello = get_page_by_path( 'hello-world', OBJECT, 'post' );\nif ( $hello ) {\n\twp_delete_post( $hello->ID, true );\n}\n\n$front_page = get_page_by_path( 'welcome' );\nif ( ! $front_page ) {\n\t$front_page_id = wp_insert_post(\n\t\tarray(\n\t\t\t'post_type'    => 'page',\n\t\t\t'post_name'    => 'welcome',\n\t\t\t'post_title'   => 'Beautiful Taxonomy Filters',\n\t\t\t'post_status'  => 'publish',\n\t\t\t'post_content' => '<p>This is a throwaway WordPress site for trying out <strong>Beautiful Taxonomy Filters</strong>. It has a \"Recipes\" custom post type with three taxonomies on it - cuisine, meal type and diet - and sixteen recipes spread across them.</p>'\n\t\t\t\t. '<p><a href=\"/recipes/\">Open the recipe archive</a> and use the filters at the top. Notice that filtering does not produce a query string: you get URLs like <code>/recipes/cuisine/thai/diet/vegan/</code> instead.</p>'\n\t\t\t\t. '<p>You are logged in as an administrator, so you can see how it is put together under <a href=\"/wp-admin/options-general.php?page=taxonomy-filters\">Settings &rarr; Taxonomy Filters</a>. Nothing you do here is saved.</p>',\n\t\t)\n\t);\n\n\tif ( ! is_wp_error( $front_page_id ) ) {\n\t\tupdate_option( 'show_on_front', 'page' );\n\t\tupdate_option( 'page_on_front', $front_page_id );\n\t}\n}\n",
+			"progress": {
+				"caption": "Adding recipes and configuring the filters"
+			}
+		},
+		{
+			"step": "runPHP",
+			"code": "<?php\n/**\n * Rebuild the rewrite rules now that the post type, the taxonomies, the plugin\n * and its settings are all in place. Without this the pretty filtered URLs\n * 404, since the rules the plugin injects on generate_rewrite_rules depend on\n * all four.\n *\n * Soft flush: it rewrites the rewrite_rules option, which is everything\n * Playground needs, and skips the .htaccess write that means nothing here.\n */\n\nrequire_once '/wordpress/wp-load.php';\n\nflush_rewrite_rules( false );\n",
+			"progress": {
+				"caption": "Building the pretty filter URLs"
+			}
+		}
+	]
+}

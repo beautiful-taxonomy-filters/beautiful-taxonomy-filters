@@ -24,7 +24,7 @@ To cut a release:
 2. Merge to `master`.
 3. Publish a GitHub release whose tag is exactly the version number (e.g. `2.5.0`).
 
-`ASSETS_DIR: subversion` — the `subversion/` directory holds only the wordpress.org plugin-page assets (banners, icons, screenshots) and is deployed separately from the code. `.distignore` controls what is stripped from the deployed plugin and zip (`.git`, `.github`, `README.md`, `LICENSE`, `subversion/`, `.DS_Store`, `*~`); anything added to the repo that shouldn't ship to users belongs there.
+`ASSETS_DIR: subversion` — the `subversion/` directory holds the wordpress.org plugin-page assets (banners, icons, screenshots) plus `blueprints/blueprint.json`, and is deployed separately from the code. That blueprint is what powers the **Live Preview** button on the plugin page: wordpress.org reads it from SVN `assets/blueprints/blueprint.json`, boots a WordPress Playground sandbox, and runs its steps. It inlines the demo PHP as JSON strings because `plugins.svn.wordpress.org` sends no CORS headers, so a blueprint cannot fetch sibling files. Test a change to it with `npx @wp-playground/cli@latest server --blueprint=subversion/blueprints/blueprint.json`. Note the button only appears once a committer sets the preview to public on the plugin's Advanced page on wordpress.org. `.distignore` controls what is stripped from the deployed plugin and zip (`.git`, `.github`, `README.md`, `LICENSE`, `subversion/`, `.DS_Store`, `*~`); anything added to the repo that shouldn't ship to users belongs there.
 
 `README.txt` is the canonical wordpress.org readme (FAQ, changelog, hook docs); `README.md` is GitHub-facing and excluded from the deploy. Keep the feature/language lists in sync when they change.
 

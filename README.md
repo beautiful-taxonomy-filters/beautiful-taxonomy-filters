@@ -1,3 +1,7 @@
+[![Try it in WordPress Playground](https://img.shields.io/badge/Try%20it-WordPress%20Playground-3858E9?logo=wordpress&logoColor=white)](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/beautiful-taxonomy-filters/beautiful-taxonomy-filters/master/subversion/blueprints/blueprint.json)
+
+Want to see it work before installing it? The badge above boots a throwaway WordPress in your browser with a recipe post type, three taxonomies and sixteen recipes already set up, so you can filter straight away. Nothing is installed on your machine and nothing is saved.
+
 The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide your visitors with filtering for your post types. With this you get a complete solution for adding filtering based on custom taxonomy terms/categories/tags. It will also automatically add rewrite rules for pretty looking filter URLs. It’s completely automatic, works without javascript and is based on the [WordPress Plugin boilerplate](https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate) for a *standardized, organized and object-oriented* codebase. It uses [select2](http://ivaynberg.github.io/select2/) for pretty looking and user friendly dropdowns but will fall back to ordinary ones if javascript is not supported.
 **No more horrible looking URLs or hacky Javascript solutions**
 
