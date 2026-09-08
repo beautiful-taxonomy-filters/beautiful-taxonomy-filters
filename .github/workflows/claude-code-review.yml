@@ -62,21 +62,17 @@ jobs:
           plugin_marketplaces: "https://github.com/anthropics/claude-code.git"
           plugins: "code-review@claude-code-plugins"
           prompt: "/code-review:code-review --comment ${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
-          # The action only starts the MCP server that posts inline comments
-          # when --allowedTools names it, even though the skill also declares it.
-          claude_args: '--allowedTools "mcp__github_inline_comment__create_inline_comment"'
-          # DIAGNOSTIC, remove once the silent-review problem below is solved.
+          # Two tools, and both are load bearing.
           #
-          # Every run of this workflow so far has finished green while posting nothing
-          # at all: no inline comments, no summary comment, no review. The runs report
-          # 22 turns, permission_denials_count of 10, is_error false, and then "No
-          # buffered inline comments". The action suppresses the rest and tells you to
-          # enable this input to see it, so there is no way to tell whether a review
-          # was produced and failed to post, or was never produced.
+          # "Skill" is what runs the prompt above. /code-review:code-review is invoked
+          # through the Skill tool, so without it the review is denied at the very first
+          # move and never happens. The run still reports success, having spent a full
+          # session improvising around the block, and posts nothing. That is what every
+          # run of this workflow did until 2026-09-08; the transcript ended on "I'll wait
+          # for these to complete before proceeding to the review step" and then stopped.
+          # The documented example omits it, so if reviews go quiet again, check here
+          # first.
           #
-          # Everything above matches the documented code-review example exactly, the
-          # permissions block included, so there is nothing obviously wrong to change.
-          # Getting the transcript first rather than guessing at tool names.
-          #
-          # Note this puts the whole transcript in a PUBLIC repo's Actions log.
-          show_full_output: "true"
+          # The MCP tool is what posts the inline comments. The action only starts that
+          # server when --allowedTools names it, even though the skill also declares it.
+          claude_args: '--allowedTools "Skill,mcp__github_inline_comment__create_inline_comment"'
