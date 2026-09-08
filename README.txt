@@ -15,6 +15,8 @@ Supercharge your custom post type archives by letting visitors filter posts by t
 The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide your visitors with filtering for your post types. With this you get a complete solution for adding filtering based on custom taxonomy terms/categories/tags. It will also automatically add rewrite rules for pretty looking filter URLs. It’s completely automatic, works without javascript and is based on the [WordPress Plugin boilerplate](https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate) for a *standardized, organized and object-oriented* codebase. It uses [select2](http://ivaynberg.github.io/select2/) for pretty looking and user friendly dropdowns but will fall back to ordinary ones if javascript is not supported.
 **No more horrible looking URLs or hacky Javascript solutions**
 
+**Try it before installing it.** Use the Live Preview button on this page for a temporary WordPress in your browser, already set up with a recipe archive and three taxonomies to filter on. Nothing is installed and nothing is saved. The one thing the preview cannot show you is the rewritten URL itself - see the FAQ for why.
+
 = Features =
 * Activate filtering on any registered public custom post type.
 * Exclude taxonomies you just don’t want the visitors to filter on.
