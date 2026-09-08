@@ -92,7 +92,7 @@ class Beautiful_Taxonomy_Filters_Info_Widget extends WP_Widget {
 				<p class="beautiful-taxonomy-filters-postcount">
 					<?php
 					// Translators: %d is a number of posts found by the current filter.
-					echo apply_filters( 'beautiful_filters_info_postcount', sprintf( esc_html__( 'Result of filter: %d', 'beautiful-taxonomy-filters' ), $wp_query->found_posts ) );  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo esc_html( apply_filters( 'beautiful_filters_info_postcount', sprintf( esc_html__( 'Result of filter: %d', 'beautiful-taxonomy-filters' ), $wp_query->found_posts ) ) );
 					?>
 				</p>
 
