@@ -53,10 +53,3 @@ jobs:
           # The action only starts the MCP server that posts inline comments
           # when --allowedTools names it, even though the skill also declares it.
           claude_args: '--allowedTools "mcp__github_inline_comment__create_inline_comment"'
-          # TEMPORARY, REMOVE BEFORE MERGING. Every run of this workflow so far has
-          # finished green while posting nothing at all, with a permission_denials_count
-          # of 10 and the review output suppressed. This dumps the full transcript into
-          # the run log so we can see which calls were denied and whether a review was
-          # produced at all. It is on for diagnosis only: it makes the whole transcript
-          # public in this repo's Actions logs, so take it back out once we know.
-          show_full_output: "true"
