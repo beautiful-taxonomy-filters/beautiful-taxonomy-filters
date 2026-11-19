@@ -18,6 +18,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Beautiful_Taxonomy_Filters_Public {
 
 	/**
+	 * Handle of the filter module script.
+	 *
+	 * @since 2.6.2
+	 */
+	const SCRIPT_HANDLE = 'beautiful-taxonomy-filters';
+
+	/**
+	 * Whether a filter module was rendered before the scripts were registered.
+	 *
+	 * @since 2.6.2
+	 * @var bool
+	 */
+	private static $scripts_requested = false;
+
+	/**
 	 * The ID of this plugin.
 	 *
 	 * @since    1.0.0
@@ -104,9 +119,17 @@ class Beautiful_Taxonomy_Filters_Public {
 		);
 		$language              = false;
 
+		//Scripts are only registered here. They're enqueued by enqueue_module_scripts() when a filter
+		//module is actually rendered, so pages without one don't load them. Deferred and in the
+		//footer. WordPress before 6.3 reads the array as $in_footer = true and ignores the strategy.
+		$script_args = array(
+			'in_footer' => true,
+			'strategy'  => 'defer',
+		);
+
 		//If the almighty user decides there be no select2, then no select2 there be!
 		if ( ! $disable_select2 ) {
-			wp_enqueue_script( 'select2', plugin_dir_url( __FILE__ ) . 'js/select2/select2.full.min.js', array( 'jquery' ), $this->version, true );
+			wp_register_script( 'select2', plugin_dir_url( __FILE__ ) . 'js/select2/select2.full.min.js', array( 'jquery' ), $this->version, $script_args );
 			$dependencies[] = 'select2';
 			/**
 			 * So language is a thing.
@@ -123,11 +146,12 @@ class Beautiful_Taxonomy_Filters_Public {
 			 * we should probably load that too.. just sayin.
 			 */
 			if ( $language && file_exists( plugin_dir_path( __FILE__ ) . sprintf( 'js/select2/i18n/%s.js', $language ) ) ) {
-				wp_enqueue_script( 'select2-' . $language, plugin_dir_url( __FILE__ ) . sprintf( 'js/select2/i18n/%s.js', $language ), array( 'jquery', 'select2' ), $this->version, true );
+				wp_register_script( 'select2-' . $language, plugin_dir_url( __FILE__ ) . sprintf( 'js/select2/i18n/%s.js', $language ), array( 'jquery', 'select2' ), $this->version, $script_args );
+				$dependencies[] = 'select2-' . $language;
 			}
 		}
 
-		wp_register_script( $this->name, plugin_dir_url( __FILE__ ) . 'js/beautiful-taxonomy-filters-public.js', $dependencies, $this->version, true );
+		wp_register_script( self::SCRIPT_HANDLE, plugin_dir_url( __FILE__ ) . 'js/beautiful-taxonomy-filters-public.js', $dependencies, $this->version, $script_args );
 		$localized_array = array(
 			'ajaxurl'               => admin_url( 'admin-ajax.php' ),
 			'min_search'            => apply_filters( 'beautiful_filters_selec2_minsearch', 8 ),
@@ -145,9 +169,34 @@ class Beautiful_Taxonomy_Filters_Public {
 		if ( ! $dropdown_behaviour || $dropdown_behaviour == 'show_all_option' ) {
 			$localized_array['allow_clear'] = false;
 		}
-		wp_localize_script( $this->name, 'btf_localization', $localized_array );
-		wp_enqueue_script( $this->name );
+		wp_localize_script( self::SCRIPT_HANDLE, 'btf_localization', $localized_array );
 
+		//A module rendered before this ran (block themes render the template before wp_head).
+		if ( self::$scripts_requested ) {
+			wp_enqueue_script( self::SCRIPT_HANDLE );
+		}
+
+	}
+
+	/**
+	 * Enqueues the scripts of the filter module, select2 and its translation included through
+	 * the dependencies. Called whenever a filter module is rendered: by beautiful_filters() for the
+	 * shortcode, the show_beautiful_filters action and automagic, and by the filter widget.
+	 * Scripts enqueued while the page renders are printed in the footer. Block themes render the
+	 * template before wp_enqueue_scripts runs, so if the scripts aren't registered yet the request
+	 * is remembered and enqueue_scripts() picks it up.
+	 *
+	 * Enqueue the beautiful-taxonomy-filters script handle yourself if you build a form without
+	 * any of those.
+	 *
+	 * @since 2.6.2
+	 */
+	public static function enqueue_module_scripts() {
+		if ( wp_script_is( self::SCRIPT_HANDLE, 'registered' ) ) {
+			wp_enqueue_script( self::SCRIPT_HANDLE );
+		} else {
+			self::$scripts_requested = true;
+		}
 	}
 
 
@@ -704,6 +753,8 @@ class Beautiful_Taxonomy_Filters_Public {
 			if ( ! $echo ) {
 				ob_start();
 			}
+
+			self::enqueue_module_scripts();
 
 			require plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/beautiful-taxonomy-filters-public-display.php';
 

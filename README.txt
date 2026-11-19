@@ -164,6 +164,9 @@ Why thank you! We don't have proper donate link but if you want to you can send 
 = 2.6.2 =
 * BUGFIX: Conditional dropdowns treated a dropdown left on its "all" option as an active filter when the form had more than one taxonomy. The dropdown you were picking from then had its own options updated too, instead of staying fully selectable.
 * BUGFIX: Conditional dropdowns no longer drop the term descriptions from the options they update.
+* IMPROVEMENT: The plugin's scripts (select2 included) are now only loaded on pages that actually show a filter module, whether that's through automagic, the shortcode, the `show_beautiful_filters` action or the widget, and they load deferred. Pages without a filter no longer download them.
+* NOTE: The stylesheets are still loaded on every page, on purpose. Scripts can be added late, while the page is being built, and still work. A stylesheet added that late ends up at the bottom of the page, so the filter would briefly show unstyled before jumping into place. The CSS is small, so loading it everywhere is the better trade-off.
+* NOTE: If you build your own filter form without the module, shortcode, action or widget, enqueue the `beautiful-taxonomy-filters` script handle yourself to get select2 and the conditional dropdowns.
 
 = 2.6.1 =
 * SECURITY: Fixed a stored cross-site scripting vulnerability (CVE-2026-122298) in the conditional dropdowns AJAX endpoint. A user able to create terms could give one a name that the endpoint returned as live HTML. Term names are now returned HTML escaped and decoded as plain text in the browser, and the response is sent as `application/json` with HTML characters escaped. Thanks to Wordfence for the responsible disclosure. Please update.
