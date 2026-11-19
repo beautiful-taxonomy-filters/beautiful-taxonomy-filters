@@ -11,6 +11,10 @@
  * @package    Beautiful_Taxonomy_Filters
  * @subpackage Beautiful_Taxonomy_Filters/admin/partials
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 ?>
 
 <?php
@@ -32,7 +36,7 @@ $saved_post_types = get_option('beautiful_taxonomy_filters_post_types');
 				<input type="checkbox" value="<?php echo esc_attr( $post_type->name ); ?>" id="<?php echo esc_attr( $post_type->name ); ?>-checkbox" name="beautiful_taxonomy_filters_post_types[]" <?php if(is_array($saved_post_types) && in_array($post_type->name, $saved_post_types)){ echo esc_attr( 'checked' ); } ?> /> <?php echo esc_html( $post_type->labels->name ); ?>
 			</label>
 			<?php $archive_link = get_post_type_archive_link($post_type->name); ?>
-			<small><a href="<?php echo esc_url( $archive_link ); ?>" target="_blank" title="<?php esc_html_e('Open in new tab', 'beautiful-taxonomy-filters'); ?>"><?php echo esc_url( $archive_link ); ?></a></small>
+			<small><a href="<?php echo esc_url( $archive_link ); ?>" target="_blank" title="<?php esc_attr_e('Open in new tab', 'beautiful-taxonomy-filters'); ?>"><?php echo esc_url( $archive_link ); ?></a></small>
 		</p>
 	<?php endforeach; ?>
 <?php else: ?>

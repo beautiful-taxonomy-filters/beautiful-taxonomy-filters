@@ -19,6 +19,9 @@
 # WordPress.org page assets live here and are deployed separately via ASSETS_DIR
 /subversion
 
+# Developer documentation, published to GitHub Pages from this folder
+/docs
+
 # OS / editor cruft
 .DS_Store
 *~

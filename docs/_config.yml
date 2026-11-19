@@ -1,0 +1,5 @@
+# GitHub Pages (Jekyll) config for the developer documentation.
+# Published from the /docs folder of the master branch.
+title: Beautiful Taxonomy Filters
+description: Developer documentation for the Beautiful Taxonomy Filters WordPress plugin.
+theme: jekyll-theme-minimal

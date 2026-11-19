@@ -13,6 +13,10 @@
  * @subpackage Beautiful_Taxonomy_Filters/includes
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * The core plugin class.
  *
@@ -69,7 +73,7 @@ class Beautiful_Taxonomy_Filters {
 	public function __construct() {
 
 		$this->Beautiful_Taxonomy_Filters = 'beautiful-taxonomy-filters';
-		$this->version                    = '2.6.0';
+		$this->version                    = '2.6.1';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -187,6 +191,10 @@ class Beautiful_Taxonomy_Filters {
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_admin_menu' );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'settings_api_init' );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'check_update_version' );
+		foreach ( array( 'beautiful_taxonomy_filters_post_types', 'beautiful_taxonomy_filters_taxonomies' ) as $btf_rewrite_option ) {
+			$this->loader->add_action( 'add_option_' . $btf_rewrite_option, $plugin_admin, 'flush_rewrite_rules_on_save' );
+			$this->loader->add_action( 'update_option_' . $btf_rewrite_option, $plugin_admin, 'flush_rewrite_rules_on_save' );
+		}
 		$this->loader->add_action( 'widgets_init', $plugin_admin, 'register_widgets' );
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'show_admin_notice' );
 

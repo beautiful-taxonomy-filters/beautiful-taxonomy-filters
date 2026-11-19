@@ -11,6 +11,10 @@
  * @package    Beautiful_Taxonomy_Filters
  * @subpackage Beautiful_Taxonomy_Filters/admin/partials
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 ?>
 <div class="wrap">
 	<h2><?php esc_html_e('Beautiful Taxonomy Filters', 'beautiful-taxonomy-filters'); ?></h2>
@@ -24,7 +28,10 @@
 		    'about' => __('About', 'beautiful-taxonomy-filters')
 	    );
 	    //set current tab
-	    $tab = ( isset($_GET['tab']) ? $_GET['tab'] : 'basic' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	    $tab = ( isset( $_GET['tab'] ) && is_string( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'basic' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	    if ( ! array_key_exists( $tab, $tabs ) ) {
+	    	$tab = 'basic';
+	    }
 	    ?>
 	    <?php foreach( $tabs as $key => $value ): ?>
 	    	<a class="nav-tab <?php if( $tab == $key ){ echo esc_attr( 'nav-tab-active' ); } ?>" href="<?php echo esc_url( admin_url() ); ?>/options-general.php?page=taxonomy-filters&tab=<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $value ); ?></a>
@@ -34,20 +41,18 @@
 	<div class="beautiful-taxonomy-filters-tabs">
 		<?php if( $tab == 'basic' ): ?>
 
-			<?php flush_rewrite_rules(); ?>
 		    <form method="post" action="options.php">
 				<?php settings_fields('taxonomy-filters'); ?>
 				<?php do_settings_sections('taxonomy-filters'); ?>
-				<?php submit_button('Save Changes'); ?>
+				<?php submit_button(); ?>
 		    </form>
 
 		<?php elseif( $tab == 'advanced' ): ?>
 
-			<?php flush_rewrite_rules(); ?>
 			<form method="post" action="options.php">
 				<?php settings_fields('advanced-taxonomy-filters'); ?>
 				<?php do_settings_sections('advanced-taxonomy-filters'); ?>
-				<?php submit_button('Save Changes'); ?>
+				<?php submit_button(); ?>
 		    </form>
 
 		<?php elseif( $tab == 'help' ): ?>

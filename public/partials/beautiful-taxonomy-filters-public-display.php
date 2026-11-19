@@ -12,6 +12,10 @@
  * @subpackage Beautiful_Taxonomy_Filters/public/partials
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /*
  * Filters in this file
  * @ beautiful_filters_post_types
@@ -67,7 +71,7 @@ $disable_select2 = ( get_option( 'beautiful_taxonomy_filters_disable_select2' ) 
 						* Uses walker found in: public/class-beautiful-taxonomy-filters-walker.php
 						*/
 						$dropdown_args = array(
-							'show_option_all' => btf_get_taxonomy_all_items_label( $taxonomy ),
+							'show_option_all' => esc_html( btf_get_taxonomy_all_items_label( $taxonomy ) ), // Core prints this unescaped.
 							'taxonomy'      => $key,
 							'name'          => 'select-' . $key, //BUG?? For some reason we can't use the actual taxonomy slugs. If we do wordpress automatically fetches the correct posts without us even changing the URL.
 							'show_count'    => $show_count,
@@ -93,7 +97,7 @@ $disable_select2 = ( get_option( 'beautiful_taxonomy_filters_disable_select2' ) 
 						//If they didnt select placeholder just output the dropdown now (or if they've disabled select2)
 						if ( $disable_select2 || ! $dropdown_behaviour || 'show_all_option' == $dropdown_behaviour ) {
 
-							echo $filterdropdown; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							echo $filterdropdown; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_dropdown_categories() markup, escaped by core and our walker.
 
 						} else {
 
@@ -107,8 +111,7 @@ $disable_select2 = ( get_option( 'beautiful_taxonomy_filters_disable_select2' ) 
 						<?php if ( $conditional_dropdowns ) : ?>
 							<span class="beautiful-taxonomy-filters-loader">
 								<?php
-								//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-								echo apply_filters( 'beautiful_filters_loader', sprintf( '<img src="%s" alt="" />', esc_url( admin_url( 'images/spinner.gif' ) ) ), $key, $current_post_type );
+								echo wp_kses_post( apply_filters( 'beautiful_filters_loader', sprintf( '<img src="%s" alt="" />', esc_url( admin_url( 'images/spinner.gif' ) ) ), $key, $current_post_type ) );
 								?>
 							</span>
 						<?php endif; ?>
@@ -120,11 +123,11 @@ $disable_select2 = ( get_option( 'beautiful_taxonomy_filters_disable_select2' ) 
 		</div>
 		<?php do_action( 'beautiful_actions_before_submit_button', $current_post_type ); //allow custom markup before submit button ?>
 		<button type="submit" class="beautiful-taxonomy-filters-button"><?php
-		echo apply_filters( 'beautiful_filters_apply_button', esc_html__( 'Apply filter', 'beautiful-taxonomy-filters' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo wp_kses_post( apply_filters( 'beautiful_filters_apply_button', esc_html__( 'Apply filter', 'beautiful-taxonomy-filters' ) ) );
 		?></button>
 		<?php do_action( 'beautiful_actions_after_submit_button', $current_post_type ); //allow custom markup before submit button ?>
 		<?php if ( $show_clear_all && is_btf_filtered() ) : ?>
-			<a href="<?php echo esc_url( apply_filters( 'beautiful_filters_clear_all_link', get_post_type_archive_link( $current_post_type ), $current_post_type ) ); ?>" class="beautiful-taxonomy-filters-clear-all" title="<?php esc_html_e( 'Click to clear all active filters', 'beautiful-taxonomy-filters' ); ?>"><?php echo esc_html( apply_filters( 'beautiful_filters_clear_button', esc_html__( 'Clear all', 'beautiful-taxonomy-filters' ) ) ); ?></a>
+			<a href="<?php echo esc_url( apply_filters( 'beautiful_filters_clear_all_link', get_post_type_archive_link( $current_post_type ), $current_post_type ) ); ?>" class="beautiful-taxonomy-filters-clear-all" title="<?php esc_attr_e( 'Click to clear all active filters', 'beautiful-taxonomy-filters' ); ?>"><?php echo esc_html( apply_filters( 'beautiful_filters_clear_button', esc_html__( 'Clear all', 'beautiful-taxonomy-filters' ) ) ); ?></a>
 		<?php endif; ?>
 		<?php do_action( 'beautiful_actions_ending_form', $current_post_type ); //allow custom markup at beginning of form ?>
 	</form>

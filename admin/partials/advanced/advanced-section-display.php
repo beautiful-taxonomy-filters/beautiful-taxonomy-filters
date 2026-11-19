@@ -11,5 +11,9 @@
  * @package    Beautiful_Taxonomy_Filters
  * @subpackage Beautiful_Taxonomy_Filters/admin/partials
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 ?>
 <p><?php esc_html_e('Settings for fine tuning your filter modules. You may leave these as default.', 'beautiful-taxonomy-filters'); ?></p>

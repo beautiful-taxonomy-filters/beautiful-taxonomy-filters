@@ -11,6 +11,10 @@
  * @package    Beautiful_Taxonomy_Filters
  * @subpackage Beautiful_Taxonomy_Filters/admin/partials
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 ?>
 <?php $automagic = get_option('beautiful_taxonomy_filters_automagic'); ?>
 

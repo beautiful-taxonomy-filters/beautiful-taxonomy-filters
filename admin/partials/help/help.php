@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+?>
 <div class="clearfix">
 	<div class="beautiful-taxonomy-filters-right-col">
 		<h3><?php esc_html_e('How to use Beautiful Taxonomy Filters', 'beautiful-taxonomy-filters'); ?></h3>
@@ -24,7 +29,7 @@
 		<h3><?php esc_html_e('I need more help!', 'beautiful-taxonomy-filters'); ?></h3>
 		<p><?php
 		// Translators: %s is a placeholder for an URL.
-		echo sprintf( __('I try to be as helpful as I can. You can find several topics in the WordPress forum or ask for help to a new issue. It\'s also possible to start an issue on <a href="%s">github.</a>', 'beautiful-taxonomy-filters'), 'https://github.com/jonathan-dejong/beautiful-taxonomy-filters'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo wp_kses( sprintf( __('I try to be as helpful as I can. You can find several topics in the WordPress forum or ask for help to a new issue. It\'s also possible to start an issue on <a href="%s">github.</a>', 'beautiful-taxonomy-filters'), 'https://github.com/beautiful-taxonomy-filters/beautiful-taxonomy-filters' ), array( 'a' => array( 'href' => array() ) ) );
 		?></p>
 		<p><strong><?php esc_html_e('Please take a look in the FAQ and search the forum before starting a new topic.', 'beautiful-taxonomy-filters'); ?></strong></p>
 		<p><a href="https://wordpress.org/support/plugin/beautiful-taxonomy-filters" class="button-secondary" target="_blank"><?php esc_html_e('Check the forum', 'beautiful-taxonomy-filters'); ?></a> <a href="https://wordpress.org/plugins/beautiful-taxonomy-filters/faq/" class="button-secondary" target="_blank"><?php esc_html_e('Read the FAQ', 'beautiful-taxonomy-filters'); ?></a></p>

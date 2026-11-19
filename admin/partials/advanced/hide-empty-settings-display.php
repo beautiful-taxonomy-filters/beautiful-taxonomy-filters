@@ -12,6 +12,9 @@
  * @subpackage Beautiful_Taxonomy_Filters/admin/partials
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $hide_empty = (get_option('beautiful_taxonomy_filters_hide_empty') ? get_option('beautiful_taxonomy_filters_hide_empty') : false);
 ?>
