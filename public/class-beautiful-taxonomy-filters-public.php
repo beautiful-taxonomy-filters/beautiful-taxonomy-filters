@@ -20,14 +20,14 @@ class Beautiful_Taxonomy_Filters_Public {
 	/**
 	 * Handle of the filter module script.
 	 *
-	 * @since 2.6.2
+	 * @since 2.6.1
 	 */
 	const SCRIPT_HANDLE = 'beautiful-taxonomy-filters';
 
 	/**
 	 * Whether a filter module was rendered before the scripts were registered.
 	 *
-	 * @since 2.6.2
+	 * @since 2.6.1
 	 * @var bool
 	 */
 	private static $scripts_requested = false;
@@ -189,7 +189,7 @@ class Beautiful_Taxonomy_Filters_Public {
 	 * Enqueue the beautiful-taxonomy-filters script handle yourself if you build a form without
 	 * any of those.
 	 *
-	 * @since 2.6.2
+	 * @since 2.6.1
 	 */
 	public static function enqueue_module_scripts() {
 		if ( wp_script_is( self::SCRIPT_HANDLE, 'registered' ) ) {
