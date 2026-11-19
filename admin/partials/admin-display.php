@@ -11,6 +11,10 @@
  * @package    Beautiful_Taxonomy_Filters
  * @subpackage Beautiful_Taxonomy_Filters/admin/partials
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 ?>
 <div class="wrap">
 	<h2><?php esc_html_e('Beautiful Taxonomy Filters', 'beautiful-taxonomy-filters'); ?></h2>

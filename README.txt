@@ -159,8 +159,10 @@ Why thank you! We don't have proper donate link but if you want to you can send 
 
 == Changelog ==
 = 2.6.1 =
-* SECURITY: Fixed a stored cross-site scripting vulnerability (CVE-2026-122298) in the conditional dropdowns AJAX endpoint. A user able to create terms could give one a name that the endpoint returned as live HTML. Term names are now stripped of markup, and the response is sent as `application/json` with HTML characters escaped. Thanks to Wordfence for the responsible disclosure. Please update.
+* SECURITY: Fixed a stored cross-site scripting vulnerability (CVE-2026-122298) in the conditional dropdowns AJAX endpoint. A user able to create terms could give one a name that the endpoint returned as live HTML. Term names are now returned HTML escaped and decoded as plain text in the browser, and the response is sent as `application/json` with HTML characters escaped. Thanks to Wordfence for the responsible disclosure. Please update.
 * SECURITY: Term names, slugs and descriptions in the filter dropdowns are now escaped on output, and select2 no longer parses the selected term's text as HTML when term descriptions are shown.
+* IMPROVEMENT: Every PHP file now refuses to run when requested directly instead of through WordPress.
+* BUGFIX: The conditional dropdowns endpoint no longer calls `map_deep()`, which doesn't exist before WordPress 4.4, the plugin's minimum supported version being 4.3.
 
 = 2.6.0 =
 * BUGFIX: A post type whose name contains a hyphen, like wp-book, is now resolved correctly from its archive template. Previously only the part before the first hyphen was used, which meant the filter module silently didn't appear and PHP threw a notice.

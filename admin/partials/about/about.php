@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+?>
 <div class="clearfix">
 	<div class="beautiful-taxonomy-filters-right-col">
 		<h3><?php esc_html_e('Supercharge your custom post type archives by letting visitors filter posts by their terms/categories.', 'beautiful-taxonomy-filters'); ?></h3>

@@ -281,7 +281,21 @@ class Beautiful_Taxonomy_Filters_Public {
 			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'beautiful-taxonomy-filters' ) ), 403 );
 		}
 
-		$selects    = isset( $_REQUEST['selects'] ) ? map_deep( wp_unslash( (array) $_REQUEST['selects'] ), 'sanitize_text_field' ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		$selects = array();
+		if ( isset( $_REQUEST['selects'] ) && is_array( $_REQUEST['selects'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification
+			// Each select is array( 'taxonomy' => string, 'term' => comma separated term ids ).
+			// Sanitized by hand rather than with map_deep(), which needs WordPress 4.4, and
+			// anything non-scalar is dropped since get_related_terms() explode()s the term.
+			foreach ( wp_unslash( $_REQUEST['selects'] ) as $select ) { // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+				if ( ! is_array( $select ) ) {
+					continue;
+				}
+				$selects[] = array(
+					'taxonomy' => isset( $select['taxonomy'] ) && is_scalar( $select['taxonomy'] ) ? sanitize_text_field( $select['taxonomy'] ) : '',
+					'term'     => isset( $select['term'] ) && is_scalar( $select['term'] ) ? sanitize_text_field( $select['term'] ) : '',
+				);
+			}
+		}
 		$post_type  = isset( $_REQUEST['posttype'] ) ? sanitize_text_field( $_REQUEST['posttype'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 		$taxonomies = isset( $_REQUEST['taxonomies'] ) ? array_map( 'sanitize_text_field', wp_unslash( (array) $_REQUEST['taxonomies'] ) ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
@@ -299,11 +313,9 @@ class Beautiful_Taxonomy_Filters_Public {
 
 		if ( $related_terms ) {
 			foreach ( $related_terms as $term ) {
-				// Term names are stored HTML encoded. They're decoded so the JS can set them as option
-				// text without showing entities, but any markup is stripped first so the response
-				// can never carry live HTML, whatever ended up in the database or the filters.
-				$term_name       = apply_filters( 'list_cats', $term->term_name, $term->taxonomy );
-				$term->term_name = wp_strip_all_tags( html_entity_decode( (string) $term_name, ENT_QUOTES, get_bloginfo( 'charset' ) ) );
+				// Sent HTML escaped, never decoded: the JS decodes it as inert text. esc_html() doesn't
+				// double encode, so a stored name like "Rock &amp; Roll" goes out unchanged.
+				$term->term_name = esc_html( apply_filters( 'list_cats', $term->term_name, $term->taxonomy ) );
 				$term->term_id    = absint( $term->term_id );
 				$term->term_count = absint( $term->term_count );
 				$sorted[ $term->taxonomy ][] = $term;

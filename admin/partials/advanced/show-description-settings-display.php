@@ -12,6 +12,9 @@
  * @subpackage Beautiful_Taxonomy_Filters/admin/partials
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $show_description = (get_option('beautiful_taxonomy_filters_show_description') ? get_option('beautiful_taxonomy_filters_show_description') : false);
 ?>

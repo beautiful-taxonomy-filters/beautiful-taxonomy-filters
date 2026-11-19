@@ -97,6 +97,15 @@
 	}
 
 	/**
+	 * Decode the HTML escaped term names the AJAX endpoint returns into plain text.
+	 * A detached textarea parses its content as text only, so markup in a name is never
+	 * turned into elements. The result must only be used with .text().
+	 */
+	function decode_entities( str ){
+		return $('<textarea/>').html( str ).text();
+	}
+
+	/**
 	 * Run the AJAX update function to make terms conditional.
 	 *
 	 * @param el	jQuery object of the select that changed.
@@ -205,7 +214,7 @@
 						// Then we loop through all fetched terms and enable them.
 						for ( var i = 0; i < terms.length; i++ ) {
 							var term = terms[i];
-							var text = terms[i].term_name;
+							var text = decode_entities( terms[i].term_name );
 							if ( btf_localization.show_count == 1 ) {
 								text += ' (' + terms[i].term_count + ')';
 							}

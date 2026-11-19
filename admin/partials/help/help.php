@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+?>
 <div class="clearfix">
 	<div class="beautiful-taxonomy-filters-right-col">
 		<h3><?php esc_html_e('How to use Beautiful Taxonomy Filters', 'beautiful-taxonomy-filters'); ?></h3>

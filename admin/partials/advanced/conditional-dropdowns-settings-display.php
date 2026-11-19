@@ -11,6 +11,10 @@
  * @subpackage Beautiful_Taxonomy_Filters/admin/partials
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 $options = get_option('beautiful_taxonomy_filters_settings');
 
 //Get the available taxonomies

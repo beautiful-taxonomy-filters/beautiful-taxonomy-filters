@@ -13,6 +13,9 @@
  * Keeping for backwards compatibility
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
 * Template tag for displaying the filters form
