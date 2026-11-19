@@ -101,7 +101,25 @@ class Walker_Slug_Value_Category_Dropdown extends Walker_CategoryDropdown {
 		// Escaped before our own filter runs so a callback can still wrap the name in markup.
 		// esc_html() doesn't double encode, so the already encoded stored name is left as is.
 		$cat_name = esc_html( apply_filters( 'list_cats', $category->name, $category ) );
+
+		//The description goes after the name (and count). It's also stored on the option so the
+		//conditional dropdowns JS can put it back when it rewrites the option text.
+		$description_suffix = '';
+		if ( $this->show_description && $category->description ) {
+			$description = esc_html( wp_strip_all_tags( $category->description ) );
+			//If we dont want select2 we cant put anything fancy around the description so this will have to do.
+			if ( $this->disable_select2 ) {
+				$description_suffix = ' – ' . $description;
+			} else {
+				//We just use an unlikely textstring so we can target it with JS later.
+				$description_suffix = ':.:' . $description . ':-:';
+			}
+		}
+
 		$output .= "\t" . '<option class="level-' . absint( $depth ) . ' ' . esc_attr( $category->slug ) . '" value="' . absint( $category->term_id ) . '" data-label=""';
+		if ( '' !== $description_suffix ) {
+			$output .= ' data-description="' . esc_attr( $description_suffix ) . '"';
+		}
 		$get_parameters = $_GET; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( ! empty( $get_parameters ) ) {
 			foreach ( $get_parameters as $get_variable ) {
@@ -138,16 +156,7 @@ class Walker_Slug_Value_Category_Dropdown extends Walker_CategoryDropdown {
 			$output .= '  ' . gmdate( $format, $category->last_update_timestamp );
 		}
 
-		if ( $this->show_description && $category->description ) {
-			$description = esc_html( wp_strip_all_tags( $category->description ) );
-			//If we dont want select2 we cant put anything fancy around the description so this will have to do.
-			if ( $this->disable_select2 ) {
-				$output .= ' – ' . $description;
-			} else {
-				//We just use an unlikely textstring so we can target it with JS later.
-				$output .= ':.:' . $description . ':-:';
-			}
-		}
+		$output .= $description_suffix;
 
 		$output .= "</option>\n";
 
