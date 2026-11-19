@@ -172,6 +172,9 @@ Why thank you! We don't have proper donate link but if you want to you can send 
 * IMPROVEMENT: Every PHP file now refuses to run when requested directly instead of through WordPress.
 * IMPROVEMENT: Rewrite rules are flushed when you save the post types or taxonomies settings, instead of every time the settings page is viewed.
 * IMPROVEMENT: The filter widget now skips non-public taxonomies, like the filter module already did.
+* IMPROVEMENT: The plugin's scripts (select2 included) are now only loaded on pages that actually show a filter module, whether that's through automagic, the shortcode, the `show_beautiful_filters` action or the widget, and they load deferred. Pages without a filter no longer download them.
+* NOTE: The stylesheets are still loaded on every page, on purpose. Scripts can be added late, while the page is being built, and still work. A stylesheet added that late ends up at the bottom of the page, so the filter would briefly show unstyled before jumping into place. The CSS is small, so loading it everywhere is the better trade-off.
+* NOTE: If you build your own filter form without the module, shortcode, action or widget, enqueue the `beautiful-taxonomy-filters` script handle yourself to get select2 and the conditional dropdowns.
 * DOCS: The filter and action reference has moved to [the developer documentation](https://beautiful-taxonomy-filters.github.io/beautiful-taxonomy-filters/hooks/). It was too long for the wordpress.org plugin page, which cut it off.
 
 = 2.6.0 =

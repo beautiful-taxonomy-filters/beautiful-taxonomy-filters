@@ -186,6 +186,8 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
 			return;
 		}
 
+		Beautiful_Taxonomy_Filters_Public::enqueue_module_scripts();
+
     	//Fetch the available settings for the filter modules behaviour
     	if($clear_all == 'inherit'){
 	    	$clear_all = apply_filters( 'beautiful_filters_clear_all', get_option('beautiful_taxonomy_filters_clear_all'), $current_post_type );

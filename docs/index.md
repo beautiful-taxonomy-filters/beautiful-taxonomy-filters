@@ -20,6 +20,16 @@ Pick whichever fits your theme:
 <?php do_action( 'show_beautiful_filters', 'your_post_type' ); // The post type is optional on its archive. ?>
 ```
 
+## Scripts and styles
+
+The plugin's scripts, select2 included, are only loaded on pages where a filter module is rendered through one of the methods above, and they load deferred. If you build your own form markup instead, enqueue them yourself:
+
+```php
+wp_enqueue_script( 'beautiful-taxonomy-filters' );
+```
+
+The stylesheets load on every page. A stylesheet enqueued while the page renders is printed at the bottom of it, which would make the filter flash unstyled.
+
 ## Hooks
 
 Almost every setting and every bit of output can be changed with a filter, and there are actions for adding your own markup around the modules.
