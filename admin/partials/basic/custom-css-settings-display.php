@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	name="beautiful_taxonomy_filters_custom_css"
 	rows="8"
 	cols="50"
-	placeholder="<?php esc_html_e('Example:', 'beautiful-taxonomy-filters'); ?>
+	placeholder="<?php esc_attr_e('Example:', 'beautiful-taxonomy-filters'); ?>
 	.beautiful-taxonomy-filter-button{
 		background:red;
 	}"

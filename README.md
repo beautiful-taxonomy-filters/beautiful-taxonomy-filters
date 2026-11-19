@@ -7,7 +7,7 @@ One caveat worth knowing before you try it: the preview runs inside WordPress Pl
 The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide your visitors with filtering for your post types. With this you get a complete solution for adding filtering based on custom taxonomy terms/categories/tags. It will also automatically add rewrite rules for pretty looking filter URLs. It’s completely automatic, works without javascript and is based on the [WordPress Plugin boilerplate](https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate) for a *standardized, organized and object-oriented* codebase. It uses [select2](http://ivaynberg.github.io/select2/) for pretty looking and user friendly dropdowns but will fall back to ordinary ones if javascript is not supported.
 **No more horrible looking URLs or hacky Javascript solutions**
 
-#[Check out the wiki for more information](https://github.com/jonathan-dejong/beautiful-taxonomy-filters/wiki)
+**[Developer documentation](https://beautiful-taxonomy-filters.github.io/beautiful-taxonomy-filters/)**: every filter and action, with examples. The source is in [`docs/`](docs/).
 
 ##features
 * Activate filtering on any registered public custom post type.
@@ -34,7 +34,7 @@ The Beautiful Taxonomy Filters plugin is an easy and good-looking way to provide
   * More to come!
 * Ability to show your visitors information about their current active filtering and control the look of this.
 * Allows for custom GET parameters to be included. Extend the filter your way with maybe a custom search-parameter or whatever you like.
-* Many [filters and actions](https://wordpress.org/plugins/beautiful-taxonomy-filters/other_notes/) for modifying the plugins behavior. For you control freaks out there…
+* Many [filters and actions](https://beautiful-taxonomy-filters.github.io/beautiful-taxonomy-filters/hooks/) for modifying the plugins behavior. For you control freaks out there…
 
 ### Languages
 * English

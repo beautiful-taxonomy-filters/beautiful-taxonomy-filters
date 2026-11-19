@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * The public-facing functionality of the plugin.
  *
@@ -192,20 +196,20 @@ class Beautiful_Taxonomy_Filters_Public {
 	* @since    1.0.0
 	*/
 	private function append_get_parameters( $new_url ) {
-		$previous_parameters = $_GET; // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.NonceVerification.Recommended
-		if ( ! empty( $previous_parameters ) ) {
-			$i                   = 0;
-			foreach ( $previous_parameters as $key => $value ) {
-				//sanitize for safety
-				$key   = sanitize_text_field( $key );
-				$value = sanitize_text_field( $value );
-				//append
-				$new_url .= ( $i == 0 ? '?' : '&' );
-				$new_url .= $key . '=' . $value;
-				$i++;
+		$parameters = array();
+		foreach ( $_GET as $key => $value ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			// Only plain key=value pairs are carried over. Keys and values are url encoded so a
+			// value can't smuggle extra parameters or a fragment into the url.
+			if ( ! is_scalar( $value ) ) {
+				continue;
 			}
+			$key = sanitize_text_field( (string) $key );
+			if ( '' === $key ) {
+				continue;
+			}
+			$parameters[ rawurlencode( $key ) ] = rawurlencode( sanitize_text_field( wp_unslash( (string) $value ) ) );
 		}
-		return $new_url;
+		return $parameters ? add_query_arg( $parameters, $new_url ) : $new_url;
 
 	}
 
@@ -281,23 +285,57 @@ class Beautiful_Taxonomy_Filters_Public {
 			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'beautiful-taxonomy-filters' ) ), 403 );
 		}
 
+		// The endpoint only exists for the conditional dropdowns, so don't answer when they're off.
+		$settings = get_option( 'beautiful_taxonomy_filters_settings' );
+		if ( ! is_array( $settings ) || empty( $settings['conditional_dropdowns'] ) ) {
+			wp_send_json_error( array( 'message' => __( 'Conditional dropdowns are disabled.', 'beautiful-taxonomy-filters' ) ), 403 );
+		}
+
+		// Only answer for a post type the filter is enabled on, and only about the taxonomies the
+		// filter module itself would show for it (public, not excluded, not built in). Anything
+		// else would let a visitor read terms the site never meant to expose.
+		$post_type  = isset( $_REQUEST['posttype'] ) && is_scalar( $_REQUEST['posttype'] ) ? sanitize_key( wp_unslash( $_REQUEST['posttype'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$post_types = apply_filters( 'beautiful_filters_post_types', get_option( 'beautiful_taxonomy_filters_post_types' ) );
+		if ( ! $post_type || ! post_type_exists( $post_type ) || ! is_array( $post_types ) || ! in_array( $post_type, $post_types, true ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid post type.', 'beautiful-taxonomy-filters' ) ), 400 );
+		}
+
+		$allowed_taxonomies = btf_get_current_taxonomies( $post_type );
+		$allowed_taxonomies = $allowed_taxonomies ? array_keys( $allowed_taxonomies ) : array();
+
+		// Requested taxonomies are matched exactly against that list, so whatever survives is a
+		// registered taxonomy name. No taxonomies requested means all of them.
+		$taxonomies = array();
+		if ( isset( $_REQUEST['taxonomies'] ) && is_array( $_REQUEST['taxonomies'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			foreach ( wp_unslash( $_REQUEST['taxonomies'] ) as $taxonomy ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+				if ( is_string( $taxonomy ) && in_array( $taxonomy, $allowed_taxonomies, true ) ) {
+					$taxonomies[] = $taxonomy;
+				}
+			}
+		} else {
+			$taxonomies = $allowed_taxonomies;
+		}
+		$taxonomies = array_values( array_unique( $taxonomies ) );
+
+		if ( empty( $taxonomies ) ) {
+			wp_send_json( array() );
+		}
+
+		// Each select is array( 'taxonomy' => string, 'term' => comma separated term ids ).
+		// Sanitized by hand rather than with map_deep(), which needs WordPress 4.4. Selects for a
+		// taxonomy outside the allowed list are dropped, as is anything non-scalar.
 		$selects = array();
-		if ( isset( $_REQUEST['selects'] ) && is_array( $_REQUEST['selects'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification
-			// Each select is array( 'taxonomy' => string, 'term' => comma separated term ids ).
-			// Sanitized by hand rather than with map_deep(), which needs WordPress 4.4, and
-			// anything non-scalar is dropped since get_related_terms() explode()s the term.
-			foreach ( wp_unslash( $_REQUEST['selects'] ) as $select ) { // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-				if ( ! is_array( $select ) ) {
+		if ( isset( $_REQUEST['selects'] ) && is_array( $_REQUEST['selects'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			foreach ( wp_unslash( $_REQUEST['selects'] ) as $select ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+				if ( ! is_array( $select ) || ! isset( $select['taxonomy'] ) || ! is_string( $select['taxonomy'] ) || ! in_array( $select['taxonomy'], $allowed_taxonomies, true ) ) {
 					continue;
 				}
 				$selects[] = array(
-					'taxonomy' => isset( $select['taxonomy'] ) && is_scalar( $select['taxonomy'] ) ? sanitize_text_field( $select['taxonomy'] ) : '',
-					'term'     => isset( $select['term'] ) && is_scalar( $select['term'] ) ? sanitize_text_field( $select['term'] ) : '',
+					'taxonomy' => $select['taxonomy'],
+					'term'     => isset( $select['term'] ) && is_scalar( $select['term'] ) ? implode( ',', array_map( 'absint', explode( ',', (string) $select['term'] ) ) ) : '',
 				);
 			}
 		}
-		$post_type  = isset( $_REQUEST['posttype'] ) ? sanitize_text_field( $_REQUEST['posttype'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-		$taxonomies = isset( $_REQUEST['taxonomies'] ) ? array_map( 'sanitize_text_field', wp_unslash( (array) $_REQUEST['taxonomies'] ) ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
 		// Short circuit the database query entirely.
 		// Return anything but null and that value is used instead of querying the database.
@@ -309,16 +347,25 @@ class Beautiful_Taxonomy_Filters_Public {
 			$related_terms = $this->get_related_terms( $post_type, $selects, $taxonomies );
 		}
 
-		$sorted = [];
+		// The response is rebuilt from known fields only, for known taxonomies only, whatever the
+		// query or a beautiful_filters_pre_related_terms callback handed back.
+		$sorted = array();
 
-		if ( $related_terms ) {
+		if ( $related_terms && is_array( $related_terms ) ) {
 			foreach ( $related_terms as $term ) {
-				// Sent HTML escaped, never decoded: the JS decodes it as inert text. esc_html() doesn't
-				// double encode, so a stored name like "Rock &amp; Roll" goes out unchanged.
-				$term->term_name = esc_html( apply_filters( 'list_cats', $term->term_name, $term->taxonomy ) );
-				$term->term_id    = absint( $term->term_id );
-				$term->term_count = absint( $term->term_count );
-				$sorted[ $term->taxonomy ][] = $term;
+				$term = (object) $term;
+				if ( ! isset( $term->taxonomy, $term->term_id, $term->term_name ) || ! in_array( $term->taxonomy, $taxonomies, true ) ) {
+					continue;
+				}
+				$sorted[ $term->taxonomy ][] = array(
+					'term_count' => isset( $term->term_count ) ? absint( $term->term_count ) : 0,
+					'term_id'    => absint( $term->term_id ),
+					// Sent HTML escaped, never decoded: the JS decodes it as inert text. esc_html()
+					// doesn't double encode, so a stored name like "Rock &amp; Roll" goes out unchanged.
+					'term_name'  => esc_html( apply_filters( 'list_cats', $term->term_name, $term->taxonomy ) ),
+					'term_slug'  => isset( $term->term_slug ) ? sanitize_title( $term->term_slug ) : '',
+					'taxonomy'   => $term->taxonomy,
+				);
 			}
 		}
 
@@ -364,29 +411,21 @@ class Beautiful_Taxonomy_Filters_Public {
 		$sql_ands        = [];
 
 		if ( $selects ) {
-			foreach ( $selects as $select ) {
+			foreach ( array_values( $selects ) as $i => $select ) {
 				// Don't query if term is not set.
 				if ( ! isset( $select['term'] ) || $select['term'] === 0 || $select['term'] === '0' || $select['term'] === '' ) {
 					continue;
 				}
 
-				// This value is used to build a raw SQL identifier (table alias) below, which
-				// $wpdb->prepare() can't parameterize, so we whitelist it against taxonomy_exists()
-				// on the exact, unmodified value. That's a case-sensitive lookup into $wp_taxonomies,
-				// a fixed dictionary only trusted server-side code (register_taxonomy()) can populate,
-				// so a match guarantees $taxonomy is one of those known-good strings and can't carry
-				// SQL metacharacters - no separate character stripping is needed on top of it.
-				// (We deliberately don't run this through sanitize_key()/lowercase it first: taxonomy
-				// keys aren't guaranteed lowercase, and doing so would break legitimate taxonomies
-				// that use mixed case.)
-				$taxonomy = $select['taxonomy'];
-				if ( ! is_string( $taxonomy ) || ! taxonomy_exists( $taxonomy ) ) {
+				// Already checked against the allowed taxonomies by the caller, but this method
+				// shouldn't rely on that.
+				if ( ! isset( $select['taxonomy'] ) || ! is_string( $select['taxonomy'] ) || ! taxonomy_exists( $select['taxonomy'] ) ) {
 					continue;
 				}
 
 				// Cast as array and run it through absint to prevent SQL injection.
 				// This also allows us to easier handle multiple term selections in the future.
-				$term_ids = array_map( 'absint', explode( ',', $select['term'] ) );
+				$term_ids = array_filter( array_map( 'absint', explode( ',', $select['term'] ) ) );
 
 				// Bail if it's now empty for some reason.
 				// Shouldn't really happen but better safe than sorry.
@@ -394,16 +433,21 @@ class Beautiful_Taxonomy_Filters_Public {
 					continue;
 				}
 
+				// A numbered table alias per join. Nothing from the request ends up in the SQL as an
+				// identifier, and taxonomy names that aren't valid SQL identifiers (like "book-shelf")
+				// no longer break the query.
+				$alias = 'btf_tr' . absint( $i );
+
 				// Add the taxonomy join.
 				$sql_joins[] = "
-					LEFT JOIN {$wpdb->prefix}term_relationships as {$taxonomy}_term_relationship
-					ON {$wpdb->prefix}posts.ID = {$taxonomy}_term_relationship.object_id
+					LEFT JOIN {$wpdb->prefix}term_relationships AS {$alias}
+					ON {$wpdb->prefix}posts.ID = {$alias}.object_id
 				";
 
 				// Add the AND condition for the current taxonomy.
 				$placeholders = implode( ',', array_fill( 0, count( $term_ids ), '%d' ) );
 				$sql_ands[] = $wpdb->prepare(
-					"AND ( {$taxonomy}_term_relationship.term_taxonomy_id IN ( $placeholders ) )", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+					"AND ( {$alias}.term_taxonomy_id IN ( $placeholders ) )", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 					$term_ids
 				);
 			}
@@ -462,22 +506,21 @@ class Beautiful_Taxonomy_Filters_Public {
 	*/
 	public function catch_filter_values() {
 		//Nope, this pageload was not due to our filter!
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-		if ( ! isset( $_POST['btf_do_filtering_nonce'] ) || ! wp_verify_nonce( $_POST['btf_do_filtering_nonce'], 'Beutiful-taxonomy-filters-do-filter' ) ) {
+		if ( ! isset( $_POST['btf_do_filtering_nonce'] ) || ! is_string( $_POST['btf_do_filtering_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['btf_do_filtering_nonce'] ) ), 'Beutiful-taxonomy-filters-do-filter' ) ) {
 			return;
 		}
 
 		//get current post type archive
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-		if ( isset( $_POST['post_type'] ) && '' !== $_POST['post_type'] ) {
-			$current_post_type = sanitize_text_field( wp_unslash( $_POST['post_type'] ) );
+		if ( isset( $_POST['post_type'] ) && is_string( $_POST['post_type'] ) && '' !== $_POST['post_type'] ) {
+			$current_post_type = sanitize_key( wp_unslash( $_POST['post_type'] ) );
 		} else {
 			//If there was no post type from the form (for some reason), try to get it anyway!
 			$current_post_type = self::get_current_posttype( false );
 		}
 
-		//post type validation
-		if ( ! post_type_exists( $current_post_type ) ) {
+		//post type validation. Only post types the filter is enabled on, like the filter module itself.
+		$post_types = apply_filters( 'beautiful_filters_post_types', get_option( 'beautiful_taxonomy_filters_post_types' ) );
+		if ( ! $current_post_type || ! post_type_exists( $current_post_type ) || ! is_array( $post_types ) || ! in_array( $current_post_type, $post_types, true ) ) {
 			return;
 		}
 
@@ -494,9 +537,14 @@ class Beautiful_Taxonomy_Filters_Public {
 
 				//check for each taxonomy as a $_POST variable.
 				//If it exists we want to append it along with the value (term) it has.
-				$term = ( isset( $_POST[ 'select-' . $key ] ) ? wp_unslash( $_POST[ 'select-' . $key ] ) : false ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+				//The option values are term ids.
+				$term = ( isset( $_POST[ 'select-' . $key ] ) && is_scalar( $_POST[ 'select-' . $key ] ) ? absint( $_POST[ 'select-' . $key ] ) : 0 );
 				if ( $term ) {
 					$term_object = get_term( $term, $key );
+					//Not a WP_Term check: that class doesn't exist before WordPress 4.4.
+					if ( ! is_object( $term_object ) || is_wp_error( $term_object ) || empty( $term_object->slug ) ) {
+						continue;
+					}
 					//Resolve the url segment for the taxonomy. Must be identical to the one used
 					//for the rewrite rules or the url we redirect to won't resolve!
 					$rewrite_slug = btf_get_taxonomy_rewrite_slug( $value, $post_type_slug );
@@ -629,9 +677,9 @@ class Beautiful_Taxonomy_Filters_Public {
 			//Take the slug the post type uses for its archive url, which is the one we actually want!
 			$current_post_type_rewrite = btf_get_post_type_archive_slug( $current_post_type );
 
-		} elseif ( isset( $_POST['post_type'] ) && $_POST['post_type'] != '' ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.NonceVerification.Missing
+		} elseif ( isset( $_POST['post_type'] ) && is_string( $_POST['post_type'] ) && '' !== $_POST['post_type'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-			$current_post_type = sanitize_text_field( $_POST['post_type'] ); //phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+			$current_post_type = sanitize_key( wp_unslash( $_POST['post_type'] ) ); //phpcs:ignore WordPress.Security.NonceVerification.Missing
 			//Take the slug the post type uses for its archive url, which is the one we actually want!
 			$current_post_type_rewrite = btf_get_post_type_archive_slug( $current_post_type );
 

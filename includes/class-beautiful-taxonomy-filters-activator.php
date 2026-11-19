@@ -10,6 +10,10 @@
  * @subpackage Beautiful_Taxonomy_Filters/includes
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Fired during plugin activation.
  *

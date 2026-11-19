@@ -9,6 +9,10 @@
  * @subpackage Beautiful_Taxonomy_Filters/includes
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * The Custom Walker class being used by our wp_dropdown_categories to render the filter dropdowns
  *
@@ -121,7 +125,7 @@ class Walker_Slug_Value_Category_Dropdown extends Walker_CategoryDropdown {
 		$output .= '>';
 
 		//run our custom filter
-		$output .= apply_filters( 'beautiful_filters_term_name', $cat_name, $category, $depth );
+		$output .= wp_kses_post( apply_filters( 'beautiful_filters_term_name', $cat_name, $category, $depth ) );
 
 		if ( ! empty( $args['show_count'] ) ) {
 			//If they want a post count make sure to only show the count for this specific post type
