@@ -32,7 +32,7 @@ Branching is git-flow style: work lands on `develop`, releases merge to `master`
 
 ## Other conventions
 
-- Minified assets (`public/css/*.min.css`, `public/js/beautiful-taxonomy-filters-public.min.js`) are **committed and hand-maintained** — no minify task exists. Note the enqueues are asymmetric: `enqueue_styles()` loads `.min.css`, `enqueue_scripts()` loads the **unminified** JS. Edit the unminified source and regenerate the `.min` CSS counterpart manually.
+- Minified CSS (`public/css/*.min.css`) is **committed and hand-maintained** — no minify task exists. `enqueue_styles()` loads the `.min.css`, so edit the unminified source and regenerate its `.min` counterpart manually. The public JS has no minified build: `enqueue_scripts()` loads `beautiful-taxonomy-filters-public.js` directly.
 - Code targets WordPress Coding Standards and carries inline `phpcs:ignore` annotations, but no `phpcs.xml` is committed — run phpcs with the `WordPress` standard yourself if you need it. Older files (`widgets/`) predate the current style (no spacing inside parens, `extract()`).
 - Translations live in `languages/` as `.po`/`.mo` pairs against `beautiful-taxonomy-filters.pot`. Text domain: `beautiful-taxonomy-filters`.
 
