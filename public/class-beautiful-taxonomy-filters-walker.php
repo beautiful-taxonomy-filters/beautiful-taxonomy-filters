@@ -94,8 +94,10 @@ class Walker_Slug_Value_Category_Dropdown extends Walker_CategoryDropdown {
 
 		global $wp_query;
 		$queryvars = $wp_query->query_vars;
-		$cat_name = apply_filters( 'list_cats', $category->name, $category );
-		$output .= "\t" . '<option class="level-' . $depth . ' ' . $category->slug . '" value="' . $category->term_id . '" data-label=""';
+		// Escaped before our own filter runs so a callback can still wrap the name in markup.
+		// esc_html() doesn't double encode, so the already encoded stored name is left as is.
+		$cat_name = esc_html( apply_filters( 'list_cats', $category->name, $category ) );
+		$output .= "\t" . '<option class="level-' . absint( $depth ) . ' ' . esc_attr( $category->slug ) . '" value="' . absint( $category->term_id ) . '" data-label=""';
 		$get_parameters = $_GET; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( ! empty( $get_parameters ) ) {
 			foreach ( $get_parameters as $get_variable ) {
@@ -124,7 +126,7 @@ class Walker_Slug_Value_Category_Dropdown extends Walker_CategoryDropdown {
 		if ( ! empty( $args['show_count'] ) ) {
 			//If they want a post count make sure to only show the count for this specific post type
 			$count = Beautiful_Taxonomy_Filters_Public::get_term_post_count_by_type( $category->slug, $category->taxonomy, $this->post_type );
-			$output .= '  (' . $count . ')';
+			$output .= '  (' . absint( $count ) . ')';
 		}
 
 		if ( isset( $args['show_last_update'] ) ) {
@@ -133,12 +135,13 @@ class Walker_Slug_Value_Category_Dropdown extends Walker_CategoryDropdown {
 		}
 
 		if ( $this->show_description && $category->description ) {
+			$description = esc_html( wp_strip_all_tags( $category->description ) );
 			//If we dont want select2 we cant put anything fancy around the description so this will have to do.
 			if ( $this->disable_select2 ) {
-				$output .= ' – ' . $category->description;
+				$output .= ' – ' . $description;
 			} else {
 				//We just use an unlikely textstring so we can target it with JS later.
-				$output .= ':.:' . $category->description . ':-:';
+				$output .= ':.:' . $description . ':-:';
 			}
 		}
 

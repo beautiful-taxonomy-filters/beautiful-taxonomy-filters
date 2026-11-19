@@ -4,7 +4,7 @@ Donate link: http://fancy.to/k9qxt
 Tags: Taxonomy, filter, pretty permalinks, terms, widget
 Requires at least: 4.3.0
 Tested up to: 7.1
-Stable tag: 2.6.0
+Stable tag: 2.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,6 +158,10 @@ Why thank you! We don't have proper donate link but if you want to you can send 
 
 
 == Changelog ==
+= 2.6.1 =
+* SECURITY: Fixed a stored cross-site scripting vulnerability (CVE-2026-122298) in the conditional dropdowns AJAX endpoint. A user able to create terms could give one a name that the endpoint returned as live HTML. Term names are now stripped of markup, and the response is sent as `application/json` with HTML characters escaped. Thanks to Wordfence for the responsible disclosure. Please update.
+* SECURITY: Term names, slugs and descriptions in the filter dropdowns are now escaped on output, and select2 no longer parses the selected term's text as HTML when term descriptions are shown.
+
 = 2.6.0 =
 * BUGFIX: A post type whose name contains a hyphen, like wp-book, is now resolved correctly from its archive template. Previously only the part before the first hyphen was used, which meant the filter module silently didn't appear and PHP threw a notice.
 * BUGFIX: The filter module now resolves the post type archive slug the same way the rewrite rules and the filtered URL do. This fixes a PHP warning on post types registered with `'rewrite' => false` and a mismatched URL on post types whose `has_archive` differs from their rewrite slug.

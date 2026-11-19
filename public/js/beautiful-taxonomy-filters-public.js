@@ -92,10 +92,8 @@
 		var re = /(:\.:[\s\S]*?:-:)/;
 		var reg_results = re.exec(new_term);
 		new_term = new_term.replace(reg_results[0], '');
-		var $term = $(
-			'<span>' + new_term + '</span>'
-		);
-		return $term;
+		// term.text is the decoded option text, so it must never be parsed as HTML.
+		return $('<span>').text(new_term);
 	}
 
 	/**

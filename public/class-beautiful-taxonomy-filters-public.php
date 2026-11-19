@@ -299,13 +299,20 @@ class Beautiful_Taxonomy_Filters_Public {
 
 		if ( $related_terms ) {
 			foreach ( $related_terms as $term ) {
-				$term->term_name = html_entity_decode( apply_filters( 'list_cats', $term->term_name, $term->taxonomy ) );
+				// Term names are stored HTML encoded. They're decoded so the JS can set them as option
+				// text without showing entities, but any markup is stripped first so the response
+				// can never carry live HTML, whatever ended up in the database or the filters.
+				$term_name       = apply_filters( 'list_cats', $term->term_name, $term->taxonomy );
+				$term->term_name = wp_strip_all_tags( html_entity_decode( (string) $term_name, ENT_QUOTES, get_bloginfo( 'charset' ) ) );
+				$term->term_id    = absint( $term->term_id );
+				$term->term_count = absint( $term->term_count );
 				$sorted[ $term->taxonomy ][] = $term;
 			}
 		}
 
-		echo wp_json_encode( $sorted );
-		exit();
+		// Sent as application/json (with admin-ajax' nosniff header) and with < > & ' " escaped,
+		// so a browser navigating straight to the endpoint never parses the response as HTML.
+		wp_send_json( $sorted, null, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT );
 	}
 
 	/**
@@ -577,7 +584,7 @@ class Beautiful_Taxonomy_Filters_Public {
 		if ( isset( $save_parameters['walker'] ) ) {
 			unset( $save_parameters['walker'] );
 		}
-		$new_select = str_replace( '<select', '<select data-taxonomy="' . $parameters['taxonomy'] . '" data-options="' . htmlspecialchars( wp_json_encode( $save_parameters ) ) . '" data-nonce="' . wp_create_nonce( 'update_btf_selects_security' ) . '"', $select );
+		$new_select = str_replace( '<select', '<select data-taxonomy="' . esc_attr( $parameters['taxonomy'] ) . '" data-options="' . esc_attr( wp_json_encode( $save_parameters ) ) . '" data-nonce="' . esc_attr( wp_create_nonce( 'update_btf_selects_security' ) ) . '"', $select );
 
 		return $new_select;
 	}
