@@ -167,7 +167,9 @@
 
 			taxonomies.push( sel.data('taxonomy') );
 
-			if ( val) {
+			// The "all" option has the value "0", which is a truthy string. Only count a select as
+			// filtered when an actual term is chosen.
+			if ( val && val !== '0' ) {
 				filtered_taxonomies.push( sel.data('taxonomy') );
 			}
 
@@ -227,7 +229,10 @@
 							if ( btf_localization.show_count == 1 ) {
 								text += ' (' + terms[i].term_count + ')';
 							}
-							var option = select_element.find('option[value="' + parseInt( terms[i].term_id, 10 ) + '"]').prop('disabled', false).text( text );
+							var option = select_element.find('option[value="' + parseInt( terms[i].term_id, 10 ) + '"]');
+							// Put the term description back, the walker stores it on the option.
+							text += option.attr('data-description') || '';
+							option.prop('disabled', false).text( text );
 						}
 
 						// If select2 is being used we need to destroy the instance and run a new one.

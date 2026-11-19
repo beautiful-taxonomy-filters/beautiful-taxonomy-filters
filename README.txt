@@ -4,7 +4,7 @@ Donate link: http://fancy.to/k9qxt
 Tags: Taxonomy, filter, pretty permalinks, terms, widget
 Requires at least: 4.3.0
 Tested up to: 7.1
-Stable tag: 2.6.1
+Stable tag: 2.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -161,6 +161,10 @@ Why thank you! We don't have proper donate link but if you want to you can send 
 
 
 == Changelog ==
+= 2.6.2 =
+* BUGFIX: Conditional dropdowns treated a dropdown left on its "all" option as an active filter when the form had more than one taxonomy. The dropdown you were picking from then had its own options updated too, instead of staying fully selectable.
+* BUGFIX: Conditional dropdowns no longer drop the term descriptions from the options they update.
+
 = 2.6.1 =
 * SECURITY: Fixed a stored cross-site scripting vulnerability (CVE-2026-122298) in the conditional dropdowns AJAX endpoint. A user able to create terms could give one a name that the endpoint returned as live HTML. Term names are now returned HTML escaped and decoded as plain text in the browser, and the response is sent as `application/json` with HTML characters escaped. Thanks to Wordfence for the responsible disclosure. Please update.
 * SECURITY: Term names, slugs and descriptions in the filter dropdowns are now escaped on output, and select2 no longer parses the selected term's text as HTML when term descriptions are shown.
