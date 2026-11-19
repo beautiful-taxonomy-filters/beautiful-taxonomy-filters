@@ -1,4 +1,9 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Our main filter widget
  *
@@ -141,7 +146,11 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
 	 */
     public function widget( $args, $instance ) {
 
-    	extract($args);
+    	// Theme supplied wrapper markup. Read explicitly rather than with extract().
+    	$before_widget = isset( $args['before_widget'] ) ? $args['before_widget'] : '';
+    	$after_widget  = isset( $args['after_widget'] ) ? $args['after_widget'] : '';
+    	$before_title  = isset( $args['before_title'] ) ? $args['before_title'] : '';
+    	$after_title   = isset( $args['after_title'] ) ? $args['after_title'] : '';
     	$settings = apply_filters( 'beautiful_filters_settings', get_option('beautiful_taxonomy_filters_settings') );
     	$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
         $clear_all = wp_strip_all_tags($instance['clear_all']);
@@ -170,33 +179,14 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
 			return;
 		}
 
-		//Get the taxonomies of the current post type and the excluded taxonomies
-		$excluded_taxonomies = apply_filters( 'beautiful_filters_taxonomies', get_option('beautiful_taxonomy_filters_taxonomies') );
-		//Also make sure we don't try to output the builtin taxonomies since they cannot be supported
-		if(is_array($excluded_taxonomies)){
-			array_push($excluded_taxonomies, 'category', 'post_tag', 'post_format');
-		}else{
-			$excluded_taxonomies = array(
-				'category',
-				'post_tag',
-				'post_format'
-			);
+		//Get the taxonomies the filter module would show for this post type: public, not excluded
+		//in the settings and not built in. Same helper as the filter module itself.
+		$current_taxonomies = btf_get_current_taxonomies( $current_post_type );
+		if ( empty( $current_taxonomies ) ) {
+			return;
 		}
 
-		//Polylang support
-		if(function_exists('pll_current_language')){
-			array_push($excluded_taxonomies, 'language', 'post_translations');
-		}
-
-		$current_taxonomies = get_object_taxonomies($current_post_type, 'objects');
-		//If we both have taxonomies on the post type AND we've set som excluded taxonomies in the plugins settings. Loop through them and unset those we don't want!
-		if($current_taxonomies && $excluded_taxonomies){
-			foreach($current_taxonomies as $key => $value){
-				if(in_array($key, $excluded_taxonomies)){
-					unset($current_taxonomies[$key]);
-				}
-			}
-		}
+		Beautiful_Taxonomy_Filters_Public::enqueue_module_scripts();
 
     	//Fetch the available settings for the filter modules behaviour
     	if($clear_all == 'inherit'){
@@ -231,8 +221,8 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
     	/*
 	    * The content of the widget
 	    */
-        echo $before_widget; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-        if ( !empty( $title ) ) { echo $before_title . $title . $after_title; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo $before_widget; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- theme supplied wrapper markup.
+        if ( !empty( $title ) ) { echo $before_title . wp_kses_post( $title ) . $after_title; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- theme supplied wrapper markup.
 
 		?>
 		<div class="beautiful-taxonomy-filters-widget  <?php if( !$disable_select2 ){ echo esc_attr( 'select2-active' ); } ?>" id="beautiful-taxonomy-filters-<?php echo esc_attr( $current_post_type ); ?>">
@@ -264,7 +254,7 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
 								* Uses walker found in: public/class-beautiful-taxonomy-filters-walker.php
 								*/
 								$dropdown_args = array(
-									'show_option_all' => btf_get_taxonomy_all_items_label( $taxonomy ),
+									'show_option_all' => esc_html( btf_get_taxonomy_all_items_label( $taxonomy ) ), // Core prints this unescaped.
 									'taxonomy'      => $key,
 									'name'          => 'select-'.$key, //BUG?? For some reason we can't use the actual taxonomy slugs. If we do wordpress automatically fetches the correct posts without us even changing the URL HOWEVER it all breaks when the term has a non standard latin character in its name (not even in the slug which is what we actually use) such as åäö
 									'show_count'    => $show_count,
@@ -301,7 +291,7 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
 								<?php if( $conditional_dropdowns ): ?>
 									<span class="beautiful-taxonomy-filters-loader">
 										<?php
-										echo apply_filters( 'beautiful_filters_loader', sprintf( '<img src="%s" alt="" />', admin_url( 'images/spinner.gif' ) ), $key, $current_post_type ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+										echo wp_kses_post( apply_filters( 'beautiful_filters_loader', sprintf( '<img src="%s" alt="" />', esc_url( admin_url( 'images/spinner.gif' ) ) ), $key, $current_post_type ) );
 										?>
 									</span>
 								<?php endif; ?>
@@ -313,7 +303,7 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
 				<?php do_action( 'beautiful_actions_before_submit_button', $current_post_type); //allow custom markup before submit button ?>
 				<button type="submit" class="beautiful-taxonomy-filters-button"><?php echo esc_html( apply_filters( 'beautiful_filters_apply_button', esc_html__('Apply filter', 'beautiful-taxonomy-filters') ) ); ?></button>
 				<?php if($clear_all && is_btf_filtered() ) : ?>
-					<a href="<?php echo esc_url( apply_filters( 'beautiful_filters_clear_all_link', get_post_type_archive_link( $current_post_type ), $current_post_type ) ); ?>" class="beautiful-taxonomy-filters-clear-all" title="<?php esc_html_e('Click to clear all active filters', 'beautiful-taxonomy-filters'); ?>"><?php echo esc_html( apply_filters( 'beautiful_filters_clear_button', esc_html__('Clear all', 'beautiful-taxonomy-filters') ) ); ?></a>
+					<a href="<?php echo esc_url( apply_filters( 'beautiful_filters_clear_all_link', get_post_type_archive_link( $current_post_type ), $current_post_type ) ); ?>" class="beautiful-taxonomy-filters-clear-all" title="<?php esc_attr_e('Click to clear all active filters', 'beautiful-taxonomy-filters'); ?>"><?php echo esc_html( apply_filters( 'beautiful_filters_clear_button', esc_html__('Clear all', 'beautiful-taxonomy-filters') ) ); ?></a>
 				<?php endif; ?>
 				<?php do_action( 'beautiful_actions_ending_form', $current_post_type); //allow custom markup at beginning of form ?>
 			</form>
@@ -321,7 +311,7 @@ class Beautiful_Taxonomy_Filters_Widget extends WP_Widget {
 		</div>
 		<?php
 
-		echo $after_widget; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo $after_widget; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- theme supplied wrapper markup.
     }
 }
 ?>

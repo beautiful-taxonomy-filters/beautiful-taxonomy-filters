@@ -12,6 +12,9 @@
  * @subpackage Beautiful_Taxonomy_Filters/admin/partials
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $selected_style = get_option('beautiful_taxonomy_filters_styles');
 $styles = array(

@@ -13,6 +13,10 @@
  * @subpackage Beautiful_Taxonomy_Filters/includes
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Define the internationalization functionality.
  *

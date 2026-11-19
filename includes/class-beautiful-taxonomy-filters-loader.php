@@ -10,6 +10,10 @@
  * @subpackage Beautiful_Taxonomy_Filters/includes
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Register all actions and filters for the plugin.
  *

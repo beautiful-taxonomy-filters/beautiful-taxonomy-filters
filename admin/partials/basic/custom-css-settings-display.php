@@ -11,12 +11,16 @@
  * @package    Beautiful_Taxonomy_Filters
  * @subpackage Beautiful_Taxonomy_Filters/admin/partials
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 ?>
 <textarea
 	name="beautiful_taxonomy_filters_custom_css"
 	rows="8"
 	cols="50"
-	placeholder="<?php esc_html_e('Example:', 'beautiful-taxonomy-filters'); ?>
+	placeholder="<?php esc_attr_e('Example:', 'beautiful-taxonomy-filters'); ?>
 	.beautiful-taxonomy-filter-button{
 		background:red;
 	}"

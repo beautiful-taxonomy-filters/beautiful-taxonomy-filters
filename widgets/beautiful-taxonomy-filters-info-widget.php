@@ -1,4 +1,9 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Our main filter widget
  *
@@ -61,7 +66,11 @@ class Beautiful_Taxonomy_Filters_Info_Widget extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 
-		extract( $args );
+		// Theme supplied wrapper markup. Read explicitly rather than with extract().
+		$before_widget = isset( $args['before_widget'] ) ? $args['before_widget'] : '';
+		$after_widget  = isset( $args['after_widget'] ) ? $args['after_widget'] : '';
+		$before_title  = isset( $args['before_title'] ) ? $args['before_title'] : '';
+		$after_title   = isset( $args['after_title'] ) ? $args['after_title'] : '';
 		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
 
 		global $wp_query;
@@ -82,9 +91,9 @@ class Beautiful_Taxonomy_Filters_Info_Widget extends WP_Widget {
 		/*
 		* The content of the widget
 		*/
-		echo $before_widget; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo $before_widget; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- theme supplied wrapper markup.
 		if ( ! empty( $title ) ) {
-			echo $before_title . $title . $after_title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo $before_title . wp_kses_post( $title ) . $after_title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- theme supplied wrapper markup.
 		}
 		?>
 		<div class="beautiful-taxonomy-filters-active-filter-widget">
@@ -92,7 +101,7 @@ class Beautiful_Taxonomy_Filters_Info_Widget extends WP_Widget {
 				<p class="beautiful-taxonomy-filters-postcount">
 					<?php
 					// Translators: %d is a number of posts found by the current filter.
-					echo apply_filters( 'beautiful_filters_info_postcount', sprintf( esc_html__( 'Result of filter: %d', 'beautiful-taxonomy-filters' ), $wp_query->found_posts ) );  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo esc_html( apply_filters( 'beautiful_filters_info_postcount', sprintf( esc_html__( 'Result of filter: %d', 'beautiful-taxonomy-filters' ), $wp_query->found_posts ) ) );
 					?>
 				</p>
 
@@ -224,7 +233,7 @@ endif;
 
 		<?php
 
-		echo $after_widget; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo $after_widget; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- theme supplied wrapper markup.
 	}
 }
 ?>

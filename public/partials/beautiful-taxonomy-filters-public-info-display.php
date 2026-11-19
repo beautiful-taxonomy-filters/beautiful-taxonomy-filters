@@ -12,6 +12,10 @@
  * @subpackage Beautiful_Taxonomy_Filters/public/partials
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
  /*
  * Filters in this file
  * @ beautiful_filters_active_taxonomy

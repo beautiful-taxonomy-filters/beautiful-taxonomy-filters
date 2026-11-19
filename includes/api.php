@@ -4,6 +4,9 @@
  * All of them are pluggable and can be replaced with your own.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Check wether the current page is filtered by BTF.

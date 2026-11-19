@@ -91,11 +91,25 @@
 		var new_term = term.text;
 		var re = /(:\.:[\s\S]*?:-:)/;
 		var reg_results = re.exec(new_term);
-		new_term = new_term.replace(reg_results[0], '');
-		var $term = $(
-			'<span>' + new_term + '</span>'
-		);
-		return $term;
+		// A term name can contain ":.:" itself without a description following it.
+		if ( reg_results ) {
+			new_term = new_term.replace(reg_results[0], '');
+		}
+		// term.text is the decoded option text, so it must never be parsed as HTML.
+		return $('<span>').text(new_term);
+	}
+
+	/**
+	 * Decode the HTML escaped term names the AJAX endpoint returns into plain text.
+	 * A detached textarea parses what's assigned to its innerHTML as text only, so markup in a
+	 * name is never turned into elements. Plain DOM rather than jQuery's .html(), which parses
+	 * some strings (containing <script>, <option> etc.) as live HTML instead.
+	 * The result must only be used with .text().
+	 */
+	function decode_entities( str ){
+		var textarea = document.createElement( 'textarea' );
+		textarea.innerHTML = String( str );
+		return textarea.value;
 	}
 
 	/**
@@ -191,7 +205,9 @@
 				 */
 				 if( Object.keys(response).length > 0 ){
  					$.each(response, function(taxonomy, terms) {
-						var select_element = form.find('select.beautiful-taxonomy-filters-select[data-taxonomy="' + taxonomy + '"]');
+						var select_element = form.find('select.beautiful-taxonomy-filters-select').filter(function(){
+							return $(this).attr('data-taxonomy') === taxonomy;
+						});
 
 						// Let's first check if we've only filtered one select. If so, we should not disabled any of that's dropdowns so it's easier to switch.
 						if ( 1 === filtered_taxonomies.length && taxonomy === filtered_taxonomies[0] ) {
@@ -207,11 +223,11 @@
 						// Then we loop through all fetched terms and enable them.
 						for ( var i = 0; i < terms.length; i++ ) {
 							var term = terms[i];
-							var text = terms[i].term_name;
+							var text = decode_entities( terms[i].term_name );
 							if ( btf_localization.show_count == 1 ) {
 								text += ' (' + terms[i].term_count + ')';
 							}
-							var option = select_element.find('option[value="' + terms[i].term_id + '"]').prop('disabled', false).text( text );
+							var option = select_element.find('option[value="' + parseInt( terms[i].term_id, 10 ) + '"]').prop('disabled', false).text( text );
 						}
 
 						// If select2 is being used we need to destroy the instance and run a new one.
@@ -221,152 +237,6 @@
 					});
 				}
 
-			},
-			error: function(){
-				/**
-				 * Make sure all dropdowns are enabled and loaders are hidden
-				 */
-				if( timer ){
-					clearTimeout(timer);
-				}
-				form.find('select.beautiful-taxonomy-filters-select').prop( 'disabled', false );
-				form.find('.beautiful-taxonomy-filters-loader').removeClass('active');
-				form.find('.beautiful-taxonomy-filters-button').prop('disabled', false);
-
-			},
-			complete: function(){
-				/**
-				 * Regardless of success/error we are done. Set active to false.
-				 */
-				active = false;
-			}
-		});
-
-	}
-
-
-	/**
-	 * Run the AJAX update function to make terms conditional.
-	 *
-	 * @param el	jQuery object of the select that changed.
-	 */
-	function conditional_terms_ajax( el ){
-
-		/**
-		 * If there's already an active AJAX request kill it.
-		 */
-		if( active ) {
-			xhr.abort();
-		}
-
-		/**
-		 * Show loaders and disable selects if the response takes more than 1 second.
-		 */
-		if( timer ){
-			clearTimeout(timer);
-		}
-		timer = setTimeout(function(){
-        	form.find('.beautiful-taxonomy-filters-loader').addClass('active');
-        	form.find('select.beautiful-taxonomy-filters-select').prop('disabled', true);
-        	form.find('.beautiful-taxonomy-filters-button').prop('disabled', true);
-        }, 800);
-
-
-		/**
-		 * Get general options
-		 */
-		var form = el.closest('#beautiful-taxonomy-filters-form'),
-			nonce = el.data('nonce'),
-			posttype = $('input[name="post_type"]').val(),
-			current_taxonomy = el.data('taxonomy'),
-			selects = [];
-
-		/**
-		 * Get values from all selects
-		 */
-		form.find('select.beautiful-taxonomy-filters-select').each(function(index){
-			var sel = $(this),
-				taxonomy = sel.data('taxonomy'),
-				val = sel.val();
-
-			if( val === '' ){
-				val = 0;
-			}
-
-			selects.push({
-				taxonomy: sel.data('taxonomy'),
-				term: val,
-			});
-
-		});
-
-		/**
-		 * Run our AJAX
-		 */
-		active = true;
-		xhr = $.ajax({
-			type: 'post',
-			dataType: 'json',
-			url: btf_localization.ajaxurl,
-			data: {
-				action: 'update_filters_callback',
-				selects: selects,
-				posttype: posttype,
-				current_taxonomy: current_taxonomy,
-				nonce: nonce,
-			},
-			success: function( response ){
-
-				/**
-				 * Make sure all dropdowns are enabled and loaders are hidden
-				 */
-				if( timer ){
-					clearTimeout(timer);
-				}
-				form.find('select.beautiful-taxonomy-filters-select').prop( 'disabled', false );
-				form.find('.beautiful-taxonomy-filters-loader').removeClass('active');
-				form.find('.beautiful-taxonomy-filters-button').prop('disabled', false);
-
-				/**
-				 * Lets get cracking on hiding options
-				 */
-				if( Object.keys(response.taxonomies).length > 0 ){
-
-					$.each(response.taxonomies, function(taxonomy, terms){
-						var select_element = form.find('select.beautiful-taxonomy-filters-select[data-taxonomy="' + taxonomy + '"]');
-						select_element.find('option').each(function(){
-							var option = $(this),
-								val = option.val(),
-								option_text = option.text();
-
-							/**
-							 * empty or 0 is probably an "all" option and we should leave these alone!
-							 * also.. leave britney alone!
-							 */
-							if( val === '' || val === 0 || val == '0' ){
-								return true;
-
-							}
-
-							if( $.inArray( val, terms ) === -1 ){
-								option.prop('disabled', true);
-
-							} else {
-								option.prop('disabled', false);
-
-							}
-						});
-
-						/**
-						 * If select2 is being used we need to destroy the instance and run a new one.
-						 */
-						if( btf_localization.disable_select2 != '1' ){
-							var select_el = form.find('select.beautiful-taxonomy-filters-select[data-taxonomy="' + taxonomy + '"]');
-							select_el.trigger('change.select2');
-						}
-					});
-
-				}
 			},
 			error: function(){
 				/**
